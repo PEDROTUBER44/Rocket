@@ -31,16 +31,7 @@ pub struct ListFolderQuery {
 }
 
 /// Creates a new folder.
-///
-/// # Arguments
-///
-/// * `state` - The application state.
-/// * `session` - The user's session.
-/// * `req` - The request payload.
-///
-/// # Returns
-///
-/// A `Response` containing the created folder's information.
+#[axum::debug_handler]
 pub async fn create_folder(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -74,16 +65,7 @@ pub async fn create_folder(
 }
 
 /// Lists the contents of a folder.
-///
-/// # Arguments
-///
-/// * `state` - The application state.
-/// * `session` - The user's session.
-/// * `query` - The query parameters.
-///
-/// # Returns
-///
-/// A `Response` containing the list of folders and files.
+#[axum::debug_handler]
 pub async fn list_folder_contents(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -132,16 +114,7 @@ pub async fn list_folder_contents(
 }
 
 /// Gets statistics for a folder.
-///
-/// # Arguments
-///
-/// * `state` - The application state.
-/// * `session` - The user's session.
-/// * `folder_id` - The ID of the folder.
-///
-/// # Returns
-///
-/// A `Response` containing the folder statistics.
+#[axum::debug_handler]
 pub async fn get_folder_stats(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -170,16 +143,7 @@ pub async fn get_folder_stats(
 }
 
 /// Deletes a folder.
-///
-/// # Arguments
-///
-/// * `state` - The application state.
-/// * `session` - The user's session.
-/// * `folder_id` - The ID of the folder to delete.
-///
-/// # Returns
-///
-/// A `Response` containing a success message.
+#[axum::debug_handler]
 pub async fn delete_folder(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
