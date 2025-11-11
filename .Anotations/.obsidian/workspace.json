@@ -1,0 +1,206 @@
+{
+  "main": {
+    "id": "52f49687e23e7857",
+    "type": "split",
+    "children": [
+      {
+        "id": "b76f1204367e8f0d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f074d424b2019832",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "Rocket WebSite.canvas",
+                "viewState": {
+                  "x": -43.87128821857063,
+                  "y": -40.26239088809078,
+                  "zoom": -0.8000000000000002
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "Rocket WebSite"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f28eb2bacda9fc87",
+    "type": "split",
+    "children": [
+      {
+        "id": "b8690c7cc211d528",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "96edaca502f030bb",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "0baf5bda1934bbef",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "6081643ca1caf964",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "792b91ed86217268",
+    "type": "split",
+    "children": [
+      {
+        "id": "0220ec360d3d24d1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "450599335713df14",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Mapa Financeiro da Rocket.canvas",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Mapa Financeiro da Rocket"
+            }
+          },
+          {
+            "id": "88302b18677434dd",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Mapa Financeiro da Rocket.canvas",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Mapa Financeiro da Rocket"
+            }
+          },
+          {
+            "id": "f29fc29d119ae1d2",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "34d6d5251d4e13ec",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Mapa Financeiro da Rocket.canvas",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Mapa Financeiro da Rocket"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "f074d424b2019832",
+  "lastOpenFiles": [
+    "Rocket.md",
+    "Rocket WebSite.canvas",
+    "Mapa Financeiro da Rocket.canvas",
+    "Textos/Manejar Financeiro das Rifas.md",
+    "2025-03-25.md",
+    "Aplicativos/Rocket Fitness.canvas",
+    "Aplicativos",
+    "Imagens/bank.svg",
+    "Textos/Investimento/Investimento & Retorno Financeiro da Rocket Design.md",
+    "Imagens.md",
+    "Imagens",
+    "Textos/Investimento/Investimento & Retorno Financeiro da Rocket Devel.md",
+    "Textos/Investimento/Investimento & Retorno Financeiro da Rocket Cloud.md",
+    "Textos/Investimento/Investimento & Retorno Financeiro da Rocket Afiliados.md",
+    "Textos/Investimento/Investimento & Retorno Financeiro da Rocket Marketing.md",
+    "Textos/Investimento/Investimento & Retorno Financeiro da Rocket Shop.md",
+    "Textos/Investimento/Investimento & Retorno Financeiro da Rocket Fitness.md",
+    "Textos/Investimento/Investimento & Retorno Financeiro da Rocket Printer.md",
+    "Textos/Investimento",
+    "Textos/Manejar Planejamento de Datas.md",
+    "Textos/Trazer novos Clientes para Contratar Serviços da Rocket.md",
+    "Textos/Criação de Livros.md",
+    "Textos/Gerenciamento das Redes Sociais.md",
+    "Textos/Afiliados da Rocket.md",
+    "Textos/Criação do Design e Identidade Visual da Empresa.md",
+    "Textos/Criação e manutenção dos aplicativos Mobile.md",
+    "Textos/Programação dos Sites e Serviços da Rocket.md",
+    "Textos",
+    "Textos/Manutenção dos produtos do site da Rocket Shop.md"
+  ]
+}

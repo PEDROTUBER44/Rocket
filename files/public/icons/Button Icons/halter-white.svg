@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46666 135.46667"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="halter-white.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="1.2109375"
+     inkscape:cx="256"
+     inkscape:cy="256"
+     inkscape:window-width="1600"
+     inkscape:window-height="831"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <defs
+     id="defs1" />
+  <g
+     id="layer1"
+     transform="matrix(1.3533037,0,0,1.3533037,-23.41,-23.930438)">
+    <rect
+       style="fill:#ffffff;stroke-width:9.41274;paint-order:markers stroke fill"
+       id="rect1-2"
+       width="9.0901241"
+       height="56.358772"
+       x="94.855072"
+       y="39.553947"
+       ry="5.7508945" />
+    <rect
+       style="fill:#ffffff;stroke-width:8.07828;paint-order:markers stroke fill"
+       id="rect1-2-7"
+       width="9.0901241"
+       height="41.51157"
+       x="106.49641"
+       y="46.977547"
+       ry="4.2358742" />
+    <rect
+       style="fill:#ffffff;stroke-width:9.41274;paint-order:markers stroke fill"
+       id="rect1-2-1"
+       width="9.0901241"
+       height="56.358772"
+       x="-39.842453"
+       y="39.553947"
+       ry="5.7508945"
+       transform="scale(-1,1)" />
+    <rect
+       style="fill:#ffffff;stroke-width:8.07828;paint-order:markers stroke fill"
+       id="rect1-2-7-8"
+       width="9.0901241"
+       height="41.51157"
+       x="-28.201122"
+       y="46.977547"
+       ry="4.2358742"
+       transform="scale(-1,1)" />
+    <rect
+       style="fill:#ffffff;stroke-width:8.29454;paint-order:markers stroke fill"
+       id="rect2"
+       width="68.175926"
+       height="10.908151"
+       x="32.208748"
+       y="62.279259"
+       ry="4.5450616" />
+  </g>
+</svg>

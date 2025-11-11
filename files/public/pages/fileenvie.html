@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Arquivos - Rocket</title>
+    <script src="https://cdn.jsdelivr.net/npm/lz4js@0.2.0/lz4.min.js"></script>
+    <style>
+        .file-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-info h3 {
+            margin: 0 0 10px 0;
+        }
+        .file-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .badge {
+            background: #4CAF50;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        .file-actions button {
+            margin-left: 10px;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+        .delete-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Meus Arquivos</h1>
+        <div id="file-list"></div>
+    </div>
+    
+    <script src="/public/js/lz4-decompressor.js"></script>
+</body>
+</html>

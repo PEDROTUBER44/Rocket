@@ -1,0 +1,5 @@
+- Rocket Fitness (Instagram, Tiktok, Youtube etc...)
+- Rocket Devel (Instagram, Tiktok, Youtube etc...)
+- Livros Cristãos
+- Criar um Publico em Seguidores seguindo e re-seguindo  pessoas que seguiram atraves dos reels ou de qualquer outra forma
+- Seguir 100 pessoas por dia 

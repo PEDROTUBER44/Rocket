@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile API Test - Rocket Fitness</title>
+    <style>
+        /* Mantém os estilos anteriores */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .section { 
+            background: rgba(255,255,255,0.05); 
+            padding: 25px; 
+            margin: 20px 0; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 { 
+            color: #fff; 
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        h2 { 
+            color: #ffffff; 
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+        input, select, button, textarea { 
+            margin: 8px 5px; 
+            padding: 12px 15px; 
+            border: 1px solid rgba(255,255,255,0.3); 
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        input::placeholder, textarea::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+        button { 
+            background: linear-gradient(135deg, #dc2626, #b91c1c); 
+            color: white; 
+            cursor: pointer; 
+            border: none;
+            padding: 12px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        button:hover { 
+            background: linear-gradient(135deg, #b91c1c, #991b1b);
+            transform: translateY(-2px);
+        }
+        .result { 
+            background: rgba(0,0,0,0.3); 
+            padding: 15px; 
+            border-left: 4px solid #3b82f6; 
+            margin-top: 15px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            border-radius: 0 8px 8px 0;
+        }
+        .error { border-left-color: #dc2626; background: rgba(220, 38, 38, 0.1); }
+        .success { border-left-color: #16a34a; background: rgba(22, 163, 74, 0.1); }
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .profile-display {
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(220, 38, 38, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Rocket Fitness - API Test</h1>
+        
+        <!-- Login Section -->
+        <div class="section">
+            <h2>🔐 Login</h2>
+            <div class="input-group">
+                <input type="text" id="loginUsername" placeholder="Username ou Email">
+                <input type="password" id="loginPassword" placeholder="Senha">
+            </div>
+            <button onclick="login()">🚀 Login</button>
+            <div id="loginResult" class="result"></div>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="section">
+            <h2>👤 Meu Perfil</h2>
+            <button onclick="getProfile()">📄 Buscar Perfil</button>
+            <div id="profileDisplay"></div>
+        </div>
+
+        <!-- Update Profile Section -->
+        <div class="section">
+            <h2>✏️ Atualizar Perfil</h2>
+            <div class="input-group">
+                <input type="text" id="updateName" placeholder="Nome">
+                <input type="text" id="updateUsername" placeholder="Username">
+                <input type="email" id="updateEmail" placeholder="Email">
+            </div>
+            <div class="input-group">
+                <textarea id="updateBio" placeholder="Biografia" rows="3"></textarea>
+            </div>
+            <button onclick="updateProfile()">💾 Atualizar</button>
+            <div id="updateResult" class="result"></div>
+        </div>
+
+        <!-- CORRIGIDO: Upload de Imagem usando base64 -->
+        <div class="section">
+            <h2>🖼️ Upload de Imagem de Perfil</h2>
+            <input type="file" id="profileImageFile" accept="image/*" onchange="previewImage(this)">
+            <div id="imagePreview"></div>
+            <button onclick="uploadProfileImage()">⬆️ Fazer Upload</button>
+            <div id="uploadResult" class="result"></div>
+        </div>
+
+        <!-- Session Info -->
+        <div class="section">
+            <h2>🔒 Sessão</h2>
+            <div id="sessionInfo">Não autenticado</div>
+            <button onclick="logout()">🚪 Logout</button>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+
+        // CORRIGIDO: Preview da imagem antes do upload
+        function previewImage(input) {
+            const preview = document.getElementById('imagePreview');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `
+                        <img src="${e.target.result}" style="max-width: 200px; max-height: 200px; border-radius: 10px; margin: 10px 0;">
+                        <p>Pronto para upload!</p>
+                    `;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // API helper
+        async function apiCall(url, method = 'GET', body = null, isFormData = false) {
+            try {
+                const options = {
+                    method: method,
+                    credentials: 'include',
+                    headers: {}
+                };
+
+                if (body && !isFormData) {
+                    options.headers['Content-Type'] = 'application/json';
+                    options.body = JSON.stringify(body);
+                } else if (body && isFormData) {
+                    options.body = body;
+                }
+
+                console.log(`🚀 ${method} ${url}`);
+                const response = await fetch(url, options);
+                
+                let data;
+                const contentType = response.headers.get('content-type');
+                
+                if (contentType && contentType.includes('application/json')) {
+                    data = await response.json();
+                } else {
+                    const text = await response.text();
+                    data = text ? { message: text } : { error: 'Empty response' };
+                }
+                
+                return {
+                    success: response.ok,
+                    status: response.status,
+                    data: data
+                };
+            } catch (error) {
+                return {
+                    success: false,
+                    error: error.message,
+                    data: { error: 'Network error', details: error.message }
+                };
+            }
+        }
+
+        function displayResult(elementId, data) {
+            const element = document.getElementById(elementId);
+            let className = 'result';
+            if (data.success === true) className += ' success';
+            else if (data.success === false) className += ' error';
+            
+            element.className = className;
+            element.innerHTML = JSON.stringify(data, null, 2);
+        }
+
+        // Login
+        async function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!username || !password) {
+                displayResult('loginResult', { error: 'Preencha todos os campos' });
+                return;
+            }
+
+            const result = await apiCall('/api/auth/signin', 'POST', {
+                username_or_email: username,
+                password: password
+            });
+
+            displayResult('loginResult', result);
+            
+            if (result.success && result.data) {
+                currentUser = result.data;
+                document.getElementById('sessionInfo').innerHTML = `Logado como: ${currentUser.username}`;
+                getProfile(); // Auto-carregar perfil
+            }
+        }
+
+        // Get Profile
+        async function getProfile() {
+            const result = await apiCall('/api/profile', 'GET');
+            
+            if (result.success && result.data) {
+                const profile = result.data;
+                document.getElementById('profileDisplay').innerHTML = `
+                    <div class="profile-display">
+                        <h3>${profile.name}</h3>
+                        <p>@${profile.username}</p>
+                        ${profile.bio ? `<p><em>"${profile.bio}"</em></p>` : ''}
+                        ${profile.profile_icon_url ? 
+                            `<img src="${profile.profile_icon_url}" class="profile-image">` : 
+                            '<div style="color: #999;">Sem imagem de perfil</div>'
+                        }
+                    </div>
+                `;
+            }
+        }
+
+        // Update Profile
+        async function updateProfile() {
+            const profileData = {};
+            
+            const name = document.getElementById('updateName').value.trim();
+            const username = document.getElementById('updateUsername').value.trim();
+            const email = document.getElementById('updateEmail').value.trim();
+            const bio = document.getElementById('updateBio').value.trim();
+            
+            if (name) profileData.name = name;
+            if (username) profileData.username = username;
+            if (email) profileData.email = email;
+            if (bio) profileData.bio = bio;
+            
+            if (Object.keys(profileData).length === 0) {
+                displayResult('updateResult', { error: 'Preencha pelo menos um campo' });
+                return;
+            }
+
+            const result = await apiCall('/api/profile_update', 'PUT', profileData);
+            displayResult('updateResult', result);
+            
+            if (result.success) {
+                setTimeout(getProfile, 500);
+            }
+        }
+
+        // CORRIGIDO: Upload usando base64 (compatível com o backend existente)
+        async function uploadProfileImage() {
+            const fileInput = document.getElementById('profileImageFile');
+            
+            if (!fileInput.files[0]) {
+                displayResult('uploadResult', { error: 'Selecione uma imagem' });
+                return;
+            }
+
+            const file = fileInput.files[0];
+            
+            // Validações
+            if (file.size > 5 * 1024 * 1024) {
+                displayResult('uploadResult', { error: 'Imagem muito grande (máx 5MB)' });
+                return;
+            }
+            
+            if (!file.type.startsWith('image/')) {
+                displayResult('uploadResult', { error: 'Arquivo deve ser uma imagem' });
+                return;
+            }
+
+            // Converter para base64
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64Data = e.target.result;
+                
+                displayResult('uploadResult', { message: 'Fazendo upload...' });
+                
+                // Enviar como parte do update do perfil
+                const result = await apiCall('/api/profile_update', 'PUT', {
+                    profile_image: base64Data
+                });
+                
+                displayResult('uploadResult', result);
+                
+                if (result.success) {
+                    setTimeout(getProfile, 1000);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Logout
+        async function logout() {
+            await apiCall('/api/signout', 'POST');
+            currentUser = null;
+            document.getElementById('sessionInfo').innerHTML = 'Não autenticado';
+            document.getElementById('profileDisplay').innerHTML = '';
+        }
+
+        // Initialize
+        window.onload = function() {
+            console.log('🚀 Rocket Fitness Test Page carregada');
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-color">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/public/icons/Rocket/LogoRocket.svg" type="image/svg+xml" />
+    <title>Serviços</title>
+    <link rel="preconnect" href="https://rsms.me/" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+    <link rel="stylesheet" href="/public/css/output.css">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <style>
+        .hover\:bg-red-hover:hover {
+            background-color: var(--red-hover);
+        }
+
+        .focus-visible\:outline-red-color:focus-visible {
+            outline-color: var(--red-color);
+        }
+
+        .services-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(202, 0, 13, 0.05) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(202, 0, 13, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .services-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .values-section {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .values-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(202, 0, 13, 0.03) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(202, 0, 13, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .values-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .value-card {
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .animate-on-scroll.fade-in-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .animate-on-scroll-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .animate-on-scroll-left.slide-in-right {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .animate-on-scroll-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .animate-on-scroll-right.slide-in-left {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .animate-on-scroll-scale {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .animate-on-scroll-scale.scale-in {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .animate-on-scroll-rotate {
+            opacity: 0;
+            transform: rotate(-10deg) scale(0.9);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .animate-on-scroll-rotate.rotate-in {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        .delay-100 {
+            transition-delay: 100ms;
+        }
+
+        .delay-200 {
+            transition-delay: 200ms;
+        }
+
+        .delay-300 {
+            transition-delay: 300ms;
+        }
+
+        .delay-400 {
+            transition-delay: 400ms;
+        }
+
+        .delay-500 {
+            transition-delay: 500ms;
+        }
+
+        .delay-600 {
+            transition-delay: 600ms;
+        }
+
+        /* Animação de contador */
+        @keyframes countUp {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .counter-animation {
+            animation: countUp 0.5s ease-out;
+        }
+
+        /* Hover effects melhorados */
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(202, 0, 13, 0.15);
+        }
+
+        /* Parallax effect */
+        .parallax-element {
+            transition: transform 0.1s ease-out;
+        }
+    </style>
+</head>
+
+<body class="h-full bg-color text-white">
+    <div class="bg-color">
+        <header id="main-header" class="fixed inset-x-0 top-0 z-50 header-transition">
+            <nav aria-label="Global" class="flex items-center justify-between p-6 lg:px-8">
+                <div class="flex lg:flex-1"> <a href="index.html" class="-m-1.5 p-1.5"> <span class="sr-only">Sua
+                            Empresa</span>
+                        <div class="h-8 w-8 flex items-center justify-center"> <img
+                                src="/public/icons/Rocket/LogoRocket.svg" alt="Logo" class="h-8 w-auto" /> </div>
+                    </a> </div>
+                <div class="flex lg:hidden"> <button type="button" id="mobile-menu-open"
+                        class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200 hover:bg-white/10 hover:text-red-600 transition">
+                        <span class="sr-only">Abrir menu</span> <svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" aria-hidden="true"
+                            class="size-6 transition-colors">
+                            <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg> </button> </div>
+                <div class="hidden lg:flex lg:gap-x-12">
+                    <a href="index_services.html"
+                        class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Serviços</a>
+                    <a href="404.html"
+                        class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Recursos</a>
+                    <a href="404.html"
+                        class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Comunidade</a>
+                    <a href="404.html"
+                        class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Empresa</a>
+                </div>
+                <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+                    <div id="loginBtn"> <a href="login.html" class="text-sm font-semibold text-white"> Entrar <span
+                                aria-hidden="true">&rarr;</span> </a> </div>
+                    <div id="profileImageContainer" style="display: none"> <img id="profileImage"
+                            style="width: 30px; height: 30px; border-radius: 50%; cursor: pointer; object-fit: cover"
+                            alt="Perfil" title="Ir para perfil" /> </div>
+                </div>
+            </nav>
+        </header> <!-- Mobile Menu -->
+        <div id="mobile-menu-overlay" class="mobile-menu-overlay">
+            <div id="mobile-menu-panel" class="mobile-menu-panel">
+                <div class="flex items-center justify-between p-6"> <a href="index.html" class="-m-1.5 p-1.5"> <span
+                            class="sr-only">Sua Empresa</span>
+                        <div class="h-8 w-8 flex items-center justify-center"> <img
+                                src="/public/icons/Rocket/LogoRocket.svg" alt="Logo" class="h-8 w-auto" /> </div>
+                    </a> <button type="button" id="mobile-menu-close"
+                        class="-m-2.5 rounded-md p-2.5 text-gray-200 hover:bg-white/10 hover:text-red-600 transition">
+                        <span class="sr-only">Fechar menu</span> <svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="size-6">
+                            <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg> </button> </div>
+                <div class="mt-6 px-6">
+                    <div class="space-y-2">
+                        <a href="index_services.html" class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Serviços</a> 
+                    <a href="index_resources.html" class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Recursos</a> 
+                    <a href="index_community.html" class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Comunidade</a> 
+                    <a href="index_enterprise.html" class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Empresa</a> 
+                    </div>
+                    <div class="mt-6 pt-6 border-t border-white/10">
+                        <div id="mobileLoginBtn"> <a href="login.html"
+                                class="block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-white/10 transition">Entrar</a>
+                        </div>
+                        <div id="mobileProfileBtn" style="display: none"> <a href="/account.html"
+                                class="block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-white/10 transition">Meu
+                                Perfil</a> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="relative isolate px-6 pt-14 lg:px-8">
+        <div aria-hidden="true"
+            class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+            <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
+                class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#CA000D] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72rem] parallax-element">
+            </div>
+        </div>
+
+        <div class="mx-auto max-w-3xl py-32 sm:py-48 lg:py-56">
+            <div class="text-center">
+                <h1 class="animate-on-scroll text-5xl font-semibold tracking-tight text-white sm:text-7xl">
+                    Nossos
+                    <span class="text-red-color">Serviços</span>
+                </h1>
+
+                <p class="animate-on-scroll delay-200 mt-8 text-lg font-medium text-gray-400 sm:text-xl">Soluções
+                    criadas para impulsionar negócios e transformar vidas.</p>
+
+                <div class="animate-on-scroll delay-400 mt-10 flex items-center justify-center gap-x-6">
+                    <a href="#services-cards"
+                        class="rounded-md bg-red-color px-3.5 py-2.5 text-sm font-semibold text-white shadow hover:bg-red-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-color transition-all duration-300">Conhecer</a>
+
+                    <a href="#company-services" class="text-sm font-semibold text-white">
+                        Saiba mais
+                        <span aria-hidden="true">→</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div aria-hidden="true"
+            class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+            <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
+                class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#CA000D] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72rem] parallax-element">
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <section class="py-20 bg-color services-section relative overflow-hidden" id="services-cards">
+        <div class="bg-element"></div>
+        <div class="bg-element"></div>
+        <div class="bg-element"></div>
+
+        <div class="mx-auto max-w-7xl px-6 lg:px-8 services-content">
+            <div class="text-center mb-16">
+                <h2 class="animate-on-scroll text-3xl md:text-4xl font-bold text-white mb-4">
+                    Explore Nossos
+                    <span class="text-red-color">Serviços</span>
+                </h2>
+                <p class="animate-on-scroll delay-200 text-xl text-gray-400 max-w-3xl mx-auto">Oferecemos soluções
+                    completas para todas as suas necessidades</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div
+                    class="animate-on-scroll-left delay-100 bg-white/5 backdrop-blur-sm rounded-2xl shadow-lg p-8 hover-lift transition-all duration-300 border border-white/10 flex flex-col justify-between min-h-[280px] hover:border-red-500/30">
+                    <div class="text-center">
+                        <div class="mb-4">
+                            <svg class="inline-block w-12 h-12 text-white" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+
+                        <h3 class="text-2xl font-bold text-white mb-4">Rocket Fitness</h3>
+                        <p class="text-gray-400 mb-6 leading-relaxed">Treinos personalizados, acompanhamento de
+                            progresso e desafios semanais para você evoluir sempre.</p>
+                    </div>
+                    <button
+                        class="bg-red-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-500 transition-colors duration-200 w-full mt-auto cursor-pointer">Começar
+                        Treino</button>
+                </div>
+
+                <div
+                    class="animate-on-scroll-right delay-200 bg-white/5 backdrop-blur-sm rounded-2xl shadow-lg p-8 hover-lift transition-all duration-300 border border-white/10 flex flex-col justify-between min-h-[280px] hover:border-red-500/30">
+                    <div class="text-center">
+                        <div class="mb-4">
+                            <svg class="inline-block w-12 h-12 text-white" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Rocket Fitness for Academy</h3>
+                        <p class="text-gray-400 mb-6 leading-relaxed">Leve o Rocket Fitness para sua academia: planos
+                            personalizados, programas exclusivos e acompanhamento completo para seus alunos.</p>
+                    </div>
+                    <button
+                        class="bg-red-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-500 transition-colors duration-200 w-full mt-auto cursor-pointer">Ver
+                        Planos</button>
+                </div>
+
+                <div
+                    class="animate-on-scroll-left delay-300 bg-white/5 backdrop-blur-sm rounded-2xl shadow-lg p-8 hover-lift transition-all duration-300 border border-white/10 flex flex-col justify-between min-h-[280px] hover:border-red-500/30">
+                    <div class="text-center">
+                        <div class="mb-4">
+                            <svg class="inline-block w-12 h-12 text-white" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Rocket SaaS for Business</h3>
+                        <p class="text-gray-400 mb-6 leading-relaxed">Plataforma SaaS completa para empresas:
+                            ferramentas inteligentes, análise avançada e crescimento otimizado.</p>
+                    </div>
+                    <button
+                        class="bg-red-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-500 transition-colors duration-200 w-full mt-auto cursor-pointer">Teste
+                        Grátis</button>
+                </div>
+
+                <div
+                    class="animate-on-scroll-right delay-400 bg-white/5 backdrop-blur-sm rounded-2xl shadow-lg p-8 hover-lift transition-all duration-300 border border-white/10 flex flex-col justify-between min-h-[280px] hover:border-red-500/30">
+                    <div class="text-center">
+                        <div class="mb-4">
+                            <svg class="inline-block w-12 h-12 text-white" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Rocket Cloud & Tech</h3>
+                        <p class="text-gray-400 mb-6 leading-relaxed">Infraestrutura tecnológica escalável e confiável
+                            para startups e empresas crescerem com segurança.</p>
+                    </div>
+                    <button
+                        class="bg-red-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-500 transition-colors duration-200 w-full mt-auto cursor-pointer">Saiba
+                        Mais</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 values-section" id="company-services">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8 values-content">
+            <div class="text-center mb-16">
+                <h2 class="animate-on-scroll text-4xl md:text-5xl font-bold text-white mb-6">
+                    Por que escolher a
+                    <span class="text-red-color">Rocket?</span>
+                </h2>
+                <p class="animate-on-scroll delay-200 text-xl text-gray-400 max-w-3xl mx-auto">Transformamos negócios
+                    através de soluções tecnológicas inovadoras. Nossos serviços são desenvolvidos para impulsionar o
+                    crescimento da sua empresa com máxima eficiência e resultados comprovados.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div
+                    class="animate-on-scroll-scale delay-100 value-card bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-red-500/30 transition-all duration-300 hover-lift">
+                    <div class="mb-6">
+                        <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Sistemas Personalizados</h3>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed">Desenvolvemos sistemas sob medida que se adaptam
+                        perfeitamente ao seu negócio. Arquitetura escalável, segurança robusta e integração completa com
+                        seus processos existentes.</p>
+                </div>
+
+                <div
+                    class="animate-on-scroll-scale delay-200 value-card bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-red-500/30 transition-all duration-300 hover-lift">
+                    <div class="mb-6">
+                        <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Sites de Alta Performance</h3>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed">Criamos sites modernos, responsivos e otimizados para
+                        conversão. Design atrativo, velocidade excepcional e SEO avançado para maximizar sua presença
+                        digital e gerar mais leads.</p>
+                </div>
+
+                <div
+                    class="animate-on-scroll-scale delay-300 value-card bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-red-500/30 transition-all duration-300 hover-lift">
+                    <div class="mb-6">
+                        <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Automação Inteligente</h3>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed">Automatizamos processos repetitivos e complexos, liberando
+                        sua equipe para atividades estratégicas. Workflows inteligentes que reduzem custos e aumentam a
+                        produtividade em até 70%.</p>
+                </div>
+
+                <div
+                    class="animate-on-scroll-scale delay-400 value-card bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-red-500/30 transition-all duration-300 hover-lift">
+                    <div class="mb-6">
+                        <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Soluções SaaS Escaláveis</h3>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed">Plataformas em nuvem que crescem com seu negócio.
+                        Infraestrutura confiável, atualizações automáticas e suporte 24/7. Acesse seus dados de qualquer
+                        lugar, a qualquer momento.</p>
+                </div>
+
+                <div
+                    class="animate-on-scroll-scale delay-500 value-card bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-red-500/30 transition-all duration-300 hover-lift">
+                    <div class="mb-6">
+                        <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Integrações Avançadas</h3>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed">Conectamos todos os seus sistemas em um ecossistema
+                        unificado. APIs robustas, sincronização em tempo real e fluxo de dados otimizado para uma
+                        operação totalmente integrada.</p>
+                </div>
+
+                <div
+                    class="animate-on-scroll-scale delay-600 value-card bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-red-500/30 transition-all duration-300 hover-lift">
+                    <div class="mb-6">
+                        <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Consultoria Estratégica</h3>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed">Analisamos seu negócio e identificamos oportunidades de
+                        melhoria tecnológica. Estratégias personalizadas para transformação digital que geram ROI
+                        comprovado e vantagem competitiva.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-gradient-to-r from-black via-red-900 to-black">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="animate-on-scroll text-3xl md:text-5xl font-bold text-white mb-6">Precisa de algo personalizado?
+            </h2>
+            <p class="animate-on-scroll delay-200 text-xl text-gray-300 mb-10 max-w-2xl mx-auto">Envie uma mensagem para
+                que nosso time dê suporte a você!</p>
+            <button
+                class="animate-on-scroll delay-400 rounded-md bg-red-color px-3.5 py-2.5 text-sm font-semibold text-white shadow hover:bg-red-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-color transition-all duration-300 cursor-pointer">Converse
+                com a Rocket agora mesmo</button>
+        </div>
+    </section>
+
+    <section class="py-20 bg-color" id="faq-section">
+        <div class="mx-auto max-w-4xl px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="animate-on-scroll text-3xl md:text-4xl font-bold text-white mb-4">Perguntas Frequentes</h2>
+                <p class="animate-on-scroll delay-200 text-xl text-gray-400 max-w-3xl mx-auto">Encontre respostas para
+                    as dúvidas mais comuns sobre nossos serviços</p>
+            </div>
+
+            <div class="space-y-6">
+                <div class="animate-on-scroll delay-100 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+                    <button
+                        class="w-full flex justify-between items-center rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 focus:outline-none focus:ring-2 focus:ring-red-color transition-all duration-200 cursor-pointer"
+                        onclick="toggleFaq('faq-1')" aria-expanded="false">
+                        <span class="text-sm font-semibold text-white pr-4">Como posso começar a usar os serviços da
+                            Rocket?</span>
+                        <div class="flex-shrink-0">
+                            <svg id="faq-1-plus" class="w-6 h-6 text-white transition-transform duration-200"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            <svg id="faq-1-minus" class="w-6 h-6 text-white transition-transform duration-200 hidden"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-1" class="hidden px-6 pb-6 pt-4">
+                        <p class="text-gray-400 leading-relaxed">É muito simples! Basta criar sua conta gratuita e
+                            escolher o serviço que melhor atende às suas necessidades. Oferecemos períodos de teste para
+                            que você possa experimentar antes de se comprometer com um plano pago.</p>
+                    </div>
+                </div>
+
+                <div class="animate-on-scroll delay-200 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+                    <button
+                        class="w-full flex justify-between items-center rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 focus:outline-none focus:ring-2 focus:ring-red-color transition-all duration-200 cursor-pointer"
+                        onclick="toggleFaq('faq-2')" aria-expanded="false">
+                        <span class="text-sm font-semibold text-white pr-4">Qual a diferença entre o Rocket Fitness e o
+                            Rocket Fitness for Academy?</span>
+                        <div class="flex-shrink-0">
+                            <svg id="faq-2-plus" class="w-6 h-6 text-white transition-transform duration-200"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            <svg id="faq-2-minus" class="w-6 h-6 text-white transition-transform duration-200 hidden"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-2" class="hidden px-6 pb-6 pt-4">
+                        <p class="text-gray-400 leading-relaxed">O Rocket Fitness é voltado para uso individual, com
+                            treinos personalizados e acompanhamento de saúde. Já o Rocket Fitness for Academy é uma
+                            solução completa para academias e profissionais de educação física, oferecendo ferramentas
+                            de gestão e programas exclusivos.</p>
+                    </div>
+                </div>
+
+                <div class="animate-on-scroll delay-300 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+                    <button
+                        class="w-full flex justify-between items-center rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 focus:outline-none focus:ring-2 focus:ring-red-color transition-all duration-200 cursor-pointer"
+                        onclick="toggleFaq('faq-3')" aria-expanded="false">
+                        <span class="text-sm font-semibold text-white pr-4">O Rocket SaaS for Business é adequado para
+                            pequenas empresas?</span>
+                        <div class="flex-shrink-0">
+                            <svg id="faq-3-plus" class="w-6 h-6 text-white transition-transform duration-200"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            <svg id="faq-3-minus" class="w-6 h-6 text-white transition-transform duration-200 hidden"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-3" class="hidden px-6 pb-6 pt-4">
+                        <p class="text-gray-400 leading-relaxed">Absolutamente! Nossa plataforma SaaS foi desenvolvida
+                            para escalar com seu negócio. Oferecemos planos específicos para startups e pequenas
+                            empresas, com recursos que crescem conforme suas necessidades.</p>
+                    </div>
+                </div>
+
+                <div class="animate-on-scroll delay-400 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+                    <button
+                        class="w-full flex justify-between items-center rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 focus:outline-none focus:ring-2 focus:ring-red-color transition-all duration-200 cursor-pointer"
+                        onclick="toggleFaq('faq-4')" aria-expanded="false">
+                        <span class="text-sm font-semibold text-white pr-4">Como funciona o suporte técnico do Rocket
+                            Cloud & Tech?</span>
+                        <div class="flex-shrink-0">
+                            <svg id="faq-4-plus" class="w-6 h-6 text-white transition-transform duration-200"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            <svg id="faq-4-minus" class="w-6 h-6 text-white transition-transform duration-200 hidden"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-4" class="hidden px-6 pb-6 pt-4">
+                        <p class="text-gray-400 leading-relaxed">Oferecemos suporte técnico 24/7 através de chat, email
+                            e telefone. Nossa equipe de especialistas está sempre pronta para ajudar com qualquer
+                            questão técnica ou dúvida sobre infraestrutura.</p>
+                    </div>
+                </div>
+
+                <div class="animate-on-scroll delay-500 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+                    <button
+                        class="w-full flex justify-between items-center rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 focus:outline-none focus:ring-2 focus:ring-red-color transition-all duration-200 cursor-pointer"
+                        onclick="toggleFaq('faq-5')" aria-expanded="false">
+                        <span class="text-sm font-semibold text-white pr-4">Posso cancelar minha assinatura a qualquer
+                            momento?</span>
+                        <div class="flex-shrink-0">
+                            <svg id="faq-5-plus" class="w-6 h-6 text-white transition-transform duration-200"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            <svg id="faq-5-minus" class="w-6 h-6 text-white transition-transform duration-200 hidden"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-5" class="hidden px-6 pb-6 pt-4">
+                        <p class="text-gray-400 leading-relaxed">Sim! Você pode cancelar sua assinatura a qualquer
+                            momento através do seu painel de controle. Não cobramos taxas de cancelamento e você
+                            continuará tendo acesso aos serviços até o fim do período pago.</p>
+                    </div>
+                </div>
+
+                <div class="animate-on-scroll delay-600 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+                    <button
+                        class="w-full flex justify-between items-center rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 focus:outline-none focus:ring-2 focus:ring-red-color transition-all duration-200 cursor-pointer"
+                        onclick="toggleFaq('faq-6')" aria-expanded="false">
+                        <span class="text-sm font-semibold text-white pr-4">Os dados dos meus clientes estão
+                            seguros?</span>
+                        <div class="flex-shrink-0">
+                            <svg id="faq-6-plus" class="w-6 h-6 text-white transition-transform duration-200"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            <svg id="faq-6-minus" class="w-6 h-6 text-white transition-transform duration-200 hidden"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-6" class="hidden px-6 pb-6 pt-4">
+                        <p class="text-gray-400 leading-relaxed">A segurança dos dados é nossa prioridade máxima.
+                            Utilizamos criptografia de ponta a ponta, certificações de segurança internacionais e
+                            seguimos rigorosamente as normas da LGPD para proteger todas as informações.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <p class="animate-on-scroll text-gray-400 mb-6">Não encontrou a resposta que procurava?</p>
+                <a href="#"
+                    class="animate-on-scroll delay-200 inline-flex items-center justify-center rounded-md bg-red-color px-3.5 py-2.5 text-sm font-semibold text-white shadow hover:bg-red-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-color transition-all duration-300">
+                    Entre em Contato
+                    <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer style="background-color: #000000">
+        <div class="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
+            <div class="animate-on-scroll delay-200 flex justify-center gap-x-10"> <a
+                    href="https://www.facebook.com/profile.php?id=61580325054600"
+                    class="text-gray-600 hover:text-gray-500 dark:text-gray-300 dark:hover:text-white"> <span
+                        class="sr-only">Facebook</span> <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+                        class="h-6 w-6">
+                        <path
+                            d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                            clip-rule="evenodd" fill-rule="evenodd"></path>
+                    </svg> </a> <a href="404.html"
+                    class="text-gray-600 hover:text-gray-500 dark:text-gray-300 dark:hover:text-white"> <span
+                        class="sr-only">Instagram</span> <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+                        class="h-6 w-6">
+                        <path
+                            d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
+                            clip-rule="evenodd" fill-rule="evenodd"></path>
+                    </svg> </a> <a href="https://x.com/rocketsolution0"
+                    class="text-gray-600 hover:text-gray-500 dark:text-gray-300 dark:hover:text-white"> <span
+                        class="sr-only">X (Twitter)</span> <svg viewBox="0 0 24 24" fill="currentColor"
+                        aria-hidden="true" class="h-6 w-6">
+                        <path
+                            d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z">
+                        </path>
+                    </svg> </a> <a href="https://www.youtube.com/channel/UCdyekWxbMgPlwukKg5-xWgw"
+                    class="text-gray-600 hover:text-gray-500 dark:text-gray-300 dark:hover:text-white"> <span
+                        class="sr-only">YouTube</span> <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+                        class="h-6 w-6">
+                        <path
+                            d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z"
+                            clip-rule="evenodd" fill-rule="evenodd"></path>
+                    </svg> </a> </div>
+            <p class="animate-on-scroll delay-300 mt-10 text-center text-sm text-gray-600 dark:text-gray-300">© 2025
+                Rocket, Inc. Todos os direitos reservados.</p>
+            <p class="animate-on-scroll delay-400 mt-10 text-center text-sm text-gray-600 dark:text-gray-300">Porque
+                dele, e por meio dele, e para ele são todas as coisas. A ele seja a glória para sempre. Amém! Rm
+                11:36</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sistema de animação de scroll
+        class ScrollAnimationManager {
+            constructor() {
+                this.elements = [];
+                this.init();
+            }
+
+            init() {
+                // Selecionar todos os elementos com animação
+                this.elements = [...document.querySelectorAll(".animate-on-scroll"), ...document.querySelectorAll(".animate-on-scroll-left"), ...document.querySelectorAll(".animate-on-scroll-right"), ...document.querySelectorAll(".animate-on-scroll-scale"), ...document.querySelectorAll(".animate-on-scroll-rotate")];
+
+                // Configurar observer
+                this.observer = new IntersectionObserver((entries) => this.handleIntersection(entries), {
+                    threshold: 0.1,
+                    rootMargin: "0px 0px -50px 0px",
+                });
+
+                // Observar elementos
+                this.elements.forEach((element) => {
+                    this.observer.observe(element);
+                });
+
+                // Inicializar parallax
+                this.initParallax();
+            }
+
+            handleIntersection(entries) {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        this.animateElement(entry.target);
+                    }
+                });
+            }
+
+            animateElement(element) {
+                if (element.classList.contains("animate-on-scroll")) {
+                    element.classList.add("fade-in-up");
+                } else if (element.classList.contains("animate-on-scroll-left")) {
+                    element.classList.add("slide-in-right");
+                } else if (element.classList.contains("animate-on-scroll-right")) {
+                    element.classList.add("slide-in-left");
+                } else if (element.classList.contains("animate-on-scroll-scale")) {
+                    element.classList.add("scale-in");
+                } else if (element.classList.contains("animate-on-scroll-rotate")) {
+                    element.classList.add("rotate-in");
+                }
+
+                // Parar de observar após animar
+                this.observer.unobserve(element);
+            }
+
+            initParallax() {
+                const parallaxElements = document.querySelectorAll(".parallax-element");
+
+                window.addEventListener("scroll", () => {
+                    const scrolled = window.pageYOffset;
+                    const rate = scrolled * -0.5;
+
+                    parallaxElements.forEach((element) => {
+                        element.style.transform = `translateY(${rate}px)`;
+                    });
+                });
+            }
+        }
+
+        // Função para gerenciar FAQ
+        function toggleFaq(faqId) {
+            const content = document.getElementById(faqId);
+            const button = content.previousElementSibling.querySelector("button");
+            const plusIcon = document.getElementById(faqId + "-plus");
+            const minusIcon = document.getElementById(faqId + "-minus");
+
+            if (content.classList.contains("hidden")) {
+                // Abrir FAQ com animação
+                content.classList.remove("hidden");
+                content.style.maxHeight = content.scrollHeight + "px";
+                content.style.opacity = "0";
+
+                // Animar entrada
+                setTimeout(() => {
+                    content.style.opacity = "1";
+                }, 10);
+
+                button.setAttribute("aria-expanded", "true");
+                plusIcon.classList.add("hidden");
+                minusIcon.classList.remove("hidden");
+            } else {
+                // Fechar FAQ com animação
+                content.style.opacity = "0";
+
+                setTimeout(() => {
+                    content.classList.add("hidden");
+                    content.style.maxHeight = "0px";
+                }, 200);
+
+                button.setAttribute("aria-expanded", "false");
+                plusIcon.classList.remove("hidden");
+                minusIcon.classList.add("hidden");
+            }
+        }
+
+        // Inicialização quando DOM carregado
+        document.addEventListener("DOMContentLoaded", function () {
+            // Inicializar sistema de animações
+            new ScrollAnimationManager();
+
+            // Configurar animação suave para FAQ
+            const faqContents = document.querySelectorAll('[id^="faq-"]:not([id$="-plus"]):not([id$="-minus"])');
+            faqContents.forEach((content) => {
+                content.style.transition = "max-height 0.3s ease-out, opacity 0.2s ease-out";
+                content.style.overflow = "hidden";
+            });
+
+            // Animação da logo no header
+            const logoElement = document.querySelector(".animate-on-scroll-scale");
+            if (logoElement) {
+                setTimeout(() => {
+                    logoElement.classList.add("scale-in");
+                }, 500);
+            }
+        });
+
+        // Smooth scrolling para links de âncora
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+            anchor.addEventListener("click", function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute("href"));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                    });
+                }
+            });
+        });
+
+        // Adicionar efeito de hover melhorado aos botões
+        document.querySelectorAll("button, .bg-red-color, .bg-red-600").forEach((element) => {
+            element.addEventListener("mouseenter", function () {
+                this.style.transform = "translateY(-2px)";
+            });
+
+            element.addEventListener("mouseleave", function () {
+                this.style.transform = "translateY(0)";
+            });
+        });
+    </script>
+    <script src="/public/js/headerbar.js"></script>
+    <script src="/public/js/pushProfileImage.js"></script>
+</body>
+
+</html>

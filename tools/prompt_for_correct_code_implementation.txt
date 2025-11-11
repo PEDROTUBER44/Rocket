@@ -1,0 +1,26 @@
+Sistema:
+   - Processador E5-2650v4
+   - Memoria ram 32gb 2133mhz
+   - Sistema FreeBSD 14.3
+   - Arquivos em pool do zfs
+   - Internet 700MEGA
+
+   Consumo de ram esperado de certos serviços:
+
+   - FreeBSD 350mb em idle (FreeBsd consome menos memoria q no linux)
+   - Redis 1gb
+   - Arc do zfs 1gb
+   - Aplicação axum rodando
+   - Firewall pf do FreeBSD
+
+   Mais ferramentas:
+
+      - CDN otimizar coisas do site para cache 
+
+
+
+Implemente em meu codigo backend completo as seguintes correçoes:
+
+- Sessões não invalidadas após mudança de senha: Quando o usuário muda a senha, as sessões antigas no Redis permanecem válidas até expirarem. O ideal seria invalidar todas as sessões existentes.
+
+Quero q você corrija e me envie o codigo completo com as correcoes implementadas sem nenhuma abreviação e nem crie arquivos alem dos que te mandei apenas aperfeiçõe eles e outra coisa não quero que você envie um arquivo por vez envie logo de uma vez todos os que necessitam de correção, não quebre a logica de os usuarios poderem acessar seus arquivos sem digitar login novamente, tenha em mente de não usar argon2 (a nao ser que os pontos acima digam o contrario) substitua o uso por bcrypt nem serde_json use apenas sonic-rs quando tiver como e tambem não implementar novas bibliotecas desnecessarias quero que seja bem feito

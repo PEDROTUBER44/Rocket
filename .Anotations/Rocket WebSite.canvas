@@ -1,0 +1,13 @@
+{
+	"nodes":[
+		{"id":"46fde8a18b6d9b34","x":-180,"y":160,"width":250,"height":60,"color":"1","type":"text","text":"SERVER"},
+		{"id":"94ba7a593c53b6b0","type":"text","text":"/api","x":70,"y":-108,"width":250,"height":60,"color":"2"},
+		{"id":"0205eace7471fd5c","x":-430,"y":-108,"width":250,"height":60,"color":"2","type":"text","text":"/api"},
+		{"id":"460b1e6b18438a7c","x":-680,"y":-340,"width":250,"height":60,"color":"2","type":"text","text":"/auth"}
+	],
+	"edges":[
+		{"id":"4e8a4957003ed2f1","fromNode":"46fde8a18b6d9b34","fromSide":"top","toNode":"0205eace7471fd5c","toSide":"bottom"},
+		{"id":"c1382611d015b0db","fromNode":"46fde8a18b6d9b34","fromSide":"top","toNode":"94ba7a593c53b6b0","toSide":"bottom"},
+		{"id":"bd2fbceabdc66cb3","fromNode":"0205eace7471fd5c","fromSide":"top","toNode":"460b1e6b18438a7c","toSide":"bottom"}
+	]
+}

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/public/icons/Rocket/LogoRocket.svg" type="image/svg+xml" />
+    <title>Conta</title>
+    <link rel="preconnect" href="https://rsms.me/" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+    <link rel="stylesheet" href="/public/css/output.css" />
+    <link rel="stylesheet" href="/public/css/main.css" />
+
+    <style>
+        #genderInput {
+            background-image: url("/public/icons/Button Icons/person.svg");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+    </style>
+</head>
+
+<body class="bg-color">
+    <header id="main-header"
+        class="fixed inset-x-0 top-0 z-50 bg-color/90 backdrop-blur-sm transition-all duration-300">
+        <nav aria-label="Global" class="flex items-center justify-between p-6 lg:px-8">
+            <div class="flex items-center gap-4">
+                <button type="button" id="mobile-menu-open"
+                    class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200 hover:bg-white/10 hover:text-red-600 transition cursor-pointer">
+                    <span class="sr-only">Abrir menu</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"
+                        class="size-6 transition-colors">
+                        <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+
+                <a href="index.html" class="-m-1.5 p-1.5">
+                    <span class="sr-only">Rocket</span>
+                    <div class="h-8 w-8 flex items-center justify-center">
+                        <img src="/public/icons/Rocket/LogoRocket.svg" alt="Logo" class="h-8 w-auto" />
+                    </div>
+                </a>
+            </div>
+
+            <div class="flex items-center">
+                <div id="profileImageContainer">
+                    <img id="profileImage" src="/public/icons/Button Icons/user.svg"
+                        class="w-8 h-8 rounded-full cursor-pointer object-cover border border-white/20" alt="Perfil"
+                        title="Ir para perfil" />
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div id="mobile-menu" class="hidden">
+        <div class="fixed inset-0 z-50">
+            <div class="fixed inset-0 bg-black/50" onclick="closeSidebar()"></div>
+
+            <div
+                class="fixed inset-y-0 left-0 z-50 w-72 overflow-y-auto bg-color border-r border-white/10 transform transition-transform duration-300">
+                <div class="flex items-center justify-between p-6 border-b border-white/10">
+                    <div class="flex items-center gap-3">
+                        <img src="/public/icons/Rocket/Logo Rocket - Com Nome.webp" alt="Rocket Logotipo"
+                            class="h-8 w-auto" />
+                    </div>
+                    <button type="button" id="mobile-menu-close"
+                        class="-m-2.5 rounded-md p-2.5 text-gray-200 hover:bg-white/10 transition-colors cursor-pointer">
+                        <span class="sr-only">Fechar menu</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"
+                            class="size-6">
+                            <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="flex flex-col gap-5 p-6">
+                    <nav class="flex flex-1 flex-col">
+                        <ul role="list" class="flex flex-1 flex-col gap-7">
+                            <li>
+                                <ul role="list" class="-mx-2 space-y-1">
+                                    <li>
+                                        <a href="account.html"
+                                            class="group flex gap-3 rounded-md p-2 text-sm font-semibold text-slate-300 hover:bg-white/5 hover:text-white cursor-pointer">
+                                            <img src="/public/icons/Button Icons/person.svg"
+                                                class="h-6 w-6 shrink-0 text-current" alt="" />
+                                            Perfil
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="account_security.html"
+                                            class="group flex gap-3 rounded-md p-2 text-sm font-semibold text-slate-300 hover:bg-white/5 hover:text-white cursor-pointer">
+                                            <img src="/public/icons/Button Icons/fingerprint.svg"
+                                                class="h-6 w-6 shrink-0 text-current" alt="" />
+                                            Segurança
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <button type="button" onclick="toggleSubmenu('services-menu')"
+                                            class="flex w-full items-center gap-3 rounded-md p-2 text-left text-sm font-semibold text-slate-300 hover:bg-white/5 hover:text-white cursor-pointer"
+                                            aria-expanded="false">
+                                            <img src="/public/icons/Button Icons/bag.svg"
+                                                class="h-6 w-6 shrink-0 text-current" alt="" />
+                                            Serviços
+                                            <svg viewBox="0 0 20 20" fill="currentColor"
+                                                class="ml-auto h-5 w-5 shrink-0 text-slate-300 transition-transform duration-150"
+                                                id="services-chevron" aria-hidden="true">
+                                                <path
+                                                    d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+                                                    clip-rule="evenodd" fill-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                        <ul class="mt-1 px-2 hidden" id="services-menu">
+                                            <li>
+                                                <a href="#"
+                                                    class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">SaaS
+                                                    for Business</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"
+                                                    class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Rocket
+                                                    Fitness</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"
+                                                    class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Rocket
+                                                    Design</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"
+                                                    class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Rocket
+                                                    OS</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <button type="button" onclick="toggleSubmenu('resources-menu')"
+                                            class="flex w-full items-center gap-3 rounded-md p-2 text-left text-sm font-semibold text-slate-300 hover:bg-white/5 hover:text-white cursor-pointer"
+                                            aria-expanded="false">
+                                            <img src="/public/icons/Button Icons/layers.svg"
+                                                class="h-6 w-6 shrink-0 text-current" alt="" />
+                                            Recursos
+                                            <svg viewBox="0 0 20 20" fill="currentColor"
+                                                class="ml-auto h-5 w-5 shrink-0 text-slate-300 transition-transform duration-150"
+                                                id="resources-chevron" aria-hidden="true">
+                                                <path
+                                                    d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+                                                    clip-rule="evenodd" fill-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                        <ul class="mt-1 px-2 hidden" id="resources-menu">
+                                            <li>
+                                                <a href="#"
+                                                    class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Programa
+                                                    de Afiliados</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"
+                                                    class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Documentação</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"
+                                                    class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Comunidade</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"
+                                                    class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Trabalhe
+                                                    conosco</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <button type="button" onclick="toggleSubmenu('companies-menu')"
+                                            class="flex w-full items-center gap-3 rounded-md p-2 text-left text-sm font-semibold text-slate-300 hover:bg-white/5 hover:text-white cursor-pointer"
+                                            aria-expanded="false">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="1.5" class="h-6 w-6 shrink-0 text-current"
+                                                aria-hidden="true">
+                                                <path
+                                                    d="M2.25 21h19.5m-18-18v18m2.25-18v18m13.5-18v18m2.25-18v18M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z"
+                                                    stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </svg>
+                                            Empresas
+                                            <svg viewBox="0 0 20 20" fill="currentColor"
+                                                class="ml-auto h-5 w-5 shrink-0 text-slate-300 transition-transform duration-150"
+                                                id="companies-chevron" aria-hidden="true">
+                                                <path
+                                                    d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+                                                    clip-rule="evenodd" fill-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                        <ul class="mt-1 px-2 hidden" id="companies-menu">
+                                            <li>
+                                                <a href="create_company.html"
+                                                    class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Criar
+                                                    Empresa</a>
+                                            </li>
+                                            <li>
+                                                <a href="manage_company.html"
+                                                    class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Gerenciar
+                                                    Empresa(s)</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"
+                                                    class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Relatórios</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <a href="settings.html"
+                                            class="group flex gap-3 rounded-md p-2 text-sm font-semibold text-slate-300 hover:bg-white/5 hover:text-white cursor-pointer">
+                                            <img src="/public/icons/Button Icons/gear.svg"
+                                                class="h-6 w-6 shrink-0 text-current" alt="" />
+                                            Configurações
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="bg-color flex items-center justify-center min-h-screen font-sans">
+        <main class="w-full max-w-sm rounded-lg p-8 flex flex-col items-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-white text-center mb-6">Mudar Senha</h1>
+
+            <!-- Formulário -->
+            <form id="authForm" class="w-full flex flex-col gap-4">
+
+                <!-- Senha Atual -->
+                <input id="currentPassword" type="password" placeholder="Senha Atual" required
+                    class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-color"
+                    autocomplete="current-password" minlength="8" maxlength="128" />
+
+                <!-- Senha Nova -->
+                <input id="newPassword" type="password" placeholder="Nova Senha" required
+                    class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-color"
+                    autocomplete="new-password" minlength="8" maxlength="128" />
+
+                <!-- Confirmar Nova Senha -->
+                <input id="confirmNewPassword" type="password" placeholder="Confirmar Nova Senha" required
+                    class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-color"
+                    autocomplete="new-password" minlength="8" maxlength="128" />
+
+                <!-- Botão -->
+                <button id="authButton" type="submit"
+                    class="flex w-full justify-center rounded-md bg-red-color px-3 py-1.5 text-sm/6 font-semibold text-white focus:outline-none focus:ring-2 focus:ring-red-color hover:bg-red-700 transition-colors duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Alterar Senha
+                </button>
+
+            </form>
+        </main>
+    </main>
+
+
+</body>
+
+<script>
+    // =============================================
+    // FUNCIONALIDADES DA SIDEBAR (MANTIDAS)
+    // =============================================
+
+    function openSidebar() {
+        console.log('[SIDEBAR] Abrindo sidebar');
+        document.getElementById('mobile-menu').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+        console.log('[SIDEBAR] Fechando sidebar');
+        document.getElementById('mobile-menu').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    function toggleSubmenu(menuId) {
+        console.log('[SUBMENU] Alternando submenu:', menuId);
+        const menu = document.getElementById(menuId);
+        const chevron = document.getElementById(menuId.replace('-menu', '-chevron'));
+        const button = chevron.closest('button');
+
+        if (menu.classList.contains('hidden')) {
+            menu.classList.remove('hidden');
+            chevron.classList.add('rotate-90');
+            button.setAttribute('aria-expanded', 'true');
+            button.classList.add('text-white');
+        } else {
+            menu.classList.add('hidden');
+            chevron.classList.remove('rotate-90');
+            button.setAttribute('aria-expanded', 'false');
+            button.classList.remove('text-white');
+        }
+    }
+
+    // =============================================
+    // NOVA FUNCIONALIDADE: CARREGAR IMAGEM DE PERFIL
+    // =============================================
+
+    async function loadProfileData() {
+        console.log('[PROFILE] Iniciando carregamento dos dados do perfil');
+
+        try {
+            console.log('[PROFILE] Fazendo requisição GET para /api/profile');
+            const response = await fetch('/api/profile', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('[PROFILE] Status da resposta:', response.status);
+
+            if (!response.ok) {
+                console.error('[PROFILE] Erro na requisição:', response.status, response.statusText);
+                return;
+            }
+
+            const data = await response.json();
+            console.log('[PROFILE] Dados recebidos do servidor:', data);
+
+            if (data.profile_icon_url) {
+                console.log('[PROFILE] URL da imagem do perfil encontrada:', data.profile_icon_url);
+                updateProfileImageDisplay(data.profile_icon_url);
+            } else {
+                console.log('[PROFILE] Nenhuma URL de imagem do perfil encontrada');
+            }
+
+        } catch (error) {
+            console.error('[PROFILE] Erro ao carregar dados do perfil:', error);
+        }
+    }
+
+    function updateProfileImageDisplay(imageUrl) {
+        console.log('[PROFILE] ===== ATUALIZANDO IMAGEM DE PERFIL =====');
+        console.log('[PROFILE] URL da imagem:', imageUrl);
+
+        const imageUrlWithTimestamp = imageUrl + '?t=' + Date.now();
+        console.log('[PROFILE] URL com timestamp para evitar cache:', imageUrlWithTimestamp);
+
+        const profileImageHeader = document.getElementById('profileImage');
+        if (profileImageHeader) {
+            profileImageHeader.src = imageUrlWithTimestamp;
+            console.log('[PROFILE] ✅ Imagem do perfil no header atualizada');
+        } else {
+            console.error('[PROFILE] ❌ Elemento profileImage (header) não encontrado');
+        }
+
+        console.log('[PROFILE] ===== ATUALIZAÇÃO CONCLUÍDA =====');
+    }
+
+    // =============================================
+    // NOVA FUNCIONALIDADE: ATUALIZAÇÃO DE SENHA
+    // =============================================
+
+    async function handlePasswordUpdate(event) {
+        event.preventDefault();
+        console.log('[PASSWORD] Iniciando atualização de senha');
+
+        const currentPassword = document.getElementById('current-password').value.trim();
+        const newPassword = document.getElementById('new-password').value.trim();
+        const confirmPassword = document.getElementById('confirm-password').value.trim();
+        const submitButton = event.target.querySelector('button[type="submit"]');
+
+        // Validações
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            showMessage('Por favor, preencha todos os campos', 'error');
+            return;
+        }
+
+        if (currentPassword.length < 8) {
+            showMessage('A senha atual deve ter no mínimo 8 caracteres', 'error');
+            return;
+        }
+
+        if (newPassword.length < 8) {
+            showMessage('A nova senha deve ter no mínimo 8 caracteres', 'error');
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            showMessage('A nova senha e a confirmação não coincidem', 'error');
+            return;
+        }
+
+        if (currentPassword === newPassword) {
+            showMessage('A nova senha deve ser diferente da senha atual', 'error');
+            return;
+        }
+
+        // Desabilita botão
+        submitButton.disabled = true;
+        submitButton.textContent = 'Atualizando...';
+
+        try {
+            console.log('[PASSWORD] Enviando requisição para /api/auth/update_password');
+            const response = await fetch('/api/auth/update_password', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    current_password: currentPassword,
+                    new_password: newPassword
+                })
+            });
+
+            console.log('[PASSWORD] Status da resposta:', response.status);
+            const data = await response.json();
+
+            if (response.ok) {
+                showMessage(data.message || 'Senha atualizada com sucesso! Você será redirecionado para fazer login novamente.', 'success');
+                document.getElementById('security-form').reset();
+
+                setTimeout(() => {
+                    window.location.href = '/login.html';
+                }, 3000);
+            } else {
+                let errorMessage = data.error || data.message || 'Erro ao atualizar senha';
+
+                if (response.status === 401) {
+                    errorMessage = 'Senha atual incorreta';
+                } else if (response.status === 400) {
+                    errorMessage = 'Dados inválidos. Verifique se ambas as senhas têm no mínimo 8 caracteres';
+                } else if (response.status === 403) {
+                    errorMessage = 'Acesso negado. Faça login novamente';
+                } else if (response.status === 422) {
+                    errorMessage = 'Erro de validação. Verifique os dados informados';
+                }
+
+                showMessage(errorMessage, 'error');
+            }
+        } catch (error) {
+            console.error('[PASSWORD] Erro na requisição:', error);
+            showMessage('Erro de conexão com o servidor. Tente novamente mais tarde', 'error');
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Atualizar Senha';
+        }
+    }
+
+    function showMessage(message, type) {
+        const form = document.getElementById('security-form');
+        const oldMessage = document.querySelector('.message-box');
+        if (oldMessage) {
+            oldMessage.remove();
+        }
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message-box';
+
+        if (type === 'error') {
+            messageDiv.style.cssText = 'background-color: #fee; border: 1px solid #fcc; color: #c33; padding: 12px; border-radius: 4px; margin-bottom: 16px;';
+        } else {
+            messageDiv.style.cssText = 'background-color: #efe; border: 1px solid #cfc; color: #3c3; padding: 12px; border-radius: 4px; margin-bottom: 16px;';
+        }
+
+        messageDiv.textContent = message;
+        form.insertBefore(messageDiv, form.firstChild);
+
+        setTimeout(() => {
+            messageDiv.remove();
+        }, 5000);
+    }
+
+    // =============================================
+    // INICIALIZAÇÃO
+    // =============================================
+
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('[INIT] DOM carregado, configurando event listeners');
+
+        // Configurar sidebar
+        const mobileMenuOpen = document.getElementById('mobile-menu-open');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+        if (mobileMenuOpen) {
+            mobileMenuOpen.addEventListener('click', openSidebar);
+        }
+
+        if (mobileMenuClose) {
+            mobileMenuClose.addEventListener('click', closeSidebar);
+        }
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeSidebar();
+            }
+        });
+
+        const profileImage = document.getElementById('profileImage');
+        if (profileImage) {
+            profileImage.addEventListener('click', function () {
+                console.log('[NAVIGATION] Redirecionamento desabilitado (já estamos na página de perfil)');
+            });
+        }
+
+        // Carregar imagem de perfil
+        console.log('[INIT] Carregando dados do perfil');
+        loadProfileData();
+
+        // Configurar formulário de senha
+        const securityForm = document.getElementById('security-form');
+        if (securityForm) {
+            securityForm.addEventListener('submit', handlePasswordUpdate);
+            console.log('[INIT] Formulário de senha configurado');
+        }
+
+        console.log('[INIT] ===== INICIALIZAÇÃO CONCLUÍDA =====');
+    });
+
+</script>
+
+
+<script src="/public/js/notificationManager.js"></script>
+<script src="/public/js/headerbar.js"></script>
+<script src="/public/js/processImage.js"></script>
+
+</html>

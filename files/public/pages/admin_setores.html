@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Setores e Tamanhos - Admin</title>
+</head>
+<body>
+    <h1>Painel Administrativo - Empresas</h1>
+    
+    <!-- ========== COMPANY TYPES ========== -->
+    <section>
+        <h2>Gerenciar Tipos de Empresa</h2>
+        
+        <h3>Adicionar Novo Tipo</h3>
+        <form id="addTypeForm">
+            <div>
+                <label>Nome:</label>
+                <input type="text" id="typeName" required placeholder="Ex: LTDA">
+            </div>
+            <div>
+                <label>Código:</label>
+                <input type="text" id="typeCode" required placeholder="Ex: LTDA">
+            </div>
+            <div>
+                <label>Descrição:</label>
+                <textarea id="typeDescription" placeholder="Ex: Sociedade Limitada"></textarea>
+            </div>
+            <button type="submit">Adicionar Tipo</button>
+        </form>
+        <div id="typeResult"></div>
+
+        <h3>Listar Tipos Existentes</h3>
+        <button id="loadTypesBtn">Carregar Tipos</button>
+        <ul id="typesList"></ul>
+
+        <h3>Editar Tipo</h3>
+        <form id="editTypeForm">
+            <div>
+                <label>ID do Tipo:</label>
+                <input type="text" id="editTypeId" required placeholder="UUID do tipo">
+            </div>
+            <div>
+                <label>Novo Nome (opcional):</label>
+                <input type="text" id="editTypeName" placeholder="Deixe vazio para não alterar">
+            </div>
+            <div>
+                <label>Novo Código (opcional):</label>
+                <input type="text" id="editTypeCode" placeholder="Deixe vazio para não alterar">
+            </div>
+            <div>
+                <label>Nova Descrição (opcional):</label>
+                <textarea id="editTypeDescription" placeholder="Deixe vazio para não alterar"></textarea>
+            </div>
+            <button type="submit">Editar Tipo</button>
+        </form>
+        <div id="editTypeResult"></div>
+
+        <h3>Deletar Tipo</h3>
+        <input type="text" id="deleteTypeId" placeholder="ID do tipo (UUID)">
+        <button id="deleteTypeBtn">Deletar Tipo</button>
+        <div id="deleteTypeResult"></div>
+    </section>
+
+    <hr>
+
+    <!-- ========== COMPANY SECTORS ========== -->
+    <section>
+        <h2>Gerenciar Setores</h2>
+        
+        <h3>Adicionar Novo Setor</h3>
+        <form id="addSectorForm">
+            <div>
+                <label>Nome do Setor:</label>
+                <input type="text" id="sectorName" required placeholder="Ex: Tecnologia">
+            </div>
+            <div>
+                <label>Código:</label>
+                <input type="text" id="sectorCode" required placeholder="Ex: TECH">
+            </div>
+            <div>
+                <label>Descrição:</label>
+                <textarea id="sectorDescription" placeholder="Descrição detalhada do setor"></textarea>
+            </div>
+            <button type="submit">Adicionar Setor</button>
+        </form>
+        <div id="sectorResult"></div>
+
+        <h3>Listar Setores Existentes</h3>
+        <button id="loadSectorsBtn">Carregar Setores</button>
+        <ul id="sectorsList"></ul>
+
+        <h3>Editar Setor</h3>
+        <form id="editSectorForm">
+            <div>
+                <label>ID do Setor:</label>
+                <input type="text" id="editSectorId" required placeholder="UUID do setor">
+            </div>
+            <div>
+                <label>Novo Nome (opcional):</label>
+                <input type="text" id="editSectorName" placeholder="Deixe vazio para não alterar">
+            </div>
+            <div>
+                <label>Novo Código (opcional):</label>
+                <input type="text" id="editSectorCode" placeholder="Deixe vazio para não alterar">
+            </div>
+            <div>
+                <label>Nova Descrição (opcional):</label>
+                <textarea id="editSectorDescription" placeholder="Deixe vazio para não alterar"></textarea>
+            </div>
+            <button type="submit">Editar Setor</button>
+        </form>
+        <div id="editSectorResult"></div>
+
+        <h3>Deletar Setor</h3>
+        <input type="text" id="deleteSectorId" placeholder="ID do setor (UUID)">
+        <button id="deleteSectorBtn">Deletar Setor</button>
+        <div id="deleteSectorResult"></div>
+    </section>
+
+    <hr>
+
+    <!-- ========== COMPANY SIZES ========== -->
+    <section>
+        <h2>Gerenciar Tamanhos de Empresa</h2>
+        
+        <h3>Adicionar Novo Tamanho</h3>
+        <form id="addSizeForm">
+            <div>
+                <label>Nome:</label>
+                <input type="text" id="sizeName" required placeholder="Ex: 11-50">
+            </div>
+            <div>
+                <label>Mínimo de Funcionários:</label>
+                <input type="number" id="sizeMin" placeholder="Ex: 11">
+            </div>
+            <div>
+                <label>Máximo de Funcionários:</label>
+                <input type="number" id="sizeMax" placeholder="Ex: 50 (deixe vazio para ilimitado)">
+            </div>
+            <button type="submit">Adicionar Tamanho</button>
+        </form>
+        <div id="sizeResult"></div>
+
+        <h3>Listar Tamanhos Existentes</h3>
+        <button id="loadSizesBtn">Carregar Tamanhos</button>
+        <ul id="sizesList"></ul>
+
+        <h3>Editar Tamanho</h3>
+        <form id="editSizeForm">
+            <div>
+                <label>ID do Tamanho:</label>
+                <input type="text" id="editSizeId" required placeholder="UUID do tamanho">
+            </div>
+            <div>
+                <label>Novo Nome (opcional):</label>
+                <input type="text" id="editSizeName" placeholder="Deixe vazio para não alterar">
+            </div>
+            <div>
+                <label>Novo Mínimo (opcional):</label>
+                <input type="number" id="editSizeMin" placeholder="Deixe vazio para não alterar">
+            </div>
+            <div>
+                <label>Novo Máximo (opcional):</label>
+                <input type="number" id="editSizeMax" placeholder="Deixe vazio para não alterar">
+            </div>
+            <button type="submit">Editar Tamanho</button>
+        </form>
+        <div id="editSizeResult"></div>
+
+        <h3>Deletar Tamanho</h3>
+        <input type="text" id="deleteSizeId" placeholder="ID do tamanho (UUID)">
+        <button id="deleteSizeBtn">Deletar Tamanho</button>
+        <div id="deleteSizeResult"></div>
+    </section>
+
+    <script>
+        const API_BASE = window.location.origin;
+
+        // ========== COMPANY TYPES ==========
+
+        // Adicionar Tipo
+        document.getElementById('addTypeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('typeName').value,
+                code: document.getElementById('typeCode').value,
+                description: document.getElementById('typeDescription').value || null
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/company_types`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById('typeResult').innerHTML = `<p>Tipo adicionado com sucesso! ID: ${result.id}</p>`;
+                    document.getElementById('addTypeForm').reset();
+                } else {
+                    document.getElementById('typeResult').innerHTML = `<p>Erro: ${result.error || 'Falha ao adicionar'}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('typeResult').innerHTML = `<p>Erro de rede: ${error.message}</p>`;
+            }
+        });
+
+        // Carregar Tipos
+        document.getElementById('loadTypesBtn').addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/api/company_types`, {
+                    credentials: 'include'
+                });
+
+                const types = await response.json();
+                const list = document.getElementById('typesList');
+                list.innerHTML = '';
+
+                if (Array.isArray(types)) {
+                    types.forEach(type => {
+                        const li = document.createElement('li');
+                        li.textContent = `[${type.id}] ${type.name} (${type.code}) - ${type.description || 'Sem descrição'}`;
+                        list.appendChild(li);
+                    });
+                } else {
+                    list.innerHTML = '<li>Erro ao carregar tipos</li>';
+                }
+            } catch (error) {
+                document.getElementById('typesList').innerHTML = `<li>Erro: ${error.message}</li>`;
+            }
+        });
+
+        // Editar Tipo
+        document.getElementById('editTypeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editTypeId').value.trim();
+            const name = document.getElementById('editTypeName').value.trim();
+            const code = document.getElementById('editTypeCode').value.trim();
+            const description = document.getElementById('editTypeDescription').value.trim();
+
+            const data = { id };
+            if (name) data.name = name;
+            if (code) data.code = code;
+            if (description) data.description = description;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/company_types`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById('editTypeResult').innerHTML = '<p>Tipo editado com sucesso!</p>';
+                    document.getElementById('editTypeForm').reset();
+                } else {
+                    document.getElementById('editTypeResult').innerHTML = `<p>Erro: ${result.error || 'Falha ao editar'}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('editTypeResult').innerHTML = `<p>Erro: ${error.message}</p>`;
+            }
+        });
+
+        // Deletar Tipo
+        document.getElementById('deleteTypeBtn').addEventListener('click', async () => {
+            const id = document.getElementById('deleteTypeId').value.trim();
+            if (!id) {
+                document.getElementById('deleteTypeResult').innerHTML = '<p>Por favor, insira um ID válido</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/company_types?id=${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById('deleteTypeResult').innerHTML = '<p>Tipo deletado com sucesso!</p>';
+                    document.getElementById('deleteTypeId').value = '';
+                } else {
+                    document.getElementById('deleteTypeResult').innerHTML = `<p>Erro: ${result.error || 'Falha ao deletar'}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('deleteTypeResult').innerHTML = `<p>Erro: ${error.message}</p>`;
+            }
+        });
+
+        // ========== COMPANY SECTORS ==========
+
+        // Adicionar Setor
+        document.getElementById('addSectorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('sectorName').value,
+                code: document.getElementById('sectorCode').value,
+                description: document.getElementById('sectorDescription').value || null
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/company_sectors`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById('sectorResult').innerHTML = `<p>Setor adicionado com sucesso! ID: ${result.id}</p>`;
+                    document.getElementById('addSectorForm').reset();
+                } else {
+                    document.getElementById('sectorResult').innerHTML = `<p>Erro: ${result.error || 'Falha ao adicionar'}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('sectorResult').innerHTML = `<p>Erro de rede: ${error.message}</p>`;
+            }
+        });
+
+        // Carregar Setores
+        document.getElementById('loadSectorsBtn').addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/api/company_sectors`, {
+                    credentials: 'include'
+                });
+
+                const sectors = await response.json();
+                const list = document.getElementById('sectorsList');
+                list.innerHTML = '';
+
+                if (Array.isArray(sectors)) {
+                    sectors.forEach(sector => {
+                        const li = document.createElement('li');
+                        li.textContent = `[${sector.id}] ${sector.name} (${sector.code}) - ${sector.description || 'Sem descrição'}`;
+                        list.appendChild(li);
+                    });
+                } else {
+                    list.innerHTML = '<li>Erro ao carregar setores</li>';
+                }
+            } catch (error) {
+                document.getElementById('sectorsList').innerHTML = `<li>Erro: ${error.message}</li>`;
+            }
+        });
+
+        // Editar Setor
+        document.getElementById('editSectorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editSectorId').value.trim();
+            const name = document.getElementById('editSectorName').value.trim();
+            const code = document.getElementById('editSectorCode').value.trim();
+            const description = document.getElementById('editSectorDescription').value.trim();
+
+            const data = { id };
+            if (name) data.name = name;
+            if (code) data.code = code;
+            if (description) data.description = description;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/company_sectors`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById('editSectorResult').innerHTML = '<p>Setor editado com sucesso!</p>';
+                    document.getElementById('editSectorForm').reset();
+                } else {
+                    document.getElementById('editSectorResult').innerHTML = `<p>Erro: ${result.error || 'Falha ao editar'}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('editSectorResult').innerHTML = `<p>Erro: ${error.message}</p>`;
+            }
+        });
+
+        // Deletar Setor
+        document.getElementById('deleteSectorBtn').addEventListener('click', async () => {
+            const id = document.getElementById('deleteSectorId').value.trim();
+            if (!id) {
+                document.getElementById('deleteSectorResult').innerHTML = '<p>Por favor, insira um ID válido</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/company_sectors?id=${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById('deleteSectorResult').innerHTML = '<p>Setor deletado com sucesso!</p>';
+                    document.getElementById('deleteSectorId').value = '';
+                } else {
+                    document.getElementById('deleteSectorResult').innerHTML = `<p>Erro: ${result.error || 'Falha ao deletar'}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('deleteSectorResult').innerHTML = `<p>Erro: ${error.message}</p>`;
+            }
+        });
+
+        // ========== COMPANY SIZES ==========
+
+        // Adicionar Tamanho
+        document.getElementById('addSizeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('sizeName').value,
+                min_employees: parseInt(document.getElementById('sizeMin').value) || null,
+                max_employees: parseInt(document.getElementById('sizeMax').value) || null
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/company_sizes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById('sizeResult').innerHTML = `<p>Tamanho adicionado com sucesso! ID: ${result.id}</p>`;
+                    document.getElementById('addSizeForm').reset();
+                } else {
+                    document.getElementById('sizeResult').innerHTML = `<p>Erro: ${result.error || 'Falha ao adicionar'}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('sizeResult').innerHTML = `<p>Erro de rede: ${error.message}</p>`;
+            }
+        });
+
+        // Carregar Tamanhos
+        document.getElementById('loadSizesBtn').addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/api/company_sizes`, {
+                    credentials: 'include'
+                });
+
+                const sizes = await response.json();
+                const list = document.getElementById('sizesList');
+                list.innerHTML = '';
+
+                if (Array.isArray(sizes)) {
+                    sizes.forEach(size => {
+                        const li = document.createElement('li');
+                        const min = size.min_employees || '0';
+                        const max = size.max_employees || '∞';
+                        li.textContent = `[${size.id}] ${size.name} (${min} - ${max} funcionários)`;
+                        list.appendChild(li);
+                    });
+                } else {
+                    list.innerHTML = '<li>Erro ao carregar tamanhos</li>';
+                }
+            } catch (error) {
+                document.getElementById('sizesList').innerHTML = `<li>Erro: ${error.message}</li>`;
+            }
+        });
+
+        // Editar Tamanho
+        document.getElementById('editSizeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editSizeId').value.trim();
+            const name = document.getElementById('editSizeName').value.trim();
+            const minStr = document.getElementById('editSizeMin').value.trim();
+            const maxStr = document.getElementById('editSizeMax').value.trim();
+
+            const data = { id };
+            if (name) data.name = name;
+            if (minStr) data.min_employees = parseInt(minStr);
+            if (maxStr) data.max_employees = parseInt(maxStr);
+
+            try {
+                const response = await fetch(`${API_BASE}/api/company_sizes`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById('editSizeResult').innerHTML = '<p>Tamanho editado com sucesso!</p>';
+                    document.getElementById('editSizeForm').reset();
+                } else {
+                    document.getElementById('editSizeResult').innerHTML = `<p>Erro: ${result.error || 'Falha ao editar'}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('editSizeResult').innerHTML = `<p>Erro: ${error.message}</p>`;
+            }
+        });
+
+        // Deletar Tamanho
+        document.getElementById('deleteSizeBtn').addEventListener('click', async () => {
+            const id = document.getElementById('deleteSizeId').value.trim();
+            if (!id) {
+                document.getElementById('deleteSizeResult').innerHTML = '<p>Por favor, insira um ID válido</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/company_sizes?id=${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById('deleteSizeResult').innerHTML = '<p>Tamanho deletado com sucesso!</p>';
+                    document.getElementById('deleteSizeId').value = '';
+                } else {
+                    document.getElementById('deleteSizeResult').innerHTML = `<p>Erro: ${result.error || 'Falha ao deletar'}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('deleteSizeResult').innerHTML = `<p>Erro: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

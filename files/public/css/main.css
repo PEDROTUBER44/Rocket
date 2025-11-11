@@ -1,0 +1,387 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
+
+:root {
+    --backgroundColor: #08090a;
+    --primaryColor: #131313;
+    --secundaryColor: #2c2c2c;
+    --borderColor: #ffffff33;
+    --headerBarColor: rgba(8, 9, 10, 0.5);
+
+    --whiteColor: #ffffff;
+    --grayColor: #a1a1aa;
+    --blackColor: #000000;
+    --redColor: #ca000d;
+
+    /* variações para hover/active/focus */
+    --red-hover: #e02e2e; /* próximo do hover:bg-red-700 */
+    --red-active: #a5000b; /* próximo do active:bg-red-800 */
+    --focus-ring-color: #ca000d;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 1rem; /* 80px de padding do topo */
+}
+
+/* Backgrounds */
+.bg-color {
+    background-color: var(--backgroundColor);
+}
+
+.bg-red-color {
+    background-color: var(--redColor);
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* Text colors */
+.text-red-color {
+    color: var(--redColor);
+}
+
+/* Ring customizado */
+.ring-red-color {
+    --tw-ring-color: var(--redColor);
+}
+
+/* Hover/Active para botões com a classe bg-red-color */
+.bg-red-color:hover {
+    background-color: var(--red-hover);
+}
+
+.bg-red-color:active {
+    background-color: var(--red-active);
+}
+
+/* Foco com ring */
+input:focus,
+textarea:focus,
+select:focus,
+button:focus {
+    --tw-ring-color: var(--focus-ring-color);
+    outline: none; /* garante que só o ring apareça */
+}
+
+.logo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo:hover {
+    opacity: 0.8;
+    transition: 1s;
+    cursor: pointer;
+}
+
+.logo .img {
+    background-image: url("/public/icons/Rocket/LogoRocket.svg");
+    background-size: cover;
+}
+
+.logo .logoText {
+    color: var(--whiteColor);
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 23px;
+}
+
+@keyframes fadeSlideUnblur {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+        filter: blur(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+.elementWithAnimation {
+    animation-name: fadeSlideUnblur;
+    animation-duration: 0.8s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
+    opacity: 0;
+}
+
+.elementWithAnimationlv1 {
+    animation-delay: 0.2s;
+}
+
+.elementWithAnimationlv2 {
+    animation-delay: 0.8s;
+}
+
+/* Header transition styles */
+.header-scrolled {
+    background-color: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.header-transition {
+    transition: all 0.3s ease;
+    background-color: transparent;
+}
+
+/* Notification System Styles */
+.notification-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.notification-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.notification-container {
+    max-width: 400px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid;
+    position: relative;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    background: rgba(20, 20, 20, 0.95);
+    backdrop-filter: blur(12px);
+}
+
+.notification-overlay.show .notification-container {
+    transform: translateY(0);
+}
+
+/* Color variants */
+.notification-container.red {
+    background: rgba(30, 20, 20, 0.95);
+    border-color: rgb(239, 68, 68);
+    color: rgb(254, 226, 226);
+    backdrop-filter: blur(12px);
+}
+
+.notification-container.yellow {
+    background: rgba(30, 25, 15, 0.95);
+    border-color: rgb(245, 158, 11);
+    color: rgb(254, 243, 199);
+    backdrop-filter: blur(12px);
+}
+
+.notification-container.green {
+    background: rgba(15, 30, 20, 0.95);
+    border-color: rgb(34, 197, 94);
+    color: rgb(220, 252, 231);
+    backdrop-filter: blur(12px);
+}
+
+.notification-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.notification-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.notification-container.red .notification-icon {
+    background: rgb(239, 68, 68);
+    color: white;
+}
+
+.notification-container.yellow .notification-icon {
+    background: rgb(245, 158, 11);
+    color: white;
+}
+
+.notification-container.green .notification-icon {
+    background: rgb(34, 197, 94);
+    color: white;
+}
+
+.notification-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.notification-message {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.notification-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: currentColor;
+    opacity: 0.7;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: opacity 0.2s ease;
+}
+
+.notification-close:hover {
+    opacity: 1;
+}
+
+/* Animation for multiple notifications */
+.notification-container:not(:last-child) {
+    margin-bottom: 12px;
+}
+
+option {
+    background-color: rgb(24, 24, 24);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+    .notification-container {
+        margin: 20px;
+        width: calc(100% - 40px);
+    }
+}
+
+.bg-element {
+    position: absolute;
+    background: linear-gradient(135deg, #ca000d, #ff4757);
+    border-radius: 50%;
+    opacity: 0.1;
+    animation: float 6s ease-in-out infinite;
+}
+
+.bg-element:nth-child(1) {
+    width: 300px;
+    height: 300px;
+    top: -50px;
+    left: -100px;
+    animation-delay: 0s;
+}
+
+.bg-element:nth-child(2) {
+    width: 200px;
+    height: 200px;
+    top: 200px;
+    right: -50px;
+    animation-delay: 2s;
+}
+
+.bg-element:nth-child(3) {
+    width: 150px;
+    height: 150px;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-delay: 4s;
+}
+
+.services-bg-geometric {
+    position: absolute;
+    border: 2px solid rgba(202, 0, 13, 0.15);
+    animation: rotate 20s linear infinite;
+}
+
+.services-bg-geometric:nth-child(4) {
+    width: 100px;
+    height: 100px;
+    top: 50px;
+    right: 20%;
+    transform: rotate(45deg);
+    border-radius: 20px;
+}
+
+.services-bg-geometric:nth-child(5) {
+    width: 80px;
+    height: 80px;
+    bottom: 50px;
+    left: 10%;
+    border-radius: 50%;
+    animation-direction: reverse;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-20px) rotate(180deg);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-menu-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 400px;
+    background-color: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 50;
+}
+
+.mobile-menu-panel.show {
+    transform: translateX(0);
+}

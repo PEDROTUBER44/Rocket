@@ -1,0 +1,3 @@
+- Marcar Reuniões Presenciais ou Virtuais com empresas
+- Dar a opção do rocket afiliado para micro empresas com uma chamativo de renda extra
+- Fazer ligações para empresas falando o quanto precisam do nosso serviço para alavancar suas vendas (Video de Exemplo No Telegram)

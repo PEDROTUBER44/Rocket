@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tailwind v4 detecta automaticamente onde usar as classes! */
+/* Não precisa mais configurar content - ele escaneia automaticamente */
+
+/* Suas customizações CSS personalizadas aqui */
+@layer components {
+  .btn-primary {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+  }
+}
+
+/* Customizar tema usando CSS variables */
+@theme {
+  --color-primary: hsl(224, 71%, 4%);
+  --color-accent: hsl(210, 40%, 98%);
+}

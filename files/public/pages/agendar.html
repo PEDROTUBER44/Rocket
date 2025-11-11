@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-color">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/public/icons/Rocket/LogoRocket.svg" type="image/svg+xml" />
+  <title>Contato</title>
+  <link rel="preconnect" href="https://rsms.me/" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+  <link rel="stylesheet" href="/public/css/output.css" />
+  <link rel="stylesheet" href="/public/css/main.css" />
+  <style>
+    /* Custom gradient */
+    .bg-rocket-gradient {
+      background: linear-gradient(to top right, #ca000d, #ff4757);
+    }
+
+    /* Custom focus styles */
+    .form-input:focus,
+    .form-select:focus {
+      outline: 2px solid #dc2626;
+      outline-offset: -2px;
+      border-color: transparent;
+    }
+
+    /* Loading animation */
+    .loading {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: .5;
+      }
+    }
+  </style>
+</head>
+
+<body class="h-full bg-color text-white">
+  <!-- Header -->
+  <div class="bg-color">
+    <header id="main-header" class="fixed inset-x-0 top-0 z-50 header-transition">
+      <nav aria-label="Global" class="flex items-center justify-between p-6 lg:px-8">
+        <div class="flex lg:flex-1"> <a href="index.html" class="-m-1.5 p-1.5"> <span class="sr-only">Sua
+              Empresa</span>
+            <div class="h-8 w-8 flex items-center justify-center"> <img src="/public/icons/Rocket/LogoRocket.svg"
+                alt="Logo" class="h-8 w-auto" /> </div>
+          </a> </div>
+        <div class="flex lg:hidden"> <button type="button" id="mobile-menu-open"
+            class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200 hover:bg-white/10 hover:text-red-600 transition">
+            <span class="sr-only">Abrir menu</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5" aria-hidden="true" class="size-6 transition-colors">
+              <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg> </button> </div>
+        <div class="hidden lg:flex lg:gap-x-12">
+          <a href="index_services.html"
+            class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Serviços</a>
+          <a href="index_resources.html"
+            class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Recursos</a>
+          <a href="index_community.html"
+            class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Comunidade</a>
+          <a href="index_enterprise.html"
+            class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Empresa</a>
+        </div>
+        <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+          <div id="loginBtn"> <a href="login.html" class="text-sm font-semibold text-white"> Entrar <span
+                aria-hidden="true">&rarr;</span> </a> </div>
+          <div id="profileImageContainer" style="display: none"> <img id="profileImage"
+              style="width: 30px; height: 30px; border-radius: 50%; cursor: pointer; object-fit: cover" alt="Perfil"
+              title="Ir para perfil" /> </div>
+        </div>
+      </nav>
+    </header> <!-- Mobile Menu -->
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay">
+      <div id="mobile-menu-panel" class="mobile-menu-panel">
+        <div class="flex items-center justify-between p-6"> <a href="index.html" class="-m-1.5 p-1.5"> <span
+              class="sr-only">Sua Empresa</span>
+            <div class="h-8 w-8 flex items-center justify-center"> <img src="/public/icons/Rocket/LogoRocket.svg"
+                alt="Logo" class="h-8 w-auto" /> </div>
+          </a> <button type="button" id="mobile-menu-close"
+            class="-m-2.5 rounded-md p-2.5 text-gray-200 hover:bg-white/10 hover:text-red-600 transition">
+            <span class="sr-only">Fechar menu</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5" aria-hidden="true" class="size-6">
+              <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+            </svg> </button> </div>
+        <div class="mt-6 px-6">
+          <div class="space-y-2">
+            <a href="index_services.html"
+              class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Serviços</a>
+            <a href="index_resources.html"
+              class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Recursos</a>
+            <a href="index_community.html"
+              class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Comunidade</a>
+            <a href="index_enterprise.html"
+              class="text-sm font-semibold text-white hover:text-red-600 transition-colors duration-300">Empresa</a>
+          </div>
+          <div class="mt-6 pt-6 border-t border-white/10">
+            <div id="mobileLoginBtn"> <a href="login.html"
+                class="block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-white/10 transition">Entrar</a>
+            </div>
+            <div id="mobileProfileBtn" style="display: none"> <a href="/account.html"
+                class="block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-white/10 transition">Meu
+                Perfil</a> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background gradients -->
+  <div aria-hidden="true" class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+    <div
+      style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
+      class="relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-red-600 to-purple-600 opacity-20 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem]">
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="isolate bg-color px-6 py-24 sm:py-32 lg:px-8 min-h-screen">
+    <div class="pt-20 pb-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <h1 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+          Enviar uma
+          <span class="text-red-color">Mensagem</span>
+        </h1>
+        <p class="mt-6 text-lg leading-8 text-gray-300">Estamos aqui para ajudar você. Entre em contato conosco e
+          responderemos o mais breve possível!</p>
+      </div>
+
+      <form id="contactForm" class="mx-auto mt-16 max-w-xl">
+        <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+          <!-- Name -->
+          <div class="sm:col-span-2">
+            <div class="mt-2.5">
+              <input type="text" name="name" id="name" autocomplete="name" required
+                class="form-input block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
+                placeholder="Nome completo" />
+            </div>
+          </div>
+
+          <!-- Company -->
+          <div class="sm:col-span-2">
+            <div class="mt-2.5">
+              <input type="text" name="enterprise_name" id="enterprise_name" autocomplete="organization" required
+                class="form-input block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
+                placeholder="Nome da sua empresa" />
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="sm:col-span-2">
+            <div class="mt-2.5">
+              <input type="email" name="email" id="email" autocomplete="email" required
+                class="form-input block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
+                placeholder="joao@exemplo.com" />
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <div class="sm:col-span-2">
+            <div class="relative mt-2.5">
+              <div class="flex">
+                <div class="relative">
+                  <select id="country" name="country"
+                    class="form-select h-full rounded-md rounded-r-none border-0 bg-white/5 py-2 pl-4 pr-9 text-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm">
+                    <option value="+55">🇧🇷 +55</option>
+                    <option value="+1">🇺🇸 +1</option>
+                    <option value="+1">🇨🇦 +1</option>
+                  </select>
+                </div>
+                <input type="tel" name="phone-number" id="phone-number" autocomplete="tel" required
+                  class="form-input block w-full rounded-md rounded-l-none border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
+                  placeholder="(11) 99999-9999" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Message -->
+          <div class="sm:col-span-2">
+            <div class="mt-2.5">
+              <textarea name="comment" id="comment" rows="4" required
+                class="form-input block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 resize-none"
+                placeholder="Como podemos ajudar você? Descreva sua necessidade ou dúvida..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-10">
+          <button type="submit" id="submitBtn"
+            class="block w-full rounded-md bg-red-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+            <span id="submitText">Enviar Mensagem</span>
+            <span id="loadingText" class="hidden">Enviando...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/public/js/notificationManager.js"></script>
+  <script>
+    // Script para gerenciar autenticação
+    (function () {
+      const token = sessionStorage.getItem("userToken");
+      const loginBtn = document.getElementById("loginBtn");
+      const profileImageContainer = document.getElementById("profileImageContainer");
+      const mobileLoginBtn = document.getElementById("mobileLoginBtn");
+      const mobileProfileBtn = document.getElementById("mobileProfileBtn");
+
+      if (token) {
+        if (loginBtn) loginBtn.style.display = "none";
+        if (profileImageContainer) profileImageContainer.style.display = "block";
+        if (mobileLoginBtn) mobileLoginBtn.style.display = "none";
+        if (mobileProfileBtn) mobileProfileBtn.style.display = "block";
+      } else {
+        if (loginBtn) loginBtn.style.display = "block";
+        if (profileImageContainer) profileImageContainer.style.display = "none";
+        if (mobileLoginBtn) mobileLoginBtn.style.display = "block";
+        if (mobileProfileBtn) mobileProfileBtn.style.display = "none";
+      }
+    })();
+
+    // Script para funcionalidades do header e menu mobile
+    (function () {
+      const mainHeader = document.getElementById("main-header");
+      let scrolled = false;
+
+      function handleScroll() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollTop > 50 && !scrolled) {
+          scrolled = true;
+          mainHeader.classList.add("header-scrolled");
+        } else if (scrollTop <= 50 && scrolled) {
+          scrolled = false;
+          mainHeader.classList.remove("header-scrolled");
+        }
+      }
+
+      window.addEventListener("scroll", handleScroll);
+
+      // Menu mobile functionality
+      const mobileMenuOpen = document.getElementById("mobile-menu-open");
+      const mobileMenuClose = document.getElementById("mobile-menu-close");
+      const mobileMenuOverlay = document.getElementById("mobile-menu-overlay");
+
+      if (mobileMenuOpen && mobileMenuClose && mobileMenuOverlay) {
+        mobileMenuOpen.addEventListener("click", () => {
+          mobileMenuOverlay.style.display = "flex";
+        });
+
+        mobileMenuClose.addEventListener("click", () => {
+          mobileMenuOverlay.style.display = "none";
+        });
+
+        // Fechar menu ao clicar fora
+        mobileMenuOverlay.addEventListener("click", (e) => {
+          if (e.target === mobileMenuOverlay) {
+            mobileMenuOverlay.style.display = "none";
+          }
+        });
+      }
+    })();
+
+    // Script para envio do formulário - CORRIGIDO COM RATE LIMIT
+    (function () {
+      const contactForm = document.getElementById('contactForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const submitText = document.getElementById('submitText');
+      const loadingText = document.getElementById('loadingText');
+
+      function showLoading(isLoading) {
+        if (isLoading) {
+          submitBtn.disabled = true;
+          submitBtn.classList.add('loading');
+          submitText.classList.add('hidden');
+          loadingText.classList.remove('hidden');
+        } else {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('loading');
+          submitText.classList.remove('hidden');
+          loadingText.classList.add('hidden');
+        }
+      }
+
+      function validateForm(data) {
+        if (!data.name?.trim()) {
+          return 'Nome é obrigatório';
+        }
+
+        if (!data.enterprise_name?.trim()) {
+          return 'Nome da empresa é obrigatório';
+        }
+
+        if (!data.email?.trim() || !data.email.includes('@')) {
+          return 'Email válido é obrigatório';
+        }
+
+        if (!data.phone?.trim()) {
+          return 'Telefone é obrigatório';
+        }
+
+        if (!data.comment?.trim()) {
+          return 'Mensagem é obrigatória';
+        }
+
+        return null;
+      }
+
+      contactForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        // Coletar dados do formulário
+        const formData = new FormData(contactForm);
+
+        // Obter código do país e número de telefone
+        const countryCode = document.getElementById('country').value;
+        const phoneNumber = formData.get('phone-number')?.trim() || '';
+
+        // Concatenar código do país com número
+        const fullPhone = countryCode + ' ' + phoneNumber;
+
+        // Criar objeto com dados no formato correto para o backend
+        const data = {
+          name: formData.get('name')?.trim() || '',
+          enterprise_name: formData.get('enterprise_name')?.trim() || '',
+          email: formData.get('email')?.trim() || '',
+          phone: fullPhone,
+          comment: formData.get('comment')?.trim() || ''
+        };
+
+        // Validação do lado cliente
+        const validationError = validateForm(data);
+        if (validationError) {
+          window.notificationManager.error(validationError);
+          return;
+        }
+
+        showLoading(true);
+
+        try {
+          const response = await fetch('/api/support/schedule', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(data)
+          });
+
+          let result;
+          const contentType = response.headers.get('content-type');
+
+          if (contentType && contentType.includes('application/json')) {
+            result = await response.json();
+          } else {
+            const responseText = await response.text();
+
+            // Tratamento especial para erro 429 mesmo sem JSON
+            if (response.status === 429) {
+              window.notificationManager.error('❌ Limite de envios atingido! Você já enviou 2 solicitações. Por favor, aguarde 3 dias antes de enviar novamente.');
+              showLoading(false);
+              return;
+            }
+
+            throw new Error(`Servidor retornou resposta não-JSON. Status: ${response.status}`);
+          }
+
+          // Tratamento de resposta com sucesso
+          if (response.ok) {
+            const successMessage = result.message || 'Solicitação de reunião enviada com sucesso! Entraremos em contato em breve.';
+            window.notificationManager.success(successMessage);
+            contactForm.reset();
+          } else {
+            // Tratamento de erros
+            const errorMsg = result.error || result.message || `Erro ${response.status}: ${response.statusText}`;
+
+            // Mensagens específicas por status code
+            if (response.status === 429) {
+              window.notificationManager.error('❌ Limite de envios atingido! Você já enviou 2 solicitações. Por favor, aguarde 3 dias antes de enviar novamente.');
+            } else if (response.status === 400) {
+              window.notificationManager.error(`❌ Erro de validação: ${errorMsg}`);
+            } else if (response.status === 403) {
+              window.notificationManager.error('❌ Acesso negado. Verifique suas credenciais.');
+            } else if (response.status === 500) {
+              window.notificationManager.error('❌ Erro no servidor. Tente novamente em alguns minutos.');
+            } else {
+              window.notificationManager.error(`❌ ${errorMsg}`);
+            }
+          }
+
+        } catch (error) {
+          console.error('Erro ao enviar formulário:', error);
+
+          let errorMessage = 'Erro de conexão. Verifique sua internet e tente novamente.';
+
+          if (error.message.includes('Failed to fetch')) {
+            errorMessage = '❌ Não foi possível conectar ao servidor. Verifique sua conexão com a internet.';
+          } else if (error.message.includes('429')) {
+            errorMessage = '❌ Limite de envios atingido! Você já enviou 2 solicitações. Por favor, aguarde 3 dias antes de enviar novamente.';
+          } else if (error.message.includes('405')) {
+            errorMessage = '❌ Método não permitido. Entre em contato com o suporte.';
+          } else if (error.message.includes('404')) {
+            errorMessage = '❌ Serviço não encontrado. Entre em contato com o suporte.';
+          } else if (error.message.includes('500')) {
+            errorMessage = '❌ Erro no servidor. Tente novamente em alguns minutos.';
+          } else if (error.message.includes('não-JSON')) {
+            errorMessage = '❌ O servidor não está respondendo corretamente. Tente novamente mais tarde.';
+          }
+
+          window.notificationManager.error(errorMessage);
+        } finally {
+          showLoading(false);
+        }
+      });
+
+    })();
+  </script>
+
+
+  <script src="/public/js/headerbar.js"></script>
+  <script src="/public/js/pushProfileImage.js"></script>
+</body>
+
+</html>

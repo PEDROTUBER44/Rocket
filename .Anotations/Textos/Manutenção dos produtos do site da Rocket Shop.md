@@ -1,0 +1,4 @@
+- Procurar os melhores produtos para vender dentro do site pelo link de afiliado
+- Postagem de Produtos e busca por melhores produtos
+- Produzir videos para tentar vender produtos de maior ticket
+- 

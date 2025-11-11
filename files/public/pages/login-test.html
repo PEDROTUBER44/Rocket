@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="pt_BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="icon"
+            href="/public/icons/Rocket/LogoRocket.svg"
+            type="image/svg+xml"
+        />
+        <title>Entrar na conta - Rocket</title>
+        <link href="/public/css/output.css" rel="stylesheet" />
+        <link href="/public/css/main.css" rel="stylesheet" />
+        <script src="/public/js/notificationManager.js"></script>
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    </head>
+
+    <body
+        class="bg-color flex items-center justify-center min-h-screen font-sans"
+        x-data="authManager()"
+    >
+        <main class="w-full max-w-sm rounded-lg p-8 flex flex-col items-center">
+            <!-- Logo -->
+            <div
+                class="logo cursor-pointer"
+                @click="window.location.href='/'"
+                style="margin-top: 10px; margin-bottom: 30px"
+            >
+                <div
+                    class="img"
+                    style="width: 45px; height: 45px; margin-right: 5px"
+                ></div>
+                <h1 class="logoText" notranslate>ROCKET</h1>
+            </div>
+
+            <!-- Formulário de Autenticação -->
+            <form id="authForm" class="w-full flex flex-col gap-4">
+                <!-- Nome (aparece só no Sign Up) -->
+                <input
+                    id="name"
+                    type="text"
+                    placeholder="Nome Completo"
+                    class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-color"
+                    style="display: none"
+                    minlength="2"
+                    maxlength="100"
+                    x-show="isSignUp"
+                    x-transition
+                />
+
+                <!-- Email / Usuário -->
+                <input
+                    id="username"
+                    type="text"
+                    placeholder="Usuário ou Email"
+                    class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-color"
+                    required
+                    x-model="form.username"
+                />
+
+                <!-- Senha -->
+                <input
+                    id="password"
+                    type="password"
+                    placeholder="Senha"
+                    class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-color"
+                    required
+                    minlength="6"
+                    x-model="form.password"
+                />
+
+                <!-- Botão Submit -->
+                <button
+                    type="button"
+                    @click="isSignUp ? register() : login()"
+                    :disabled="loading"
+                    class="w-full rounded-md bg-red-color px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-red-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    x-text="loading ? 'Carregando...' : (isSignUp ? 'Criar Conta' : 'Entrar')"
+                >
+                    Entrar
+                </button>
+            </form>
+
+            <!-- Link Toggle Sign Up / Login -->
+            <div class="mt-6 text-center text-sm text-gray-400">
+                <span x-text="isSignUp ? 'Já tem uma conta?' : 'Não tem uma conta?'"></span>
+                <button
+                    type="button"
+                    @click="toggleMode()"
+                    class="ml-2 text-red-color hover:underline font-semibold"
+                    x-text="isSignUp ? 'Entrar' : 'Criar Conta'"
+                >
+                    Criar Conta
+                </button>
+            </div>
+        </main>
+
+        <script>
+            function authManager() {
+                return {
+                    isSignUp: false,
+                    loading: false,
+                    form: {
+                        username: '',
+                        password: '',
+                        name: ''
+                    },
+
+                    toggleMode() {
+                        this.isSignUp = !this.isSignUp;
+                        if (this.isSignUp) {
+                            document.getElementById('name').style.display = 'block';
+                            setTimeout(() => {
+                                document.getElementById('name').focus();
+                            }, 100);
+                        } else {
+                            document.getElementById('name').style.display = 'none';
+                        }
+                    },
+
+                    async login() {
+                        this.loading = true;
+
+                        try {
+                            const response = await fetch('/api/auth/login', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    username: this.form.username,
+                                    password: this.form.password
+                                }),
+                                credentials: 'include'
+                            });
+
+                            const data = await response.json();
+
+                            if (response.ok) {
+                                window.notificationManager.success('Login realizado com sucesso!', {
+                                    duration: 1500
+                                });
+                                setTimeout(() => {
+                                    window.location.href = '/dashboard';
+                                }, 1500);
+                            } else {
+                                window.notificationManager.error(data.error || 'Erro ao fazer login');
+                            }
+                        } catch (error) {
+                            window.notificationManager.error('Erro de conexão: ' + error.message);
+                        } finally {
+                            this.loading = false;
+                        }
+                    },
+
+                    async register() {
+                        if (!this.form.name) {
+                            window.notificationManager.error('Por favor, insira seu nome');
+                            return;
+                        }
+
+                        this.loading = true;
+
+                        try {
+                            const response = await fetch('/api/auth/register', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    name: this.form.name,
+                                    username: this.form.username,
+                                    password: this.form.password
+                                }),
+                                credentials: 'include'
+                            });
+
+                            const data = await response.json();
+
+                            if (response.ok) {
+                                window.notificationManager.success('Conta criada com sucesso! Redirecionando...', {
+                                    duration: 1500
+                                });
+                                setTimeout(() => {
+                                    window.location.href = '/public/pages/account.html';
+                                }, 1500);
+                            } else {
+                                window.notificationManager.error(data.error || 'Erro ao criar conta');
+                            }
+                        } catch (error) {
+                            window.notificationManager.error('Erro de conexão: ' + error.message);
+                        } finally {
+                            this.loading = false;
+                        }
+                    }
+                };
+            }
+        </script>
+    </body>
+</html>

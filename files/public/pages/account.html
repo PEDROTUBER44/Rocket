@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/public/icons/Rocket/LogoRocket.svg" type="image/svg+xml" />
+        <title>Conta</title>
+        <link rel="preconnect" href="https://rsms.me/" />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <link rel="stylesheet" href="/public/css/output.css" />
+        <link rel="stylesheet" href="/public/css/main.css" />
+
+        <style>
+            #genderInput {
+                background-image: url("/public/icons/Button Icons/person.svg");
+                background-repeat: no-repeat;
+                background-position: right 12px center;
+                background-size: 16px;
+                padding-right: 40px;
+            }
+        </style>
+    </head>
+
+    <body class="bg-color">
+        <header id="main-header" class="fixed inset-x-0 top-0 z-50 bg-color/90 backdrop-blur-sm transition-all duration-300">
+            <nav aria-label="Global" class="flex items-center justify-between p-6 lg:px-8">
+                <div class="flex items-center gap-4">
+                    <button type="button" id="mobile-menu-open" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200 hover:bg-white/10 hover:text-red-600 transition cursor-pointer">
+                        <span class="sr-only">Abrir menu</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="size-6 transition-colors">
+                            <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+
+                    <a href="index.html" class="-m-1.5 p-1.5">
+                        <span class="sr-only">Rocket</span>
+                        <div class="h-8 w-8 flex items-center justify-center">
+                            <img src="/public/icons/Rocket/LogoRocket.svg" alt="Logo" class="h-8 w-auto" />
+                        </div>
+                    </a>
+                </div>
+
+                <div class="flex items-center">
+                    <div id="profileImageContainer">
+                        <img id="profileImage" src="/public/icons/Button Icons/user.svg" class="w-8 h-8 rounded-full cursor-pointer object-cover border border-white/20" alt="Perfil" title="Ir para perfil" />
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div id="mobile-menu" class="hidden">
+            <div class="fixed inset-0 z-50">
+                <div class="fixed inset-0 bg-black/50" onclick="closeSidebar()"></div>
+
+                <div class="fixed inset-y-0 left-0 z-50 w-72 overflow-y-auto bg-color border-r border-white/10 transform transition-transform duration-300">
+                    <div class="flex items-center justify-between p-6 border-b border-white/10">
+                        <div class="flex items-center gap-3">
+                            <img src="/public/icons/Rocket/Logo Rocket - Com Nome.webp" alt="Rocket Logotipo" class="h-8 w-auto" />
+                        </div>
+                        <button type="button" id="mobile-menu-close" class="-m-2.5 rounded-md p-2.5 text-gray-200 hover:bg-white/10 transition-colors cursor-pointer">
+                            <span class="sr-only">Fechar menu</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="size-6">
+                                <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="flex flex-col gap-5 p-6">
+                        <nav class="flex flex-1 flex-col">
+                            <ul role="list" class="flex flex-1 flex-col gap-7">
+                                <li>
+                                    <ul role="list" class="-mx-2 space-y-1">
+                                        <li>
+                                            <a href="#" class="group flex gap-3 rounded-md p-2 text-sm font-semibold text-slate-300 hover:bg-white/5 hover:text-white cursor-pointer">
+                                                <img src="/public/icons/Button Icons/person.svg" class="h-6 w-6 shrink-0 text-current" alt="" />
+                                                Perfil
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="account_security.html" class="group flex gap-3 rounded-md p-2 text-sm font-semibold text-slate-300 hover:bg-white/5 hover:text-white cursor-pointer">
+                                                <img src="/public/icons/Button Icons/fingerprint.svg" class="h-6 w-6 shrink-0 text-current" alt="" />
+                                                Segurança
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <button type="button" onclick="toggleSubmenu('services-menu')" class="flex w-full items-center gap-3 rounded-md p-2 text-left text-sm font-semibold text-slate-300 hover:bg-white/5 hover:text-white cursor-pointer" aria-expanded="false">
+                                                <img src="/public/icons/Button Icons/bag.svg" class="h-6 w-6 shrink-0 text-current" alt="" />
+                                                Serviços
+                                                <svg viewBox="0 0 20 20" fill="currentColor" class="ml-auto h-5 w-5 shrink-0 text-slate-300 transition-transform duration-150" id="services-chevron" aria-hidden="true">
+                                                    <path d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                            <ul class="mt-1 px-2 hidden" id="services-menu">
+                                                <li>
+                                                    <a href="#" class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">SaaS for Business</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Rocket Fitness</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Rocket Design</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Rocket OS</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li>
+                                            <button type="button" onclick="toggleSubmenu('resources-menu')" class="flex w-full items-center gap-3 rounded-md p-2 text-left text-sm font-semibold text-slate-300 hover:bg-white/5 hover:text-white cursor-pointer" aria-expanded="false">
+                                                <img src="/public/icons/Button Icons/layers.svg" class="h-6 w-6 shrink-0 text-current" alt="" />
+                                                Recursos
+                                                <svg viewBox="0 0 20 20" fill="currentColor" class="ml-auto h-5 w-5 shrink-0 text-slate-300 transition-transform duration-150" id="resources-chevron" aria-hidden="true">
+                                                    <path d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                            <ul class="mt-1 px-2 hidden" id="resources-menu">
+                                                <li>
+                                                    <a href="#" class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Programa de Afiliados</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Documentação</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Comunidade</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Trabalhe conosco</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li>
+                                            <button type="button" onclick="toggleSubmenu('companies-menu')" class="flex w-full items-center gap-3 rounded-md p-2 text-left text-sm font-semibold text-slate-300 hover:bg-white/5 hover:text-white cursor-pointer" aria-expanded="false">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-6 w-6 shrink-0 text-current" aria-hidden="true">
+                                                    <path d="M2.25 21h19.5m-18-18v18m2.25-18v18m13.5-18v18m2.25-18v18M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </svg>
+                                                Empresas
+                                                <svg viewBox="0 0 20 20" fill="currentColor" class="ml-auto h-5 w-5 shrink-0 text-slate-300 transition-transform duration-150" id="companies-chevron" aria-hidden="true">
+                                                    <path d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                            <ul class="mt-1 px-2 hidden" id="companies-menu">
+                                                <li>
+                                                    <a href="create_company.html" class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Criar Empresa</a>
+                                                </li>
+                                                <li>
+                                                    <a href="manage_company.html" class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Gerenciar Empresa(s)</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="block rounded-md py-2 pr-2 pl-9 text-sm text-slate-300 hover:bg-white/5 hover:text-white">Relatórios</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li>
+                                            <a href="settings.html" class="group flex gap-3 rounded-md p-2 text-sm font-semibold text-slate-300 hover:bg-white/5 hover:text-white cursor-pointer">
+                                                <img src="/public/icons/Button Icons/gear.svg" class="h-6 w-6 shrink-0 text-current" alt="" />
+                                                Configurações
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="pt-20">
+            <div id="bannerprofileimage" class="w-full h-80 bg-red-600 border-b border-gray-600 relative cursor-pointer bg-cover bg-center bg-no-repeat transition-all duration-300 group">
+                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10"></div>
+
+                <div class="w-full h-full flex items-center justify-center relative">
+                    <div id="bannerLoading" class="hidden text-white bg-black/70 px-5 py-2 rounded-full text-sm">Processando imagem...</div>
+
+                    <div id="btnEditBannerProfileImage" class="absolute top-10 right-10 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button title="Editar banner" class="w-12 h-12 rounded-full bg-black/25 backdrop-blur-md border border-white/20 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110">
+                            <img src="/public/icons/Button Icons/pencil.svg" alt="Editar banner" class="w-5 h-5" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-image-container relative w-30 h-30 -mt-15 mx-auto mb-5 z-10 group profileimageContainer">
+                <img id="profileimage" alt="Perfil" src="/public/icons/Button Icons/user.svg" class="w-30 h-30 rounded-full object-cover border-4 border-gray-800" />
+                <div id="profileLoading" class="absolute inset-0 flex items-center justify-center bg-black/70 rounded-full text-white text-sm hidden">Carregando...</div>
+                <div class="edit-overlay absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
+                    <button class="editprofileBtn text-white p-2 rounded-full bg-black/50" title="Editar foto de perfil">
+                        <img src="/public/icons/Button Icons/pencil.svg" alt="Editar" class="w-4 h-4" />
+                    </button>
+                </div>
+            </div>
+
+            <div class="w-full flex justify-center items-center flex-col">
+                <section class="text-center w-full min-w-52 max-w-lg px-5">
+                    <div class="mb-4">
+                        <input id="usernameInput" type="text" class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600 text-center text-2xl bg-transparent border-2 border-transparent transition-all duration-300 hover:bg-white/3 hover:rounded-md focus:border-red-600 focus:bg-white/5" placeholder="Carregando..." title="Clique para editar seu username" />
+                    </div>
+
+                    <div class="mb-4">
+                        <textarea id="bioInput" class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 text-gray-400 outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600 text-center bg-transparent border-2 border-transparent transition-all duration-300 hover:bg-white/3 hover:rounded-md focus:border-red-600 focus:bg-white/5 resize-none min-h-20 max-h-20 leading-relaxed overflow-hidden whitespace-pre-wrap" placeholder="Carregando..." title="Clique para editar sua biografia" rows="1"></textarea>
+                    </div>
+                </section>
+            </div>
+
+            <section class="flex justify-center items-center flex-col w-full">
+                <div class="grid w-full max-w-2xl grid-cols-1 md:grid-cols-2 gap-4 mt-4 mb-24 px-5">
+                    <div class="block w-full">
+                        <input id="dateOfBirthInput" type="date" class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600" placeholder="Carregando..." title="Clique para editar sua data de nascimento" />
+                    </div>
+
+                    <div class="block w-full">
+                        <input id="emailInput" type="text" class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600" placeholder="Carregando..." title="Clique para editar seu email" />
+                    </div>
+
+                    <div class="block w-full">
+                        <input id="phoneInput" type="tel" class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600" placeholder="Carregando..." title="Clique para editar seu telefone" />
+                    </div>
+
+                    <div class="block w-full">
+                        <select id="genderInput" class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600 cursor-pointer appearance-none disabled:cursor-wait disabled:opacity-60" title="Selecione seu gênero (Pressione Delete para remover)">
+                            <option value="" disabled selected>Carregando gênero...</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Feminino</option>
+                            <option value="prefer_not_say">Prefiro não dizer</option>
+                        </select>
+                    </div>
+
+                    <div class="block w-full">
+                        <select id="countryInput" class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600 cursor-pointer" title="Selecione seu país">
+                            <option value="" disabled="">País atual: BR</option>
+                            <option value="">Nenhum país selecionado</option>
+                            <option value="AD">Andorra (AD)</option>
+                            <option value="AE">Emirados Árabes Unidos (AE)</option>
+                            <option value="AF">Afeganistão (AF)</option>
+                            <option value="AG">Antígua e Barbuda (AG)</option>
+                            <option value="AI">Anguilla (AI)</option>
+                            <option value="AL">Albânia (AL)</option>
+                            <option value="AM">Armênia (AM)</option>
+                            <option value="AO">Angola (AO)</option>
+                            <option value="AQ">Antártida (AQ)</option>
+                            <option value="AR">Argentina (AR)</option>
+                            <option value="AS">Samoa Americana (AS)</option>
+                            <option value="AT">Áustria (AT)</option>
+                            <option value="AU">Austrália (AU)</option>
+                            <option value="AW">Aruba (AW)</option>
+                            <option value="AX">Ilhas Åland (AX)</option>
+                            <option value="AZ">Azerbaijão (AZ)</option>
+                            <option value="BA">Bósnia e Herzegovina (BA)</option>
+                            <option value="BB">Barbados (BB)</option>
+                            <option value="BD">Bangladesh (BD)</option>
+                            <option value="BE">Bélgica (BE)</option>
+                            <option value="BF">Burkina Faso (BF)</option>
+                            <option value="BG">Bulgária (BG)</option>
+                            <option value="BH">Bahrein (BH)</option>
+                            <option value="BI">Burundi (BI)</option>
+                            <option value="BJ">Benin (BJ)</option>
+                            <option value="BL">São Bartolomeu (BL)</option>
+                            <option value="BM">Bermudas (BM)</option>
+                            <option value="BN">Brunei (BN)</option>
+                            <option value="BO">Bolívia (BO)</option>
+                            <option value="BQ">Bonaire (BQ)</option>
+                            <option value="BR">Brasil (BR)</option>
+                            <option value="BS">Bahamas (BS)</option>
+                            <option value="BT">Butão (BT)</option>
+                            <option value="BV">Ilha Bouvet (BV)</option>
+                            <option value="BW">Botsuana (BW)</option>
+                            <option value="BY">Bielorrússia (BY)</option>
+                            <option value="BZ">Belize (BZ)</option>
+                            <option value="CA">Canadá (CA)</option>
+                            <option value="CC">Ilhas Cocos (CC)</option>
+                            <option value="CD">República Democrática do Congo (CD)</option>
+                            <option value="CF">República Centro-Africana (CF)</option>
+                            <option value="CG">Congo (CG)</option>
+                            <option value="CH">Suíça (CH)</option>
+                            <option value="CI">Costa do Marfim (CI)</option>
+                            <option value="CK">Ilhas Cook (CK)</option>
+                            <option value="CL">Chile (CL)</option>
+                            <option value="CM">Camarões (CM)</option>
+                            <option value="CN">China (CN)</option>
+                            <option value="CO">Colômbia (CO)</option>
+                            <option value="CR">Costa Rica (CR)</option>
+                            <option value="CU">Cuba (CU)</option>
+                            <option value="CV">Cabo Verde (CV)</option>
+                            <option value="CW">Curaçao (CW)</option>
+                            <option value="CX">Ilha Christmas (CX)</option>
+                            <option value="CY">Chipre (CY)</option>
+                            <option value="CZ">República Tcheca (CZ)</option>
+                            <option value="DE">Alemanha (DE)</option>
+                            <option value="DJ">Djibouti (DJ)</option>
+                            <option value="DK">Dinamarca (DK)</option>
+                            <option value="DM">Dominica (DM)</option>
+                            <option value="DO">República Dominicana (DO)</option>
+                            <option value="DZ">Argélia (DZ)</option>
+                            <option value="EC">Equador (EC)</option>
+                            <option value="EE">Estônia (EE)</option>
+                            <option value="EG">Egito (EG)</option>
+                            <option value="EH">Saara Ocidental (EH)</option>
+                            <option value="ER">Eritreia (ER)</option>
+                            <option value="ES">Espanha (ES)</option>
+                            <option value="ET">Etiópia (ET)</option>
+                            <option value="FI">Finlândia (FI)</option>
+                            <option value="FJ">Fiji (FJ)</option>
+                            <option value="FK">Ilhas Malvinas (FK)</option>
+                            <option value="FM">Micronésia (FM)</option>
+                            <option value="FO">Ilhas Faroé (FO)</option>
+                            <option value="FR">França (FR)</option>
+                            <option value="GA">Gabão (GA)</option>
+                            <option value="GB">Reino Unido (GB)</option>
+                            <option value="GD">Granada (GD)</option>
+                            <option value="GE">Geórgia (GE)</option>
+                            <option value="GF">Guiana Francesa (GF)</option>
+                            <option value="GG">Guernsey (GG)</option>
+                            <option value="GH">Gana (GH)</option>
+                            <option value="GI">Gibraltar (GI)</option>
+                            <option value="GL">Groenlândia (GL)</option>
+                            <option value="GM">Gâmbia (GM)</option>
+                            <option value="GN">Guiné (GN)</option>
+                            <option value="GP">Guadalupe (GP)</option>
+                            <option value="GQ">Guiné Equatorial (GQ)</option>
+                            <option value="GR">Grécia (GR)</option>
+                            <option value="GS">Geórgia do Sul (GS)</option>
+                            <option value="GT">Guatemala (GT)</option>
+                            <option value="GU">Guam (GU)</option>
+                            <option value="GW">Guiné-Bissau (GW)</option>
+                            <option value="GY">Guiana (GY)</option>
+                            <option value="HK">Hong Kong (HK)</option>
+                            <option value="HM">Ilha Heard (HM)</option>
+                            <option value="HN">Honduras (HN)</option>
+                            <option value="HR">Croácia (HR)</option>
+                            <option value="HT">Haiti (HT)</option>
+                            <option value="HU">Hungria (HU)</option>
+                            <option value="ID">Indonésia (ID)</option>
+                            <option value="IE">Irlanda (IE)</option>
+                            <option value="IL">Israel (IL)</option>
+                            <option value="IM">Ilha de Man (IM)</option>
+                            <option value="IN">Índia (IN)</option>
+                            <option value="IO">Território Britânico do Oceano Índico (IO)</option>
+                            <option value="IQ">Iraque (IQ)</option>
+                            <option value="IR">Irã (IR)</option>
+                            <option value="IS">Islândia (IS)</option>
+                            <option value="IT">Itália (IT)</option>
+                            <option value="JE">Jersey (JE)</option>
+                            <option value="JM">Jamaica (JM)</option>
+                            <option value="JO">Jordânia (JO)</option>
+                            <option value="JP">Japão (JP)</option>
+                            <option value="KE">Quênia (KE)</option>
+                            <option value="KG">Quirguistão (KG)</option>
+                            <option value="KH">Camboja (KH)</option>
+                            <option value="KI">Kiribati (KI)</option>
+                            <option value="KM">Comores (KM)</option>
+                            <option value="KN">São Cristóvão e Nevis (KN)</option>
+                            <option value="KP">Coreia do Norte (KP)</option>
+                            <option value="KR">Coreia do Sul (KR)</option>
+                            <option value="KW">Kuwait (KW)</option>
+                            <option value="KY">Ilhas Cayman (KY)</option>
+                            <option value="KZ">Cazaquistão (KZ)</option>
+                            <option value="LA">Laos (LA)</option>
+                            <option value="LB">Líbano (LB)</option>
+                            <option value="LC">Santa Lúcia (LC)</option>
+                            <option value="LI">Liechtenstein (LI)</option>
+                            <option value="LK">Sri Lanka (LK)</option>
+                            <option value="LR">Libéria (LR)</option>
+                            <option value="LS">Lesoto (LS)</option>
+                            <option value="LT">Lituânia (LT)</option>
+                            <option value="LU">Luxemburgo (LU)</option>
+                            <option value="LV">Letônia (LV)</option>
+                            <option value="LY">Líbia (LY)</option>
+                            <option value="MA">Marrocos (MA)</option>
+                            <option value="MC">Mônaco (MC)</option>
+                            <option value="MD">Moldávia (MD)</option>
+                            <option value="ME">Montenegro (ME)</option>
+                            <option value="MF">São Martinho (MF)</option>
+                            <option value="MG">Madagáscar (MG)</option>
+                            <option value="MH">Ilhas Marshall (MH)</option>
+                            <option value="MK">Macedônia do Norte (MK)</option>
+                            <option value="ML">Mali (ML)</option>
+                            <option value="MM">Myanmar (MM)</option>
+                            <option value="MN">Mongólia (MN)</option>
+                            <option value="MO">Macau (MO)</option>
+                            <option value="MP">Ilhas Marianas do Norte (MP)</option>
+                            <option value="MQ">Martinica (MQ)</option>
+                            <option value="MR">Mauritânia (MR)</option>
+                            <option value="MS">Montserrat (MS)</option>
+                            <option value="MT">Malta (MT)</option>
+                            <option value="MU">Maurício (MU)</option>
+                            <option value="MV">Maldivas (MV)</option>
+                            <option value="MW">Malawi (MW)</option>
+                            <option value="MX">México (MX)</option>
+                            <option value="MY">Malásia (MY)</option>
+                            <option value="MZ">Moçambique (MZ)</option>
+                            <option value="NA">Namíbia (NA)</option>
+                            <option value="NC">Nova Caledônia (NC)</option>
+                            <option value="NE">Níger (NE)</option>
+                            <option value="NF">Ilha Norfolk (NF)</option>
+                            <option value="NG">Nigéria (NG)</option>
+                            <option value="NI">Nicarágua (NI)</option>
+                            <option value="NL">Países Baixos (NL)</option>
+                            <option value="NO">Noruega (NO)</option>
+                            <option value="NP">Nepal (NP)</option>
+                            <option value="NR">Nauru (NR)</option>
+                            <option value="NU">Niue (NU)</option>
+                            <option value="NZ">Nova Zelândia (NZ)</option>
+                            <option value="OM">Omã (OM)</option>
+                            <option value="PA">Panamá (PA)</option>
+                            <option value="PE">Peru (PE)</option>
+                            <option value="PF">Polinésia Francesa (PF)</option>
+                            <option value="PG">Papua-Nova Guiné (PG)</option>
+                            <option value="PH">Filipinas (PH)</option>
+                            <option value="PK">Paquistão (PK)</option>
+                            <option value="PL">Polônia (PL)</option>
+                            <option value="PM">São Pedro e Miquelon (PM)</option>
+                            <option value="PN">Pitcairn (PN)</option>
+                            <option value="PR">Porto Rico (PR)</option>
+                            <option value="PS">Palestina (PS)</option>
+                            <option value="PT">Portugal (PT)</option>
+                            <option value="PW">Palau (PW)</option>
+                            <option value="PY">Paraguai (PY)</option>
+                            <option value="QA">Catar (QA)</option>
+                            <option value="RE">Reunião (RE)</option>
+                            <option value="RO">Romênia (RO)</option>
+                            <option value="RS">Sérvia (RS)</option>
+                            <option value="RU">Rússia (RU)</option>
+                            <option value="RW">Ruanda (RW)</option>
+                            <option value="SA">Arábia Saudita (SA)</option>
+                            <option value="SB">Ilhas Salomão (SB)</option>
+                            <option value="SC">Seicheles (SC)</option>
+                            <option value="SD">Sudão (SD)</option>
+                            <option value="SE">Suécia (SE)</option>
+                            <option value="SG">Singapura (SG)</option>
+                            <option value="SH">Santa Helena (SH)</option>
+                            <option value="SI">Eslovênia (SI)</option>
+                            <option value="SJ">Svalbard e Jan Mayen (SJ)</option>
+                            <option value="SK">Eslováquia (SK)</option>
+                            <option value="SL">Serra Leoa (SL)</option>
+                            <option value="SM">San Marino (SM)</option>
+                            <option value="SN">Senegal (SN)</option>
+                            <option value="SO">Somália (SO)</option>
+                            <option value="SR">Suriname (SR)</option>
+                            <option value="SS">Sudão do Sul (SS)</option>
+                            <option value="ST">São Tomé e Príncipe (ST)</option>
+                            <option value="SV">El Salvador (SV)</option>
+                            <option value="SX">Sint Maarten (SX)</option>
+                            <option value="SY">Síria (SY)</option>
+                            <option value="SZ">Eswatini (SZ)</option>
+                            <option value="TC">Turks e Caicos (TC)</option>
+                            <option value="TD">Chade (TD)</option>
+                            <option value="TF">Territórios Franceses do Sul (TF)</option>
+                            <option value="TG">Togo (TG)</option>
+                            <option value="TH">Tailândia (TH)</option>
+                            <option value="TJ">Tajiquistão (TJ)</option>
+                            <option value="TK">Tokelau (TK)</option>
+                            <option value="TL">Timor-Leste (TL)</option>
+                            <option value="TM">Turcomenistão (TM)</option>
+                            <option value="TN">Tunísia (TN)</option>
+                            <option value="TO">Tonga (TO)</option>
+                            <option value="TR">Turquia (TR)</option>
+                            <option value="TT">Trinidad e Tobago (TT)</option>
+                            <option value="TV">Tuvalu (TV)</option>
+                            <option value="TW">Taiwan (TW)</option>
+                            <option value="TZ">Tanzânia (TZ)</option>
+                            <option value="UA">Ucrânia (UA)</option>
+                            <option value="UG">Uganda (UG)</option>
+                            <option value="UM">Ilhas Menores dos EUA (UM)</option>
+                            <option value="US">Estados Unidos (US)</option>
+                            <option value="UY">Uruguai (UY)</option>
+                            <option value="UZ">Uzbequistão (UZ)</option>
+                            <option value="VA">Vaticano (VA)</option>
+                            <option value="VC">São Vicente e Granadinas (VC)</option>
+                            <option value="VE">Venezuela (VE)</option>
+                            <option value="VG">Ilhas Virgens Britânicas (VG)</option>
+                            <option value="VI">Ilhas Virgens Americanas (VI)</option>
+                            <option value="VN">Vietnã (VN)</option>
+                            <option value="VU">Vanuatu (VU)</option>
+                            <option value="WF">Wallis e Futuna (WF)</option>
+                            <option value="WS">Samoa (WS)</option>
+                            <option value="YE">Iêmen (YE)</option>
+                            <option value="YT">Mayotte (YT)</option>
+                            <option value="ZA">África do Sul (ZA)</option>
+                            <option value="ZM">Zâmbia (ZM)</option>
+                            <option value="ZW">Zimbábue (ZW)</option>
+                        </select>
+                    </div>
+
+                    <div class="block w-full">
+                        <select id="languageInput" class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600" title="Selecione seu idioma">
+                            <option value="" disabled selected>Selecione o idioma</option>
+                            <option value="pt-BR">Português (Brasil)</option>
+                            <option value="en-US">Inglês (EUA)</option>
+                            <option value="es-ES">Espanhol</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </body>
+
+<script>
+    // =============================================
+    // FUNCIONALIDADES EXISTENTES (MANTIDAS)
+    // =============================================
+
+    function openSidebar() {
+        console.log('[SIDEBAR] Abrindo sidebar');
+        document.getElementById('mobile-menu').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+        console.log('[SIDEBAR] Fechando sidebar');
+        document.getElementById('mobile-menu').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    function toggleSubmenu(menuId) {
+        console.log('[SUBMENU] Alternando submenu:', menuId);
+        const menu = document.getElementById(menuId);
+        const chevron = document.getElementById(menuId.replace('-menu', '-chevron'));
+        const button = chevron.closest('button');
+
+        if (menu.classList.contains('hidden')) {
+            menu.classList.remove('hidden');
+            chevron.classList.add('rotate-90');
+            button.setAttribute('aria-expanded', 'true');
+            button.classList.add('text-white');
+        } else {
+            menu.classList.add('hidden');
+            chevron.classList.remove('rotate-90');
+            button.setAttribute('aria-expanded', 'false');
+            button.classList.remove('text-white');
+        }
+    }
+
+    // =============================================
+    // NOVAS FUNCIONALIDADES - PERFIL
+    // =============================================
+
+    // Estado global do perfil
+    let profileData = {};
+    let isUpdating = false;
+
+    // Função para fazer requisição GET /api/profile
+    async function loadProfileData() {
+        console.log('[PROFILE] Iniciando carregamento dos dados do perfil');
+        
+        try {
+            console.log('[PROFILE] Fazendo requisição GET para /api/profile');
+            const response = await fetch('/api/profile', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('[PROFILE] Status da resposta:', response.status);
+
+            if (!response.ok) {
+                console.error('[PROFILE] Erro na requisição:', response.status, response.statusText);
+                throw new Error(`Erro ao carregar perfil: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('[PROFILE] Dados recebidos do servidor:', data);
+
+            profileData = data;
+            populateProfileFields(data);
+            
+            if (data.profile_icon_url) {
+                console.log('[PROFILE] URL da imagem do perfil encontrada:', data.profile_icon_url);
+                updateProfileImageDisplay(data.profile_icon_url);
+            } else {
+                console.log('[PROFILE] Nenhuma URL de imagem do perfil encontrada');
+            }
+
+            if (data.profile_background_url) {
+                console.log('[PROFILE] URL do banner do perfil encontrada:', data.profile_background_url);
+                updateBannerImageDisplay(data.profile_background_url);
+            } else {
+                console.log('[PROFILE] Nenhuma URL de banner do perfil encontrada');
+            }
+            
+            console.log('[PROFILE] Dados do perfil carregados com sucesso');
+        } catch (error) {
+            console.error('[PROFILE] Erro ao carregar dados do perfil:', error);
+            if (window.notificationManager) {
+                window.notificationManager.error('Erro ao carregar dados do perfil: ' + error.message);
+            }
+        }
+    }
+
+    // Função para popular os campos do formulário com placeholders corrigidos
+    function populateProfileFields(data) {
+        console.log('[PROFILE] Populando campos do formulário');
+        console.log('[PROFILE] Dados disponíveis para mapeamento:', {
+            username: data.username,
+            bio: data.bio,
+            date_of_birth: data.date_of_birth,
+            login_email: data.login_email,
+            phone_number: data.phone_number,
+            gender: data.gender,
+            country: data.country,
+            language: data.language
+        });
+
+        const fieldsToPopulate = {
+            'usernameInput': { value: data.username || '', placeholder: 'Digite seu nome de usuário' },
+            'bioInput': { value: data.bio || '', placeholder: 'Escreva sua biografia' },
+            'dateOfBirthInput': { value: data.date_of_birth || '', placeholder: 'Selecione sua data de nascimento' },
+            'emailInput': { value: data.login_email || '', placeholder: 'Digite seu email' },
+            'phoneInput': { value: data.phone_number || '', placeholder: 'Digite seu telefone (mín. 10 caracteres)' },
+            'genderInput': { value: data.gender || '', placeholder: 'Selecione seu gênero' },
+            'countryInput': { value: data.country || 'BR', placeholder: 'Selecione seu país' },
+            'languageInput': { value: data.language || 'pt-BR', placeholder: 'Selecione seu idioma' }
+        };
+
+        Object.entries(fieldsToPopulate).forEach(([fieldId, config]) => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                console.log('[PROFILE] Populando campo', fieldId, 'com valor:', config.value);
+                field.value = config.value;
+                
+                if (!config.value || config.value === '') {
+                    field.placeholder = config.placeholder;
+                    console.log('[PROFILE] Campo vazio, configurando placeholder:', config.placeholder);
+                } else {
+                    field.placeholder = '';
+                    console.log('[PROFILE] Campo preenchido, removendo placeholder');
+                }
+            } else {
+                console.warn('[PROFILE] Campo', fieldId, 'não encontrado no DOM');
+            }
+        });
+
+        console.log('[PROFILE] Campos populados com sucesso');
+    }
+
+    // FUNÇÃO CORRIGIDA: Atualizar a exibição da imagem do perfil em TODOS OS LOCAIS
+    function updateProfileImageDisplay(imageUrl) {
+        console.log('[PROFILE] ===== ATUALIZANDO IMAGEM DE PERFIL =====');
+        console.log('[PROFILE] Nova URL da imagem:', imageUrl);
+        
+        const imageUrlWithTimestamp = imageUrl + '?t=' + Date.now();
+        console.log('[PROFILE] URL com timestamp para evitar cache:', imageUrlWithTimestamp);
+        
+        const profileImageHeader = document.getElementById('profileImage');
+        if (profileImageHeader) {
+            profileImageHeader.src = imageUrlWithTimestamp;
+            console.log('[PROFILE] ✅ Imagem do perfil no header atualizada');
+        } else {
+            console.error('[PROFILE] ❌ Elemento profileImage (header) não encontrado');
+        }
+        
+        const profileImageMain = document.getElementById('profileimage');
+        if (profileImageMain) {
+            profileImageMain.src = imageUrlWithTimestamp;
+            console.log('[PROFILE] ✅ Imagem principal do perfil atualizada');
+        } else {
+            console.error('[PROFILE] ❌ Elemento profileimage (main) não encontrado');
+        }
+
+        const allProfileImages = document.querySelectorAll('img[id="profileImage"], img[id="profileimage"], img[src*="user.svg"]');
+        console.log('[PROFILE] Total de imagens de perfil encontradas:', allProfileImages.length);
+        
+        allProfileImages.forEach((img, index) => {
+            img.src = imageUrlWithTimestamp;
+            console.log(`[PROFILE] ✅ Imagem ${index + 1} atualizada:`, img.id || 'sem ID', '- src:', img.src);
+        });
+
+        console.log('[PROFILE] ===== ATUALIZAÇÃO CONCLUÍDA =====');
+    }
+
+    // FUNÇÃO CORRIGIDA: Atualizar a exibição do banner
+    function updateBannerImageDisplay(bannerUrl) {
+        console.log('[BANNER] ===== ATUALIZANDO BANNER =====');
+        console.log('[BANNER] Nova URL do banner:', bannerUrl);
+        
+        const bannerElement = document.getElementById('bannerprofileimage');
+        
+        if (bannerElement && bannerUrl) {
+            const bannerUrlWithTimestamp = bannerUrl + '?t=' + Date.now();
+            console.log('[BANNER] URL com timestamp para evitar cache:', bannerUrlWithTimestamp);
+            
+            bannerElement.style.backgroundImage = `url('${bannerUrlWithTimestamp}')`;
+            console.log('[BANNER] ✅ Banner atualizado com sucesso');
+            console.log('[BANNER] Style aplicado:', bannerElement.style.backgroundImage);
+        } else {
+            console.error('[BANNER] ❌ Banner element não encontrado ou URL vazia');
+            console.log('[BANNER] bannerElement:', bannerElement);
+            console.log('[BANNER] bannerUrl:', bannerUrl);
+        }
+        
+        console.log('[BANNER] ===== ATUALIZAÇÃO CONCLUÍDA =====');
+    }
+
+    // FUNÇÃO CORRIGIDA: Mapear campos do frontend para backend
+    function mapFieldToServerField(fieldName, value) {
+        const fieldMapping = {
+            'username': 'username',
+            'email': 'email',
+            'phone': 'phone_number',
+            'dateOfBirth': 'date_of_birth',
+            'bio': 'bio',
+            'gender': 'gender',
+            'country': 'country',
+            'language': 'language',
+            'timezone': 'timezone'
+        };
+
+        const serverField = fieldMapping[fieldName] || fieldName;
+        console.log('[PROFILE] Mapeando campo', fieldName, '->', serverField, 'com valor:', value);
+        return { [serverField]: value };
+    }
+
+    // FUNÇÃO CORRIGIDA: Enviar dados para o endpoint único /api/profile_update
+    async function updateProfileData(updatedData) {
+        if (isUpdating) {
+            console.log('[PROFILE] Update já em andamento, ignorando');
+            return;
+        }
+        
+        console.log('[PROFILE] Iniciando atualização do perfil:', updatedData);
+        isUpdating = true;
+
+        try {
+            console.log('[PROFILE] Fazendo requisição PUT para /api/profile_update');
+            
+            const response = await fetch('/api/profile_update', {
+                method: 'PUT',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedData)
+            });
+
+            console.log('[PROFILE] Status da resposta de atualização:', response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('[PROFILE] Erro na atualização:', response.status, response.statusText, errorText);
+                throw new Error(`Erro ao atualizar perfil: ${response.status} - ${errorText}`);
+            }
+
+            const result = await response.json();
+            console.log('[PROFILE] Perfil atualizado com sucesso:', result);
+
+            if (window.notificationManager) {
+                window.notificationManager.success('Perfil atualizado com sucesso!');
+            }
+            
+            await loadProfileData();
+            
+        } catch (error) {
+            console.error('[PROFILE] Erro ao atualizar perfil:', error);
+            if (window.notificationManager) {
+                window.notificationManager.error('Erro ao atualizar perfil: ' + error.message);
+            }
+        } finally {
+            isUpdating = false;
+        }
+    }
+
+    // =============================================
+    // GESTÃO DE UPLOAD DE IMAGEM - CORRIGIDA
+    // =============================================
+
+    // Função para validar se uma imagem é válida
+    function isValidImageFile(file) {
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/bmp', 'image/tiff', 'image/svg+xml'];
+        console.log('[IMAGE] Validando tipo de arquivo:', file.type);
+        return validTypes.includes(file.type.toLowerCase());
+    }
+
+    // Função para converter imagem para WebP
+    async function convertImageToWebP(file, quality = 0.85) {
+        console.log('[IMAGE] Iniciando conversão para WebP:', file.name, file.type);
+        
+        return new Promise((resolve, reject) => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = function() {
+                console.log('[IMAGE] Imagem carregada para conversão. Dimensões:', img.width, 'x', img.height);
+                
+                canvas.width = img.width;
+                canvas.height = img.height;
+                
+                ctx.drawImage(img, 0, 0);
+                
+                canvas.toBlob(function(blob) {
+                    if (blob) {
+                        console.log('[IMAGE] Conversão para WebP concluída. Tamanho:', blob.size, 'bytes');
+                        resolve(blob);
+                    } else {
+                        console.error('[IMAGE] Falha na conversão para WebP');
+                        reject(new Error('Falha na conversão para WebP'));
+                    }
+                }, 'image/webp', quality);
+            };
+            
+            img.onerror = function() {
+                console.error('[IMAGE] Erro ao carregar imagem para conversão');
+                reject(new Error('Erro ao carregar imagem para conversão'));
+            };
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.onerror = function() {
+                console.error('[IMAGE] Erro ao ler arquivo para conversão');
+                reject(new Error('Erro ao ler arquivo'));
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // FUNÇÃO CORRIGIDA: Processar e enviar imagem do perfil
+    async function handleProfileImageUpload(file) {
+        console.log('[IMAGE] ===== INICIANDO UPLOAD DA IMAGEM DE PERFIL =====');
+        console.log('[IMAGE] Arquivo:', file.name, file.type, file.size, 'bytes');
+        
+        if (!isValidImageFile(file)) {
+            console.error('[IMAGE] Tipo de arquivo não suportado:', file.type);
+            if (window.notificationManager) {
+                window.notificationManager.error('Tipo de arquivo não suportado. Use JPG, PNG, WebP, GIF, BMP ou TIFF.');
+            }
+            return;
+        }
+
+        const maxSize = 10 * 1024 * 1024;
+        if (file.size > maxSize) {
+            console.error('[IMAGE] Arquivo muito grande:', file.size, 'bytes. Máximo permitido:', maxSize, 'bytes');
+            if (window.notificationManager) {
+                window.notificationManager.error('Arquivo muito grande. Máximo permitido: 10MB');
+            }
+            return;
+        }
+
+        const loadingElement = document.getElementById('profileLoading');
+        if (loadingElement) {
+            loadingElement.classList.remove('hidden');
+            console.log('[IMAGE] Indicador de carregamento ativado');
+        }
+
+        try {
+            let processedBlob;
+            
+            if (typeof window.processCircularImage === 'undefined') {
+                console.error('[IMAGE] ❌ Função processCircularImage não está disponível');
+                throw new Error('Função de processamento de imagem não encontrada');
+            }
+
+            if (file.type === 'image/webp') {
+                console.log('[IMAGE] Arquivo já é WebP, processando diretamente');
+                processedBlob = await window.processCircularImage(file);
+            } else {
+                console.log('[IMAGE] Convertendo para WebP antes do processamento');
+                const webpBlob = await convertImageToWebP(file);
+                console.log('[IMAGE] Conversão concluída, processando imagem circular');
+                processedBlob = await window.processCircularImage(webpBlob);
+            }
+            
+            console.log('[IMAGE] Imagem processada com sucesso. Tamanho final:', processedBlob.size, 'bytes');
+            console.log('[IMAGE] Enviando imagem processada para o servidor');
+            await uploadImageToServer(processedBlob, 'profile');
+
+        } catch (error) {
+            console.error('[IMAGE] ❌ Erro no processamento/upload da imagem:', error);
+            if (window.notificationManager) {
+                window.notificationManager.error('Erro ao processar imagem: ' + error.message);
+            }
+        } finally {
+            if (loadingElement) {
+                loadingElement.classList.add('hidden');
+                console.log('[IMAGE] Indicador de carregamento desativado');
+            }
+            console.log('[IMAGE] ===== UPLOAD FINALIZADO =====');
+        }
+    }
+
+    // NOVA: Função CORRIGIDA para processar e enviar banner
+    async function handleBannerImageUpload(file) {
+        console.log('[BANNER] ===== INICIANDO UPLOAD DO BANNER =====');
+        console.log('[BANNER] Arquivo:', file.name, file.type, file.size, 'bytes');
+        
+        if (!isValidImageFile(file)) {
+            console.error('[BANNER] Tipo de arquivo não suportado:', file.type);
+            if (window.notificationManager) {
+                window.notificationManager.error('Tipo de arquivo não suportado. Use JPG, PNG, WebP, GIF, BMP ou TIFF.');
+            }
+            return;
+        }
+
+        const maxSize = 10 * 1024 * 1024;
+        if (file.size > maxSize) {
+            console.error('[BANNER] Arquivo muito grande:', file.size, 'bytes. Máximo permitido:', maxSize, 'bytes');
+            if (window.notificationManager) {
+                window.notificationManager.error('Arquivo muito grande. Máximo permitido: 10MB');
+            }
+            return;
+        }
+
+        const loadingElement = document.getElementById('bannerLoading');
+        if (loadingElement) {
+            loadingElement.classList.remove('hidden');
+            console.log('[BANNER] Indicador de carregamento ativado');
+        }
+
+        try {
+            let processedBlob;
+            
+            if (typeof window.processWideImage === 'undefined') {
+                console.error('[BANNER] ❌ Função processWideImage não está disponível');
+                throw new Error('Função de processamento de banner não encontrada');
+            }
+
+            if (file.type === 'image/webp') {
+                console.log('[BANNER] Arquivo já é WebP, processando diretamente');
+                processedBlob = await window.processWideImage(file);
+            } else {
+                console.log('[BANNER] Convertendo para WebP antes do processamento');
+                const webpBlob = await convertImageToWebP(file);
+                console.log('[BANNER] Conversão concluída, processando imagem wide');
+                processedBlob = await window.processWideImage(webpBlob);
+            }
+            
+            console.log('[BANNER] Banner processado com sucesso. Tamanho final:', processedBlob.size, 'bytes');
+            console.log('[BANNER] Enviando banner processado para o servidor');
+            await uploadImageToServer(processedBlob, 'banner');
+
+        } catch (error) {
+            console.error('[BANNER] ❌ Erro no processamento/upload do banner:', error);
+            if (window.notificationManager) {
+                window.notificationManager.error('Erro ao processar banner: ' + error.message);
+            }
+        } finally {
+            if (loadingElement) {
+                loadingElement.classList.add('hidden');
+                console.log('[BANNER] Indicador de carregamento desativado');
+            }
+            console.log('[BANNER] ===== UPLOAD FINALIZADO =====');
+        }
+    }
+
+    // FUNÇÃO TOTALMENTE CORRIGIDA: Upload da imagem para o servidor com atualização automática
+    async function uploadImageToServer(imageBlob, type = 'profile') {
+        console.log('[UPLOAD] ===== INICIANDO UPLOAD PARA SERVIDOR =====');
+        console.log('[UPLOAD] Tipo:', type);
+        console.log('[UPLOAD] Tamanho do blob:', imageBlob.size, 'bytes');
+        
+        const formData = new FormData();
+        const filename = type === 'banner' ? 'banner_image.webp' : 'profile_image.webp';
+        const endpoint = type === 'banner' ? '/api/profile/bannerimage' : '/api/profile/image';
+        
+        formData.append('profile_image', imageBlob, filename);
+        console.log('[UPLOAD] Endpoint:', endpoint);
+        console.log('[UPLOAD] Filename:', filename);
+
+        try {
+            console.log('[UPLOAD] Fazendo requisição de upload...');
+            const response = await fetch(endpoint, {
+                method: 'PUT',
+                credentials: 'include',
+                body: formData
+            });
+
+            console.log('[UPLOAD] Status do upload:', response.status);
+            console.log('[UPLOAD] Status text:', response.statusText);
+
+            if (!response.ok) {
+                console.error('[UPLOAD] ❌ Erro no upload:', response.status, response.statusText);
+                try {
+                    const errorText = await response.text();
+                    console.error('[UPLOAD] Detalhes do erro:', errorText);
+                } catch (e) {
+                    console.error('[UPLOAD] Não foi possível ler detalhes do erro:', e);
+                }
+                throw new Error(`Erro no upload: ${response.status} ${response.statusText}`);
+            }
+
+            let result;
+            try {
+                result = await response.json();
+                console.log('[UPLOAD] ✅ Upload realizado com sucesso. Resposta:', result);
+            } catch (e) {
+                console.warn('[UPLOAD] ⚠️ Upload bem-sucedido mas resposta não é JSON válido');
+                result = { success: true };
+            }
+            
+            if (type === 'banner') {
+                const bannerUrl = result.image_url || result.banner_url || result.profile_background_url || result.url;
+                console.log('[UPLOAD] URL do banner retornada:', bannerUrl);
+                
+                if (bannerUrl) {
+                    updateBannerImageDisplay(bannerUrl);
+                    profileData.profile_background_url = bannerUrl;
+                    console.log('[UPLOAD] ✅ Banner atualizado e dados locais salvos');
+                } else {
+                    console.log('[UPLOAD] ⚠️ URL do banner não retornada, recarregando dados do perfil...');
+                    setTimeout(loadProfileData, 1000);
+                }
+            } else if (type === 'profile') {
+                const profileUrl = result.image_url || result.profile_url || result.profile_icon_url || result.url;
+                console.log('[UPLOAD] URL da imagem de perfil retornada:', profileUrl);
+                
+                if (profileUrl) {
+                    updateProfileImageDisplay(profileUrl);
+                    profileData.profile_icon_url = profileUrl;
+                    console.log('[UPLOAD] ✅ Imagem de perfil atualizada e dados locais salvos');
+                } else {
+                    console.log('[UPLOAD] ⚠️ URL da imagem de perfil não retornada, recarregando dados do perfil...');
+                    setTimeout(loadProfileData, 1000);
+                }
+            }
+
+            if (window.notificationManager) {
+                const message = type === 'banner' ? 'Banner atualizado com sucesso!' : 'Imagem de perfil atualizada com sucesso!';
+                window.notificationManager.success(message);
+            }
+            
+            console.log('[UPLOAD] ===== UPLOAD CONCLUÍDO COM SUCESSO =====');
+
+        } catch (error) {
+            console.error('[UPLOAD] ❌ Erro no upload da imagem:', error);
+            console.log('[UPLOAD] ===== UPLOAD FALHOU =====');
+            throw error;
+        }
+    }
+
+    // =============================================
+    // VALIDAÇÃO DE TELEFONE - NOVA FUNÇÃO
+    // =============================================
+    function validatePhoneNumber(phoneNumber) {
+        const cleanPhone = phoneNumber.replace(/[^0-9+\-]/g, '');
+        
+        if (cleanPhone.length < 10) {
+            console.log('[VALIDATION] Telefone inválido. Tamanho:', cleanPhone.length, ', Mínimo: 10');
+            return false;
+        }
+        
+        console.log('[VALIDATION] Telefone válido. Tamanho:', cleanPhone.length);
+        return true;
+    }
+
+    // =============================================
+    // EVENT LISTENERS E INICIALIZAÇÃO
+    // =============================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('[INIT] DOM carregado, configurando event listeners');
+        
+        const mobileMenuOpen = document.getElementById('mobile-menu-open');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        
+        if (mobileMenuOpen) {
+            mobileMenuOpen.addEventListener('click', openSidebar);
+        }
+        
+        if (mobileMenuClose) {
+            mobileMenuClose.addEventListener('click', closeSidebar);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeSidebar();
+            }
+        });
+
+        const profileImage = document.getElementById('profileImage');
+        if (profileImage) {
+            profileImage.addEventListener('click', function() {
+                console.log('[NAVIGATION] Redirecionamento desabilitado (já estamos na página de perfil)');
+            });
+        }
+
+        // =============================================
+        // NOVOS EVENT LISTENERS PARA PERFIL
+        // =============================================
+
+        const editProfileBtn = document.querySelector('.editprofileBtn');
+        
+        if (editProfileBtn) {
+            editProfileBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('[IMAGE] Botão de edição da imagem clicado');
+                
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.style.display = 'none';
+                
+                input.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        console.log('[IMAGE] Arquivo selecionado:', file.name, file.type, file.size, 'bytes');
+                        handleProfileImageUpload(file);
+                    } else {
+                        console.log('[IMAGE] Nenhum arquivo selecionado');
+                    }
+                });
+                
+                document.body.appendChild(input);
+                input.click();
+                document.body.removeChild(input);
+            });
+            console.log('[INIT] ✅ Event listener da imagem de perfil configurado');
+        } else {
+            console.error('[INIT] ❌ Botão de edição da imagem de perfil não encontrado');
+        }
+
+        const btnEditBanner = document.querySelector('#btnEditBannerProfileImage button');
+        
+        if (btnEditBanner) {
+            btnEditBanner.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('[BANNER] Botão de edição do banner clicado');
+                
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.style.display = 'none';
+                
+                input.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        console.log('[BANNER] Arquivo selecionado:', file.name, file.type, file.size, 'bytes');
+                        handleBannerImageUpload(file);
+                    } else {
+                        console.log('[BANNER] Nenhum arquivo selecionado');
+                    }
+                });
+                
+                document.body.appendChild(input);
+                input.click();
+                document.body.removeChild(input);
+            });
+            console.log('[INIT] ✅ Event listener do banner configurado');
+        } else {
+            console.error('[INIT] ❌ Botão de edição do banner não encontrado');
+        }
+
+        // Event listeners para campos do formulário (TODOS OS CAMPOS EDITÁVEIS)
+        const profileFields = [
+            'usernameInput', 'emailInput', 'bioInput', 'dateOfBirthInput', 
+            'phoneInput', 'genderInput', 'countryInput', 'languageInput'
+        ];
+
+        profileFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                const eventType = field.tagName.toLowerCase() === 'select' ? 'change' : 'blur';
+                
+                field.addEventListener(eventType, function() {
+                    const currentValue = this.value;
+                    const fieldName = fieldId.replace('Input', '');
+                    
+                    console.log('[PROFILE] Campo', fieldName, 'alterado para:', currentValue);
+                    
+                    // VALIDAÇÃO DE TELEFONE ADICIONADA
+                    if (fieldName === 'phone' && currentValue) {
+                        if (!validatePhoneNumber(currentValue)) {
+                            if (window.notificationManager) {
+                                window.notificationManager.error('Número de telefone deve ter no mínimo 10 caracteres');
+                            }
+                            console.error('[VALIDATION] Telefone inválido, não enviando para servidor');
+                            return;
+                        }
+                    }
+                    
+                    const mappedData = mapFieldToServerField(fieldName, currentValue);
+                    const serverFieldName = Object.keys(mappedData)[0];
+                    const serverFieldValue = Object.values(mappedData)[0];
+                    
+                    let previousValue;
+                    if (serverFieldName === 'email') {
+                        previousValue = profileData.login_email;
+                    } else if (serverFieldName === 'phone_number') {
+                        previousValue = profileData.phone_number;
+                    } else if (serverFieldName === 'date_of_birth') {
+                        previousValue = profileData.date_of_birth;
+                    } else {
+                        previousValue = profileData[serverFieldName];
+                    }
+                    
+                    console.log('[PROFILE] Comparando valores. Anterior:', previousValue, ', Novo:', serverFieldValue);
+                    
+                    if (previousValue !== serverFieldValue) {
+                        console.log('[PROFILE] Valor diferente detectado para', serverFieldName, '. Atualizar');
+                        
+                        if (serverFieldName === 'email') {
+                            profileData.login_email = serverFieldValue;
+                        } else {
+                            profileData[serverFieldName] = serverFieldValue;
+                        }
+                        
+                        updateProfileData(mappedData);
+                    } else {
+                        console.log('[PROFILE] Valor igual, não enviando atualização para', serverFieldName);
+                    }
+                });
+            }
+        });
+
+        console.log('[INIT] Carregando dados do perfil');
+        loadProfileData();
+        
+        console.log('[INIT] ===== INICIALIZAÇÃO CONCLUÍDA =====');
+    });
+
+    window.addEventListener('load', function() {
+        console.log('[INIT] Página totalmente carregada');
+        
+        if (typeof processCircularImage !== 'undefined') {
+            window.processCircularImage = processCircularImage;
+            console.log('[INIT] ✅ processCircularImage disponível');
+        } else {
+            console.error('[INIT] ❌ processCircularImage não encontrada');
+        }
+        
+        if (typeof processWideImage !== 'undefined') {
+            window.processWideImage = processWideImage;
+            console.log('[INIT] ✅ processWideImage disponível');
+        } else {
+            console.error('[INIT] ❌ processWideImage não encontrada');
+        }
+    });
+</script>
+
+
+<script src="/public/js/notificationManager.js"></script>
+<script src="/public/js/headerbar.js"></script>
+<script src="/public/js/processImage.js"></script>
+</html>

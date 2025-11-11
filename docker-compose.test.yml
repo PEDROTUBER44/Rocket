@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  postgres_test:
+    image: public.ecr.aws/docker/library/postgres:16-alpine
+    container_name: rocket_test_postgres
+    environment:
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_DB: test_rocket_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - test_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d test_rocket_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis_test:
+    image: public.ecr.aws/docker/library/redis:7-alpine
+    container_name: rocket_test_redis
+    ports:
+      - "6380:6379"
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  test_postgres_data:

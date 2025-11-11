@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat com IA</title>
+    <link rel="icon" href="/public/icons/Rocket/LogoRocket.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://rsms.me/" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+    <link rel="stylesheet" href="/public/css/output.css">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <!-- Biblioteca Marked.js para Markdown -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+    <!-- Prism.js para destacar código -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+        
+        .message {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .typing-dots span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #666;
+            margin: 0 1px;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+        /* Estilo para o container principal com barra fixa */
+        .chat-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 1rem;
+        }
+        
+        .input-container {
+            position: sticky;
+            bottom: 0;
+            background: inherit;
+            border-top: 1px solid rgb(31, 41, 55);
+            padding: 1.5rem;
+            z-index: 10;
+        }
+
+        /* Estilos para markdown nas mensagens */
+        .message-content {
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+        
+        .message-content h1, .message-content h2, .message-content h3 {
+            margin: 0.5rem 0;
+            font-weight: bold;
+        }
+        
+        .message-content h1 { font-size: 1.25rem; }
+        .message-content h2 { font-size: 1.1rem; }
+        .message-content h3 { font-size: 1rem; }
+        
+        .message-content p {
+            margin: 0.5rem 0;
+            line-height: 1.5;
+        }
+        
+        .message-content ul, .message-content ol {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .message-content li {
+            margin: 0.25rem 0;
+        }
+        
+        .message-content blockquote {
+            margin: 0.5rem 0;
+            padding-left: 1rem;
+            border-left: 3px solid #666;
+            font-style: italic;
+        }
+        
+        .message-content code {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.875rem;
+        }
+        
+        .message-content pre {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 0.5rem 0;
+        }
+        
+        .message-content pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        .message-content strong {
+            font-weight: bold;
+        }
+        
+        .message-content em {
+            font-style: italic;
+        }
+        
+        .message-content a {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
+        
+        .message-content hr {
+            border: none;
+            border-top: 1px solid #666;
+            margin: 1rem 0;
+        }
+        
+        .message-content table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+        
+        .message-content th, .message-content td {
+            border: 1px solid #666;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        
+        .message-content th {
+            background-color: rgba(255, 255, 255, 0.1);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-color text-white">
+    <div class="max-w-2xl mx-auto chat-container">
+        <!-- Messages Area -->
+        <div class="messages-container" id="chatMessages">
+            <div class="p-6">
+                <div class="text-center text-gray-400 py-20" id="welcomeMessage">
+                    <p class="text-lg mb-2">Como posso ajudá-lo?</p>
+                    <small class="text-gray-500"><span id="requestCount">0</span>/5 mensagens</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Input Area -->
+        <div class="input-container">
+            <div class="flex gap-3">
+                <input 
+                    type="text" 
+                    class="flex-1 px-4 py-3 bg-color border border-gray-700 rounded-full focus:outline-none focus:border-gray-600 text-white placeholder-gray-400" 
+                    id="messageInput" 
+                    placeholder="Digite sua mensagem..." 
+                    maxlength="400"
+                    autocomplete="off"
+                >
+                <button 
+                    class="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-105 disabled:opacity-60" 
+                    style="background-color: #ca000d;"
+                    type="button" 
+                    id="sendButton"
+                >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class ChatApp {
+            constructor() {
+                this.messageInput = document.getElementById('messageInput');
+                this.sendButton = document.getElementById('sendButton');
+                this.chatMessages = document.getElementById('chatMessages');
+                this.requestCount = document.getElementById('requestCount');
+                this.welcomeMessage = document.getElementById('welcomeMessage');
+                
+                this.messagesCount = parseInt(sessionStorage.getItem('chatMessagesCount') || '0');
+                this.updateRequestCounter();
+                
+                this.initializeEventListeners();
+                this.configureMarked();
+            }
+            
+            configureMarked() {
+                // Configurar Marked.js para segurança e funcionalidade
+                marked.setOptions({
+                    gfm: true, // GitHub Flavored Markdown
+                    breaks: true, // Quebras de linha
+                    sanitize: false, // Permitir HTML (controlado)
+                    highlight: function(code, language) {
+                        if (language && Prism.languages[language]) {
+                            return Prism.highlight(code, Prism.languages[language], language);
+                        }
+                        return code;
+                    }
+                });
+            }
+            
+            initializeEventListeners() {
+                this.sendButton.addEventListener('click', () => {
+                    this.sendMessage();
+                });
+                
+                this.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+                
+                this.messageInput.focus();
+            }
+            
+            updateRequestCounter() {
+                this.requestCount.textContent = this.messagesCount;
+            }
+            
+            async sendMessage() {
+                const message = this.messageInput.value.trim();
+                
+                if (!message || this.messagesCount >= 5) return;
+                
+                this.setInputsDisabled(true);
+                
+                if (this.welcomeMessage) {
+                    this.welcomeMessage.remove();
+                }
+                
+                this.addMessage(message, 'user');
+                this.messageInput.value = '';
+                this.addTypingIndicator();
+                
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: message })
+                    });
+                    
+                    this.removeTypingIndicator();
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.addMessage(data.response, 'ai');
+                        
+                        this.messagesCount++;
+                        sessionStorage.setItem('chatMessagesCount', this.messagesCount.toString());
+                        this.updateRequestCounter();
+                    } else {
+                        this.showError('Erro na comunicação');
+                    }
+                } catch (error) {
+                    this.removeTypingIndicator();
+                    this.showError('Erro de conexão');
+                } finally {
+                    this.setInputsDisabled(false);
+                    this.messageInput.focus();
+                }
+            }
+            
+            addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message mb-4 ${sender === 'user' ? 'text-right' : 'text-left'} px-6`;
+                
+                const bubbleDiv = document.createElement('div');
+                if (sender === 'user') {
+                    bubbleDiv.className = 'inline-block max-w-sm px-4 py-3 rounded-2xl text-white text-sm message-content';
+                    bubbleDiv.style.backgroundColor = '#ca000d';
+                    bubbleDiv.style.borderBottomRightRadius = '6px';
+                    // Para mensagens do usuário, apenas texto simples
+                    bubbleDiv.textContent = text;
+                } else {
+                    bubbleDiv.className = 'inline-block max-w-sm px-4 py-3 rounded-2xl bg-color text-gray-100 text-sm message-content';
+                    bubbleDiv.style.borderBottomLeftRadius = '6px';
+                    // Para mensagens da IA, processar markdown
+                    try {
+                        const htmlContent = marked.parse(text);
+                        bubbleDiv.innerHTML = htmlContent;
+                        
+                        // Destacar código após inserir o HTML
+                        setTimeout(() => {
+                            Prism.highlightAllUnder(bubbleDiv);
+                        }, 0);
+                    } catch (error) {
+                        // Fallback para texto simples se houver erro
+                        bubbleDiv.textContent = text;
+                    }
+                }
+                
+                messageDiv.appendChild(bubbleDiv);
+                this.chatMessages.appendChild(messageDiv);
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            }
+            
+            addTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'message text-left mb-4 px-6';
+                typingDiv.id = 'typingIndicator';
+                
+                const bubbleDiv = document.createElement('div');
+                bubbleDiv.className = 'inline-block px-4 py-3 rounded-2xl bg-color';
+                bubbleDiv.style.borderBottomLeftRadius = '6px';
+                bubbleDiv.innerHTML = `
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                `;
+                
+                typingDiv.appendChild(bubbleDiv);
+                this.chatMessages.appendChild(typingDiv);
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            }
+            
+            removeTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            showError(errorMessage) {
+                const toast = document.createElement('div');
+                toast.className = 'fixed top-4 right-4 bg-red-600 text-white px-4 py-3 rounded-lg shadow-lg z-50';
+                toast.textContent = errorMessage;
+                
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.remove();
+                    }
+                }, 3000);
+            }
+            
+            setInputsDisabled(disabled) {
+                this.messageInput.disabled = disabled;
+                this.sendButton.disabled = disabled;
+                
+                if (disabled) {
+                    this.sendButton.innerHTML = '<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>';
+                } else {
+                    this.sendButton.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
+                }
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            new ChatApp();
+        });
+        
+        function resetDailyCounter() {
+            const lastReset = sessionStorage.getItem('lastCounterReset');
+            const today = new Date().toDateString();
+            
+            if (lastReset !== today) {
+                sessionStorage.setItem('chatMessagesCount', '0');
+                sessionStorage.setItem('lastCounterReset', today);
+                const requestCountEl = document.getElementById('requestCount');
+                if (requestCountEl) {
+                    requestCountEl.textContent = '0';
+                }
+            }
+        }
+        
+        resetDailyCounter();
+    </script>
+</body>
+</html>

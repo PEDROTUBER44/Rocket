@@ -1,0 +1,267 @@
+warning: unused import: `PasswordHash`
+ --> src/crypto/dek.rs:7:21
+  |
+7 |     password_hash::{PasswordHash, PasswordHasher, SaltString},
+  |                     ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `crate::repositories::user as user_repo`
+ --> src/services/auth.rs:4:5
+  |
+4 | use crate::repositories::user as user_repo;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `user as user_repo`
+ --> src/services/files.rs:6:39
+  |
+6 |     repositories::{file as file_repo, user as user_repo},
+  |                                       ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Response`
+ --> src/handlers/files.rs:6:30
+  |
+6 |     response::{IntoResponse, Response},
+  |                              ^^^^^^^^
+
+warning: unused import: `Extension`
+ --> src/middleware_layer/auth.rs:7:5
+  |
+7 |     Extension,
+  |     ^^^^^^^^^
+
+warning: unused import: `error::AppError`
+  --> src/middleware_layer/auth.rs:13:5
+   |
+13 |     error::AppError,
+   |     ^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> src/handlers/auth.rs:388:11
+    |
+388 |     State(mut state): State<AppState>,
+    |           ----^^^^^
+    |           |
+    |           help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` on by default
+
+warning: variable does not need to be mutable
+    --> src/handlers/files.rs:1163:38
+     |
+1163 | pub async fn cleanup_expired_uploads(mut state: AppState) -> Result<()> {
+     |                                      ----^^^^^
+     |                                      |
+     |                                      help: remove this `mut`
+
+warning: use of deprecated associated function `argon2::password_hash::SaltString::new`: use `from_b64` instead
+  --> src/crypto/dek.rs:73:28
+   |
+73 |     let salt = SaltString::new(salt_str)
+   |                            ^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: unused import: `TryStreamExt`
+  --> src/handlers/files.rs:11:5
+   |
+11 |     TryStreamExt
+   |     ^^^^^^^^^^^^
+
+warning: method `into_inner` is never used
+  --> src/crypto/aes.rs:34:12
+   |
+18 | impl SecureKey {
+   | -------------- method in this implementation
+...
+34 |     pub fn into_inner(self) -> [u8; KEY_SIZE] {
+   |            ^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: method `clear` is never used
+  --> src/crypto/kek.rs:59:18
+   |
+25 | impl KekCache {
+   | ------------- method in this implementation
+...
+59 |     pub async fn clear(&self) {
+   |                  ^^^^^
+
+warning: multiple fields are never read
+  --> src/models/user.rs:11:9
+   |
+ 7 | pub struct User {
+   |            ---- fields in this struct
+...
+11 |     pub name: String,
+   |         ^^^^
+12 |     /// The user's username.
+13 |     pub username: String,
+   |         ^^^^^^^^
+14 |     /// The user's email address.
+15 |     pub email: Option<String>,
+   |         ^^^^^
+...
+19 |     pub roles: Vec<String>,
+   |         ^^^^^
+...
+25 |     pub dek_kek_version: i32,
+   |         ^^^^^^^^^^^^^^^
+26 |     /// The user's storage quota in bytes.
+27 |     pub storage_quota_bytes: i64,
+   |         ^^^^^^^^^^^^^^^^^^^
+28 |     /// The user's used storage in bytes.
+29 |     pub storage_used_bytes: i64,
+   |         ^^^^^^^^^^^^^^^^^^
+30 |     /// The timestamp when the user was created.
+31 |     pub created_at: DateTime<Utc>,
+   |         ^^^^^^^^^^
+32 |     /// The timestamp when the user was last updated.
+33 |     pub updated_at: DateTime<Utc>,
+   |         ^^^^^^^^^^
+34 |     /// The timestamp of the user's last password change.
+35 |     pub last_password_change: Option<DateTime<Utc>>,
+   |         ^^^^^^^^^^^^^^^^^^^^
+36 |     /// Whether the user is active.
+37 |     pub is_active: bool,
+   |         ^^^^^^^^^
+   |
+   = note: `User` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: struct `FileListItem` is never constructed
+  --> src/models/file.rs:28:12
+   |
+28 | pub struct FileListItem {
+   |            ^^^^^^^^^^^^
+
+warning: function `create_user` is never used
+  --> src/repositories/user.rs:22:14
+   |
+22 | pub async fn create_user(
+   |              ^^^^^^^^^^^
+
+warning: function `find_by_email` is never used
+  --> src/repositories/user.rs:74:14
+   |
+74 | pub async fn find_by_email(pool: &PgPool, email: &str) -> Result<Option<User>> {
+   |              ^^^^^^^^^^^^^
+
+warning: function `find_by_id` is never used
+   --> src/repositories/user.rs:115:14
+    |
+115 | pub async fn find_by_id(pool: &PgPool, user_id: &Uuid) -> Result<Option<User>> {
+    |              ^^^^^^^^^^
+
+warning: function `update_password` is never used
+   --> src/repositories/user.rs:159:14
+    |
+159 | pub async fn update_password(
+    |              ^^^^^^^^^^^^^^^
+
+warning: function `update_storage_with_quota_check` is never used
+   --> src/repositories/user.rs:198:14
+    |
+198 | pub async fn update_storage_with_quota_check(
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rollback_storage_usage` is never used
+   --> src/repositories/user.rs:235:14
+    |
+235 | pub async fn rollback_storage_usage(
+    |              ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `get_user_storage_info` is never used
+   --> src/repositories/user.rs:263:14
+    |
+263 | pub async fn get_user_storage_info(pool: &PgPool, user_id: &Uuid) -> Result<(i64, i64)> {
+    |              ^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `StorageCheckResult` is never constructed
+   --> src/repositories/user.rs:280:12
+    |
+280 | pub struct StorageCheckResult {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: function `create_file` is never used
+  --> src/repositories/file.rs:26:14
+   |
+26 | pub async fn create_file(
+   |              ^^^^^^^^^^^
+
+warning: function `find_by_id` is never used
+  --> src/repositories/file.rs:83:14
+   |
+83 | pub async fn find_by_id(
+   |              ^^^^^^^^^^
+
+warning: function `list_user_files` is never used
+   --> src/repositories/file.rs:119:14
+    |
+119 | pub async fn list_user_files(
+    |              ^^^^^^^^^^^^^^^
+
+warning: function `soft_delete_file` is never used
+   --> src/repositories/file.rs:158:14
+    |
+158 | pub async fn soft_delete_file(
+    |              ^^^^^^^^^^^^^^^^
+
+warning: function `increment_access_count` is never used
+   --> src/repositories/file.rs:189:14
+    |
+189 | pub async fn increment_access_count(pool: &PgPool, file_id: Uuid) -> Result<()> {
+    |              ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `save_file_metadata` is never used
+  --> src/services/files.rs:28:14
+   |
+28 | pub async fn save_file_metadata(
+   |              ^^^^^^^^^^^^^^^^^^
+
+warning: function `delete_file` is never used
+   --> src/services/files.rs:120:14
+    |
+120 | pub async fn delete_file(state: &AppState, user_id: Uuid, file_id: Uuid) -> Result<()> {
+    |              ^^^^^^^^^^^
+
+warning: function `list_files` is never used
+   --> src/services/files.rs:156:14
+    |
+156 | pub async fn list_files(
+    |              ^^^^^^^^^^
+
+warning: function `get_user_storage_info` is never used
+   --> src/services/files.rs:175:14
+    |
+175 | pub async fn get_user_storage_info(state: &AppState, user_id: Uuid) -> Result<(i64, i64, i64)> {
+    |              ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rate_limit_change_password` is never used
+   --> src/middleware_layer/rate_limit.rs:189:14
+    |
+189 | pub async fn rate_limit_change_password(
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `check_storage_quota` is never used
+   --> src/middleware_layer/rate_limit.rs:251:14
+    |
+251 | pub async fn check_storage_quota(
+    |              ^^^^^^^^^^^^^^^^^^^
+
+warning: function `rate_limit_file_download` is never used
+   --> src/middleware_layer/rate_limit.rs:304:14
+    |
+304 | pub async fn rate_limit_file_download(
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `verify_file_ownership` is never used
+   --> src/middleware_layer/rate_limit.rs:403:14
+    |
+403 | pub async fn verify_file_ownership(
+    |              ^^^^^^^^^^^^^^^^^^^^^
+
+warning: `rocket` (bin "rocket") generated 35 warnings (run `cargo fix --bin "rocket"` to apply 8 suggestions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.50s
+     Running `target/debug/rocket`
+[2m2025-11-10T01:10:44.519796Z[0m [32m INFO[0m [2mrocket[0m[2m:[0m ✅ Configuration loaded successfully

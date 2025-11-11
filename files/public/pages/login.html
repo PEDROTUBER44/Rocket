@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="pt_BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="icon"
+            href="/icons/Rocket/LogoRocket.svg"
+            type="image/svg+xml"
+        />
+        <title>Entrar na conta - Rocket</title>
+        <link href="/css/output.css" rel="stylesheet" />
+        <link href="/css/main.css" rel="stylesheet" />
+        <script src="/js/notificationManager.js"></script>
+    </head>
+
+    <body
+        class="bg-color flex items-center justify-center min-h-screen font-sans"
+    >
+        <main class="w-full max-w-sm rounded-lg p-8 flex flex-col items-center">
+            <!-- Logo -->
+            <div
+                class="logo cursor-pointer"
+                onclick="window.location.href='/'"
+                style="margin-top: 10px; margin-bottom: 30px"
+            >
+                <div
+                    class="img"
+                    style="width: 45px; height: 45px; margin-right: 5px"
+                ></div>
+                <h1 class="logoText" notranslate>ROCKET</h1>
+            </div>
+
+            <!-- Formulário -->
+            <form id="authForm" class="w-full flex flex-col gap-4">
+                <!-- Nome (aparece só no Sign Up) -->
+                <input
+                    id="name"
+                    type="text"
+                    placeholder="Nome Completo"
+                    class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-color"
+                    style="display: none"
+                    minlength="2"
+                    maxlength="100"
+                />
+
+                <!-- Email / Usuário -->
+                <input
+                    id="username"
+                    type="text"
+                    placeholder="Usuário ou Email"
+                    required
+                    class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-color"
+                    autocomplete="username"
+                    minlength="3"
+                    maxlength="100"
+                />
+
+                <!-- Senha -->
+                <input
+                    id="password"
+                    type="password"
+                    placeholder="Senha"
+                    required
+                    class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-color"
+                    autocomplete="current-password"
+                    minlength="8"
+                    maxlength="128"
+                />
+
+                <!-- Confirmar Senha (aparece só no Sign Up) -->
+                <input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="Confirmar Senha"
+                    class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-sm/6 font-semibold text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-color"
+                    style="display: none"
+                    autocomplete="new-password"
+                    minlength="8"
+                    maxlength="128"
+                />
+
+                <!-- Botão -->
+                <button
+                    id="authButton"
+                    type="submit"
+                    class="flex w-full justify-center rounded-md bg-red-color px-3 py-1.5 text-sm/6 font-semibold text-white focus:outline-none focus:ring-2 focus:ring-red-color hover:bg-red-700 transition-colors duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    Entrar
+                </button>
+
+                <!-- Toggle -->
+                <p
+                    id="toggleAuth"
+                    class="text-center text-white hover:underline cursor-pointer mt-2 text-sm"
+                >
+                    Não tem uma conta? Crie uma
+                </p>
+            </form>
+        </main>
+
+        <script>
+            let isSignup = false;
+            let isLoading = false;
+
+            // Elementos DOM
+            const toggleAuth = document.getElementById("toggleAuth");
+            const authButton = document.getElementById("authButton");
+            const authForm = document.getElementById("authForm");
+            const nameInput = document.getElementById("name");
+            const confirmPasswordInput =
+                document.getElementById("confirmPassword");
+
+            function setLoading(loading) {
+                isLoading = loading;
+                const button = document.getElementById("authButton");
+
+                if (loading) {
+                    button.disabled = true;
+                    button.textContent = isSignup
+                        ? "Criando..."
+                        : "Entrando...";
+                } else {
+                    button.disabled = false;
+                    button.textContent = isSignup ? "Criar Conta" : "Entrar";
+                }
+            }
+
+            function updateTitleAndButton() {
+                if (isSignup) {
+                    authButton.textContent = "Criar Conta";
+                    toggleAuth.textContent = "Já tem uma conta? Entrar";
+                    nameInput.style.display = "block";
+                    nameInput.required = true;
+                    confirmPasswordInput.style.display = "block";
+                    confirmPasswordInput.required = true;
+                    confirmPasswordInput.autocomplete = "new-password";
+                    document.title = "Inscrever-se - Rocket";
+
+                    document.getElementById("password").autocomplete =
+                        "new-password";
+                    document.getElementById("username").placeholder =
+                        "Nome de Usuário (3-50 caracteres)";
+                } else {
+                    authButton.textContent = "Entrar";
+                    toggleAuth.textContent = "Não tem uma conta? Crie uma";
+                    nameInput.style.display = "none";
+                    nameInput.required = false;
+                    confirmPasswordInput.style.display = "none";
+                    confirmPasswordInput.required = false;
+                    document.title = "Entrar na conta - Rocket";
+
+                    document.getElementById("password").autocomplete =
+                        "current-password";
+                    document.getElementById("username").placeholder =
+                        "Usuário ou Email";
+                }
+            }
+
+            function validateUsername(username) {
+                // Regex atualizada para corresponder ao backend
+                const usernameRegex = /^[a-zA-Z0-9_]+$/;
+
+                if (username.length < 3) {
+                    return "Nome de usuário deve ter pelo menos 3 caracteres.";
+                }
+
+                if (username.length > 50) {
+                    return "Nome de usuário deve ter no máximo 50 caracteres.";
+                }
+
+                if (!usernameRegex.test(username)) {
+                    return "Nome de usuário deve conter apenas letras, números e underscore.";
+                }
+
+                return null;
+            }
+
+            toggleAuth.addEventListener("click", (e) => {
+                e.preventDefault();
+                if (isLoading) return;
+
+                isSignup = !isSignup;
+                updateTitleAndButton();
+
+                // Fechar todas as notificações ao alternar entre login/signup
+                window.notificationManager.hideAll();
+                document.getElementById("authForm").reset();
+            });
+
+            authForm.addEventListener("submit", async (event) => {
+                event.preventDefault();
+
+                if (isLoading) return;
+
+                const username = document
+                    .getElementById("username")
+                    .value.trim();
+                const password = document.getElementById("password").value;
+                const name = isSignup
+                    ? document.getElementById("name").value.trim()
+                    : "";
+
+                console.log("Form submission:", {
+                    isSignup,
+                    username,
+                    hasPassword: !!password,
+                    hasName: !!name,
+                });
+
+                if (!username || !password) {
+                    window.notificationManager.error(
+                        "Por favor, preencha todos os campos obrigatórios.",
+                    );
+                    return;
+                }
+
+                if (isSignup) {
+                    const confirmPassword =
+                        document.getElementById("confirmPassword").value;
+
+                    if (!name) {
+                        window.notificationManager.error(
+                            "Nome é obrigatório para criar uma conta.",
+                        );
+                        return;
+                    }
+
+                    if (name.length < 2 || name.length > 100) {
+                        window.notificationManager.error(
+                            "Nome deve ter entre 2 e 100 caracteres.",
+                        );
+                        return;
+                    }
+
+                    const usernameError = validateUsername(username);
+                    if (usernameError) {
+                        window.notificationManager.error(usernameError);
+                        return;
+                    }
+
+                    if (password !== confirmPassword) {
+                        window.notificationManager.error(
+                            "As senhas não coincidem. Por favor, verifique e tente novamente.",
+                        );
+                        return;
+                    }
+
+                    if (password.length < 8) {
+                        window.notificationManager.error(
+                            "A senha deve ter pelo menos 8 caracteres.",
+                        );
+                        return;
+                    }
+
+                    if (password.length > 128) {
+                        window.notificationManager.error(
+                            "A senha deve ter no máximo 128 caracteres.",
+                        );
+                        return;
+                    }
+
+                    await handleSignup(username, password, name);
+                } else {
+                    await handleLogin(username, password);
+                }
+            });
+
+            async function handleLogin(username, password) {
+                console.log("Starting login process for:", username);
+                setLoading(true);
+                window.notificationManager.hideAll();
+
+                try {
+                    console.log("Sending login request...");
+
+                    // CORRIGIDO: Usar a rota correta do backend
+                    const response = await fetch("/api/auth/login", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Accept: "application/json",
+                        },
+                        credentials: "include",
+                        body: JSON.stringify({ username, password }), // CORREÇÃO AQUI
+                    });
+
+                    console.log("Login response received:", {
+                        status: response.status,
+                        statusText: response.statusText,
+                        ok: response.ok,
+                        headers: Object.fromEntries(response.headers.entries()),
+                    });
+
+                    // Qualquer status 2xx consideramos sucesso
+                    if (response.ok) {
+                        console.log("Login successful based on status code");
+
+                        let userData = { name: username }; // Fallback
+
+                        try {
+                            const responseText = await response.text();
+                            console.log("Response text:", responseText);
+
+                            if (responseText && responseText.trim()) {
+                                userData = JSON.parse(responseText);
+                                console.log("User data parsed:", userData);
+                            }
+                        } catch (parseError) {
+                            console.warn(
+                                "Could not parse response JSON, using fallback data:",
+                                parseError,
+                            );
+                        }
+
+                        window.notificationManager.success(
+                            `Bem-vindo, ${userData.name || username}!`,
+                        );
+
+                        // Redirecionar após 1.5 segundos
+                        setTimeout(() => {
+                            console.log("Redirecting to home page...");
+                            window.location.href = "/";
+                        }, 1500);
+                        return;
+                    }
+
+                    // Tratar erros específicos baseados no backend
+                    console.log("Login failed, processing error...");
+                    let errorMessage = "Erro no login";
+
+                    try {
+                        const responseText = await response.text();
+                        console.log("Error response text:", responseText);
+
+                        if (responseText && responseText.trim()) {
+                            const errorData = JSON.parse(responseText);
+                            console.log("Error data parsed:", errorData);
+                            errorMessage =
+                                errorData.error ||
+                                errorData.details ||
+                                errorMessage;
+                        }
+                    } catch (parseError) {
+                        console.log(
+                            "Could not parse error response, using status-based message",
+                        );
+                        // Tratamento melhorado baseado nos códigos do backend
+                        switch (response.status) {
+                            case 401:
+                                errorMessage = "Usuário ou senha incorretos";
+                                break;
+                            case 429:
+                                errorMessage =
+                                    "Muitas tentativas de login. Tente novamente mais tarde";
+                                break;
+                            case 400:
+                                errorMessage =
+                                    "Dados inválidos. Verifique os campos preenchidos";
+                                break;
+                            case 500:
+                                errorMessage = "Erro interno do servidor";
+                                break;
+                            default:
+                                errorMessage = `Erro ${response.status}: Falha no login`;
+                        }
+                    }
+
+                    window.notificationManager.error(errorMessage);
+                } catch (err) {
+                    console.error("Network/fetch error during login:", err);
+
+                    // Tratamento melhorado de erros de rede
+                    if (
+                        err.name === "TypeError" &&
+                        (err.message.includes("fetch") ||
+                            err.message.includes("network"))
+                    ) {
+                        window.notificationManager.error(
+                            "Erro de conexão. Verifique sua internet e tente novamente.",
+                        );
+                    } else {
+                        window.notificationManager.error(
+                            "Erro inesperado. Tente novamente.",
+                        );
+                    }
+                } finally {
+                    setLoading(false);
+                }
+            }
+
+            async function handleSignup(username, password, name) {
+                console.log("Starting signup process for:", username);
+                setLoading(true);
+                window.notificationManager.hideAll();
+
+                try {
+                    console.log("Sending signup request...");
+
+                    // CORRIGIDO: Usar a rota correta do backend
+                    const response = await fetch("/api/auth/register", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Accept: "application/json",
+                        },
+                        credentials: "include",
+                        body: JSON.stringify({
+                            username,
+                            password,
+                            name,
+                            email: null,
+                        }),
+                    });
+
+                    console.log("Signup response received:", {
+                        status: response.status,
+                        statusText: response.statusText,
+                        ok: response.ok,
+                    });
+
+                    if (response.ok) {
+                        console.log("Signup successful");
+
+                        let userData = { name: name };
+
+                        try {
+                            const responseText = await response.text();
+                            console.log("Signup response text:", responseText);
+
+                            if (responseText && responseText.trim()) {
+                                userData = JSON.parse(responseText);
+                                console.log("Signup user data:", userData);
+                            }
+                        } catch (parseError) {
+                            console.warn(
+                                "Could not parse signup response:",
+                                parseError,
+                            );
+                        }
+
+                        window.notificationManager.success(
+                            `Conta criada com sucesso! Bem-vindo, ${userData.name}!`,
+                        );
+
+                        // Redirecionar após 2.5 segundos (signup já autentica no backend)
+                        setTimeout(() => {
+                            console.log(
+                                "Signup successful, redirecting to home page...",
+                            );
+                            window.location.href = "/";
+                        }, 2500);
+                        return;
+                    }
+
+                    // Tratar erros específicos do signup
+                    let errorMessage = "Erro ao criar conta";
+
+                    try {
+                        const responseText = await response.text();
+                        if (responseText && responseText.trim()) {
+                            const errorData = JSON.parse(responseText);
+                            errorMessage =
+                                errorData.error ||
+                                errorData.details ||
+                                errorMessage;
+                        }
+                    } catch (parseError) {
+                        // Tratamento específico baseado no backend
+                        switch (response.status) {
+                            case 409:
+                                errorMessage =
+                                    "Este nome de usuário já está em uso. Escolha outro nome de usuário.";
+                                break;
+                            case 400:
+                                errorMessage =
+                                    "Dados inválidos. Verifique se o nome de usuário tem pelo menos 3 caracteres e a senha pelo menos 8.";
+                                break;
+                            case 429:
+                                errorMessage =
+                                    "Muitas tentativas. Tente novamente mais tarde.";
+                                break;
+                            case 500:
+                                errorMessage = "Erro interno do servidor.";
+                                break;
+                            default:
+                                errorMessage = `Erro ${response.status}: Não foi possível criar a conta.`;
+                        }
+                    }
+
+                    window.notificationManager.error(errorMessage);
+                } catch (err) {
+                    console.error("Network error during signup:", err);
+                    window.notificationManager.error(
+                        "Erro de conexão. Verifique sua internet e tente novamente.",
+                    );
+                } finally {
+                    setLoading(false);
+                }
+            }
+
+            // Aguardar o DOM estar carregado antes de inicializar
+            document.addEventListener("DOMContentLoaded", () => {
+                updateTitleAndButton();
+                console.log("Login page loaded and ready");
+            });
+        </script>
+    </body>
+</html>

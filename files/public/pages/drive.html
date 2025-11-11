@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocket - Drive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #CA000D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f0f0f;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .sidebar {
+            background: #1a1a1a;
+            border-right: 1px solid #2a2a2a;
+        }
+
+        .file-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .file-card:hover {
+            border-color: var(--primary);
+            background: #242424;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary), #ff6b6b);
+            height: 4px;
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--primary);
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .upload-zone.drag-over {
+            background: rgba(202, 0, 13, 0.1);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1a1a1a;
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 16px;
+            color: white;
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+            min-width: 300px;
+        }
+
+        .notification-success {
+            border-left: 4px solid #10b981;
+        }
+
+        .notification-error {
+            border-left: 4px solid #ef4444;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .storage-bar {
+            background: #2a2a2a;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .storage-used {
+            background: var(--primary);
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        .loading {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navegação -->
+    <nav class="border-b border-gray-800 bg-black">
+        <div class="px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">🚀 Rocket Drive</h1>
+            <button id="logoutBtn" class="btn-primary">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Container Principal -->
+    <div class="flex h-screen bg-black">
+        <!-- Sidebar -->
+        <div class="sidebar w-64 overflow-y-auto">
+            <div class="p-6 space-y-4">
+                <!-- Upload Zone -->
+                <div class="upload-zone" id="uploadZone">
+                    <input type="file" id="fileInput" multiple hidden>
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">📤</div>
+                        <p class="text-sm text-gray-400">Clique para upload</p>
+                        <p class="text-xs text-gray-500">ou arraste arquivos</p>
+                    </div>
+                </div>
+
+                <!-- Storage Info -->
+                <div class="bg-gray-900 rounded-lg p-4 border border-gray-800">
+                    <h3 class="text-sm font-semibold mb-3">📊 Storage</h3>
+                    <div class="storage-bar">
+                        <div class="storage-used" id="storageBar" style="width: 0%"></div>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2" id="storageText">Carregando...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">Meus Arquivos</h2>
+                <p class="text-gray-400 text-sm" id="fileCount">Carregando...</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="filesContainer">
+                <div class="file-card p-4 flex items-center justify-center h-32">
+                    <p class="text-gray-500">
+                        <span class="loading">⏳</span> Carregando arquivos...
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Modal -->
+        <div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+            <div class="bg-gray-900 rounded-lg p-6 max-w-md w-full border border-gray-800">
+                <h3 class="text-lg font-semibold mb-4">📤 Upload em Progresso</h3>
+                <p class="text-sm text-gray-400 mb-2" id="uploadFileName">Arquivo...</p>
+                <div class="progress-bar" id="uploadProgress"></div>
+                <p class="text-xs text-gray-500 mt-2">
+                    <span id="uploadStatus">Preparando...</span>
+                </p>
+                <p class="text-xs text-gray-500 mt-1" id="uploadSpeed">0 MB/s</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/apiClient.js"></script>
+    <script>
+        // ✅ Estado global
+        let currentUploadSession = null;
+        let uploadChunks = [];
+        let currentChunkIndex = 0;
+
+        const CHUNK_SIZE = 6 * 1024 * 1024; // 6MB por chunk
+
+        // ✅ Inicializar
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🚀 [DRIVE] Inicializando gerenciador de arquivos...');
+
+            // Setup event listeners
+            const uploadZone = document.getElementById('uploadZone');
+            const fileInput = document.getElementById('fileInput');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            if (uploadZone) {
+                uploadZone.addEventListener('click', () => fileInput?.click());
+                uploadZone.addEventListener('dragover', handleDragOver);
+                uploadZone.addEventListener('dragleave', handleDragLeave);
+                uploadZone.addEventListener('drop', handleDrop);
+            }
+
+            if (fileInput) {
+                fileInput.addEventListener('change', handleFileSelect);
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', logout);
+            }
+
+            try {
+                await loadStorageInfo();
+                await loadFiles();
+                console.log('✅ [DRIVE] Gerenciador pronto para uso');
+            } catch (error) {
+                console.error('❌ Erro ao inicializar:', error);
+            }
+        });
+
+        // ✅ Carregar informações de armazenamento
+        async function loadStorageInfo() {
+            try {
+                console.log('📊 [STORAGE] Carregando informações de armazenamento...');
+                const response = await api.get('/api/files/storage/info');
+
+                if (!response.ok) {
+                    console.error('❌ [STORAGE] Erro HTTP:', response.status);
+                    showNotification('Erro ao carregar armazenamento', 'error');
+                    return;
+                }
+
+                const data = await response.json();
+                console.log('✅ [STORAGE] Dados recebidos:', data);
+
+                const usagePercent = data.storage_used_bytes > 0 
+                    ? (data.storage_used_bytes / data.storage_quota_bytes) * 100 
+                    : 0;
+
+                const storageBar = document.getElementById('storageBar');
+                const storageText = document.getElementById('storageText');
+
+                if (storageBar) {
+                    storageBar.style.width = usagePercent + '%';
+                }
+                if (storageText) {
+                    storageText.textContent = `${formatBytes(data.storage_used_bytes)} / ${formatBytes(data.storage_quota_bytes)}`;
+                }
+            } catch (error) {
+                console.error('❌ [STORAGE] Erro:', error);
+                showNotification('Erro ao carregar armazenamento', 'error');
+            }
+        }
+
+        // ✅ Carregar lista de arquivos
+        async function loadFiles() {
+            try {
+                console.log('📂 [FILES] Carregando lista de arquivos...');
+                const response = await api.get('/api/files?limit=50&offset=0');
+
+                if (!response.ok) {
+                    console.error('❌ [FILES] Erro HTTP:', response.status);
+                    showNotification('Erro ao carregar arquivos', 'error');
+                    return;
+                }
+
+                const data = await response.json();
+                console.log('✅ [FILES] Dados recebidos:', data);
+
+                const files = Array.isArray(data) ? data : (data.files || []);
+                console.log('📋 [FILES] Total de arquivos:', files.length);
+
+                if (files.length > 0) {
+                    console.log('🔍 [DEBUG] Primeiro arquivo completo:', JSON.stringify(files[0], null, 2));
+                    console.log('🔍 [DEBUG] Keys do arquivo:', Object.keys(files[0]));
+                }
+
+                const filesContainer = document.getElementById('filesContainer');
+                const fileCount = document.getElementById('fileCount');
+
+                if (!filesContainer) {
+                    console.warn('⚠️ Elemento filesContainer não encontrado');
+                    return;
+                }
+
+                if (!files || files.length === 0) {
+                    filesContainer.innerHTML = '<div class="col-span-full text-gray-500 text-center py-8">📭 Nenhum arquivo ainda</div>';
+                    if (fileCount) {
+                        fileCount.textContent = '0 arquivos';
+                    }
+                    return;
+                }
+
+                if (fileCount) {
+                    fileCount.textContent = `${files.length} arquivo${files.length !== 1 ? 's' : ''}`;
+                }
+
+                // ✅ CORRIGIDO: Remover parâmetro fileName do botão downloadFile
+                filesContainer.innerHTML = files.map(file => `
+                    <div class="file-card p-4">
+                        <div class="mb-3">
+                            <h3 class="font-semibold text-white truncate">📄 ${escapeHtml(file.filename || 'Sem nome')}</h3>
+                        </div>
+                        <div class="text-sm text-gray-400 mb-4">
+                            <p>${formatBytes(file.size_bytes || 0)}</p>
+                            <p>${file.uploaded_at ? new Date(file.uploaded_at).toLocaleDateString('pt-BR') : 'Data desconhecida'}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="btn-primary text-sm flex-1" onclick="downloadFile('${file.id}')">
+                                ⬇️ Download
+                            </button>
+                            <button class="btn-primary text-sm flex-1" onclick="deleteFile('${file.id}')">
+                                🗑️ Deletar
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('❌ [FILES] Erro:', error);
+                showNotification('Erro ao carregar arquivos', 'error');
+            }
+        }
+
+        // ✅ Handle drag & drop
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const uploadZone = document.getElementById('uploadZone');
+            if (uploadZone) uploadZone.classList.add('drag-over');
+        }
+
+        function handleDragLeave(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const uploadZone = document.getElementById('uploadZone');
+            if (uploadZone) uploadZone.classList.remove('drag-over');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const uploadZone = document.getElementById('uploadZone');
+            if (uploadZone) uploadZone.classList.remove('drag-over');
+            handleFileSelect({ dataTransfer: event.dataTransfer });
+        }
+
+        // ✅ Handle file selection
+        function handleFileSelect(event) {
+            const files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
+            if (files.length === 0) return;
+
+            const file = files[0];
+            console.log('📁 Arquivo selecionado:', file.name, `(${formatBytes(file.size)})`);
+            uploadFile(file);
+        }
+
+        // ✅ Upload file
+        async function uploadFile(file) {
+          try {
+            console.log("🔑 Iniciando upload session...");
+
+            const MAX_FILE_SIZE = 50 * 1024 * 1024 * 1024; // 50 GB
+            if (file.size > MAX_FILE_SIZE) {
+              throw new Error("Arquivo é maior que o limite de 50GB");
+            }
+
+            if (file.size <= 0) {
+              throw new Error("Arquivo vazio");
+            }
+
+            const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+
+            console.log(
+              `📊 Arquivo: ${file.name} (${formatBytes(file.size)}) - ` +
+              `${totalChunks} chunks de ${formatBytes(CHUNK_SIZE)} cada`
+            );
+
+            const initPayload = {
+              filename: file.name,
+              file_size: Number(file.size),
+              total_chunks: totalChunks,
+              expected_hash: null,
+            };
+
+            console.log("📤 Payload do init:", JSON.stringify(initPayload, null, 2));
+
+            const initResponse = await api.post(`/api/files/upload/init`, initPayload);
+
+            if (!initResponse.ok) {
+              const errorText = await initResponse.text();
+              console.error("❌ Erro no backend:", errorText);
+              throw new Error(`HTTP ${initResponse.status} ao inicializar upload: ${errorText}`);
+            }
+
+            const initData = await initResponse.json();
+            currentUploadSession = initData.upload_session_id;
+
+            console.log("✅ Upload session criado:", currentUploadSession);
+
+            uploadChunks = [];
+            for (let i = 0; i < file.size; i += CHUNK_SIZE) {
+              uploadChunks.push({
+                index: Math.floor(i / CHUNK_SIZE),
+                data: file.slice(i, i + CHUNK_SIZE),
+                file: file,
+              });
+            }
+
+            console.log(`📦 Arquivo dividido em ${uploadChunks.length} chunks`);
+
+            const uploadModal = document.getElementById("uploadModal");
+            const uploadFileName = document.getElementById("uploadFileName");
+
+            if (uploadModal) {
+              uploadModal.classList.remove("hidden");
+              uploadModal.style.display = "flex";
+            }
+
+            if (uploadFileName) {
+              uploadFileName.textContent = escapeHtml(file.name);
+            }
+
+            currentChunkIndex = 0;
+
+            await uploadNextChunk();
+
+          } catch (error) {
+            console.error("❌ Erro no upload:", error);
+            showNotification(`Erro ao fazer upload: ${error.message}`, "error");
+
+            const uploadModal = document.getElementById("uploadModal");
+            if (uploadModal) {
+              uploadModal.classList.add("hidden");
+              uploadModal.style.display = "none";
+            }
+          }
+        }
+
+
+        // ✅ Upload next chunk
+        async function uploadNextChunk() {
+            if (currentChunkIndex >= uploadChunks.length) {
+                await completeUpload();
+                return;
+            }
+
+            const chunk = uploadChunks[currentChunkIndex];
+
+            try {
+                console.log(`📤 Enviando chunk ${currentChunkIndex + 1}/${uploadChunks.length}...`);
+
+                const formData = new FormData();
+                formData.append('upload_session_id', currentUploadSession);
+                formData.append('chunk_index', chunk.index);
+                formData.append('chunk', chunk.data);
+
+                const csrfToken = api.getCookie('csrf_token');
+                if (!csrfToken) {
+                    throw new Error('CSRF token não encontrado. Faça login novamente.');
+                }
+
+                const response = await fetch('/api/files/upload/chunk', {
+                    method: 'POST',
+                    headers: {
+                        'x-csrf-token': csrfToken,
+                    },
+                    body: formData,
+                    credentials: 'include',
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+
+                currentChunkIndex++;
+                const percent = Math.round((currentChunkIndex / uploadChunks.length) * 100);
+
+                const uploadStatus = document.getElementById('uploadStatus');
+                if (uploadStatus) {
+                    uploadStatus.textContent = `${percent}% concluído`;
+                }
+
+                const uploadProgress = document.getElementById('uploadProgress');
+                if (uploadProgress) {
+                    uploadProgress.style.width = percent + '%';
+                }
+
+                console.log(`✅ Chunk ${currentChunkIndex}/${uploadChunks.length} enviado`);
+
+                await uploadNextChunk();
+
+            } catch (error) {
+                console.error(`❌ Erro ao enviar chunk ${currentChunkIndex}:`, error);
+                showNotification(`❌ Erro ao enviar arquivo: ${error.message}`, 'error');
+                const uploadModal = document.getElementById('uploadModal');
+                if (uploadModal) {
+                    uploadModal.classList.add('hidden');
+                    uploadModal.style.display = 'none';
+                }
+            }
+        }
+
+        // ✅ Complete upload
+        async function completeUpload() {
+            try {
+                console.log('🏁 Finalizando upload...');
+
+                // ✅ CORRIGIDO: Enviar folder_id em vez de filename
+                const response = await api.post('/api/files/upload/finalize', {
+                    upload_session_id: currentUploadSession,
+                    folder_id: null,
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+
+                const result = await response.json();
+                console.log('✅ Upload completo!', result);
+
+                showNotification('✅ Arquivo enviado com sucesso!', 'success');
+                const uploadModal = document.getElementById('uploadModal');
+                if (uploadModal) {
+                    uploadModal.classList.add('hidden');
+                    uploadModal.style.display = 'none';
+                }
+
+                await loadStorageInfo();
+                await loadFiles();
+
+            } catch (error) {
+                console.error('❌ Erro ao completar upload:', error);
+                showNotification('❌ Erro ao completar upload: ' + error.message, 'error');
+                const uploadModal = document.getElementById('uploadModal');
+                if (uploadModal) {
+                    uploadModal.classList.add('hidden');
+                    uploadModal.style.display = 'none';
+                }
+            }
+        }
+
+        // ✅ Download file - CORRIGIDO
+        async function downloadFile(fileId) {
+            try {
+                console.log('⬇️ Iniciando download:', fileId);
+                // ✅ Backend agora retorna o nome correto no header Content-Disposition
+                window.location.href = `/api/files/${fileId}`;
+            } catch (error) {
+                console.error('❌ Erro ao fazer download:', error);
+                showNotification('❌ Erro ao fazer download', 'error');
+            }
+        }
+
+        // ✅ Delete file
+        async function deleteFile(fileId) {
+            if (!confirm('Tem certeza que deseja deletar este arquivo?')) return;
+
+            try {
+                console.log('🗑️ Deletando arquivo:', fileId);
+                const response = await api.delete(`/api/files/${fileId}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                showNotification('✅ Arquivo deletado!', 'success');
+                await loadStorageInfo();
+                await loadFiles();
+
+            } catch (error) {
+                console.error('❌ Erro ao deletar:', error);
+                showNotification('❌ Erro ao deletar arquivo', 'error');
+            }
+        }
+
+        // ✅ Logout
+        async function logout() {
+            try {
+                console.log('👋 Fazendo logout...');
+                const response = await api.post('/api/auth/logout', {});
+
+                if (response.ok) {
+                    console.log('✅ Logout realizado');
+                }
+            } catch (error) {
+                console.error('❌ Erro ao fazer logout:', error);
+            } finally {
+                localStorage.clear();
+                window.location.href = '/pages/login.html';
+            }
+        }
+
+        // ✅ Utility: Format bytes
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        // ✅ Utility: Escape HTML
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return String(text).replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // ✅ Utility: Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

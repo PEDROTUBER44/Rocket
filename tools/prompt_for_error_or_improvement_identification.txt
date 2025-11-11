@@ -1,0 +1,25 @@
+* Anexar arquivos do codigo
+
+Agora responda para mim com base no codigo gerado as seguintes perguntas: 
+
+Dessa forma com o codigo que você gerou o usuario tem acesso aos arquivos sem precisar digitar a senha a cada vez q pedir o arquivo?
+
+Eu posso ter acesso aos arquivos de alguma forma?
+
+O usuario pode mudar a senha de usuario normalmente e os arquivos não sofreram problemas?
+
+Existe alguma falha de segurança ou codigo duplicado?
+
+Se eu reiniciar o servidor o usuario perde os arquivos, ou apenas precisa se logar novamente?
+
+Existe coisas no codigo que podem ser substituidas por bibliotecas para diminuir o tamanho final do codigo?
+
+Existe alguma forma de um usuario burlar o tamanho de cota para cada usuario maximo? e qual é o maximo permitido de arquivos? como funciona
+
+Existe alguma coisa que posso fazer para otimizar meu codigo para melhor performance sem abrir tanto mão da segurança?
+
+Existe rate-limit contra ataques de ddos em todos os lugares?
+
+Existe alguma forma de os arquivos serem corrompidos? se sim como ?
+
+Existe o erro n+1 no meu codigo ou otimização necessaria para que coisas relacionadas ao banco de dados sejam mais otimizadas possivel?

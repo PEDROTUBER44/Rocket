@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/public/icons/RocketLogo/Rocket.svg" type="image/svg+xml">
+    <title>Gerenciador de Arquivos - Rocket</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link href="/public/css/main.css" rel="stylesheet">
+    <script src="/public/js/notificationManager.js"></script>
+</head>
+<body class="bg-color flex items-center justify-center min-h-screen font-sans">
+    <main class="w-full max-w-4xl rounded-lg p-8" x-data="fileManager">
+        <!-- Logo -->
+        <div class="logo cursor-pointer" onclick="window.location.href='/'" style="margin-bottom: 30px;">
+            <div class="img" style="width: 45px; height: 45px; margin-right: 5px;"></div>
+            <h1 class="logoText notranslate">ROCKET</h1>
+        </div>
+
+        <h1 class="text-3xl font-bold text-white mb-8">Gerenciador de Arquivos</h1>
+
+        <!-- Upload Section -->
+        <div class="bg-white/5 rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-4">Enviar Arquivo</h2>
+            
+            <div class="flex gap-4 items-end">
+                <div class="flex-1">
+                    <input 
+                        type="file" 
+                        id="fileInput"
+                        class="block w-full text-sm text-gray-400
+                               file:mr-4 file:py-2 file:px-4
+                               file:rounded-md file:border-0
+                               file:text-sm file:font-semibold
+                               file:bg-accent file:text-white
+                               hover:file:bg-red-600
+                               file:cursor-pointer cursor-pointer"
+                    />
+                </div>
+                <button 
+                    @click="uploadFile()"
+                    :disabled="loading"
+                    class="bg-accent hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    <span x-show="!loading">Enviar</span>
+                    <span x-show="loading">Enviando...</span>
+                </button>
+            </div>
+            
+            <p class="text-gray-400 text-sm mt-2">Tamanho máximo: 100MB</p>
+        </div>
+
+        <!-- Files List Section -->
+        <div class="bg-white/5 rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-white">Meus Arquivos</h2>
+                <button 
+                    @click="loadFiles()"
+                    :disabled="loading"
+                    class="bg-white/10 hover:bg-white/20 text-white font-semibold py-2 px-4 rounded-md transition-colors disabled:opacity-50"
+                >
+                    <span x-show="!loading">🔄 Atualizar</span>
+                    <span x-show="loading">Carregando...</span>
+                </button>
+            </div>
+
+            <!-- Loading State -->
+            <div x-show="loading && files.length === 0" class="text-center py-8">
+                <p class="text-gray-400">Carregando arquivos...</p>
+            </div>
+
+            <!-- Empty State -->
+            <div x-show="!loading && files.length === 0" class="text-center py-8">
+                <p class="text-gray-400">Nenhum arquivo enviado ainda</p>
+            </div>
+
+            <!-- Files Table -->
+            <div x-show="files.length > 0" class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-white/10">
+                            <th class="py-3 px-4 text-gray-300 font-semibold">Nome do Arquivo</th>
+                            <th class="py-3 px-4 text-gray-300 font-semibold">Tamanho</th>
+                            <th class="py-3 px-4 text-gray-300 font-semibold">Data de Upload</th>
+                            <th class="py-3 px-4 text-gray-300 font-semibold">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="(file, index) in files" :key="file.id || `file-${index}`">
+                            <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                <td class="py-3 px-4 text-white" x-text="file.original_filename"></td>
+                                <td class="py-3 px-4 text-gray-400" x-text="formatFileSize(file.file_size)"></td>
+                                <td class="py-3 px-4 text-gray-400" x-text="formatDate(file.created_at)"></td>
+                                <td class="py-3 px-4">
+                                    <div class="flex gap-2">
+                                        <button 
+                                            @click="downloadFile(file.id, file.original_filename)"
+                                            class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                                        >
+                                            ⬇️ Baixar
+                                        </button>
+                                        <button 
+                                            @click="deleteFile(file.id, file.original_filename)"
+                                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                                        >
+                                            🗑️ Deletar
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Notification Container -->
+        <div id="notification-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+    </main>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('fileManager', () => ({
+                files: [],
+                loading: false,
+                uploadProgress: 0,
+
+                async init() {
+                    await this.loadFiles();
+                },
+
+                async uploadFile() {
+                    const input = document.getElementById('fileInput');
+                    const file = input.files[0];
+                    
+                    if (!file) {
+                        window.notificationManager.error('Selecione um arquivo');
+                        return;
+                    }
+
+                    const maxSize = 100 * 1024 * 1024;
+                    if (file.size > maxSize) {
+                        window.notificationManager.error('Arquivo muito grande. Máximo: 100MB');
+                        return;
+                    }
+
+                    this.loading = true;
+                    this.uploadProgress = 0;
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    try {
+                        const response = await fetch('/api/files/upload', {
+                            method: 'POST',
+                            credentials: 'same-origin',
+                            body: formData
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            console.log('Upload response:', data);
+                            
+                            window.notificationManager.success(
+                                `✅ Arquivo "${data.original_filename}" enviado com sucesso!`
+                            );
+                            
+                            input.value = '';
+                            await this.loadFiles();
+                        } else {
+                            const errorText = await response.text();
+                            console.error('Upload error:', errorText);
+                            window.notificationManager.error(
+                                `❌ Erro no upload: ${response.status}`
+                            );
+                        }
+                    } catch (err) {
+                        console.error('Upload failed:', err);
+                        window.notificationManager.error(
+                            '❌ Erro de conexão: ' + err.message
+                        );
+                    } finally {
+                        this.loading = false;
+                        this.uploadProgress = 0;
+                    }
+                },
+
+                async loadFiles() {
+                    this.loading = true;
+                    
+                    try {
+                        const response = await fetch('/api/files/list', {
+                            method: 'GET',
+                            credentials: 'same-origin',
+                            headers: {
+                                'Accept': 'application/json'
+                            }
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            
+                            console.log('Files loaded:', data.length);
+                            console.log('File IDs:', data.map(f => f.id));
+                            
+                            const ids = data.map(f => f.id);
+                            const uniqueIds = new Set(ids);
+                            if (ids.length !== uniqueIds.size) {
+                                console.warn('⚠️ Aviso: Existem file IDs duplicados no backend!');
+                            }
+                            
+                            this.files = data;
+                        } else {
+                            const errorText = await response.text();
+                            console.error('List error:', errorText);
+                            window.notificationManager.error(
+                                `❌ Erro ao carregar arquivos: ${response.status}`
+                            );
+                        }
+                    } catch (err) {
+                        console.error('Load files failed:', err);
+                        window.notificationManager.error(
+                            '❌ Erro de conexão: ' + err.message
+                        );
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                async downloadFile(fileId, filename) {
+                    try {
+                        const response = await fetch(`/api/files/download/${fileId}`, {
+                            method: 'GET',
+                            credentials: 'same-origin'
+                        });
+
+                        if (response.ok) {
+                            const blob = await response.blob();
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = filename;
+                            document.body.appendChild(a);
+                            a.click();
+                            window.URL.revokeObjectURL(url);
+                            document.body.removeChild(a);
+                            
+                            window.notificationManager.success(
+                                `✅ Download de "${filename}" concluído!`
+                            );
+                        } else {
+                            const errorText = await response.text();
+                            console.error('Download error:', errorText);
+                            window.notificationManager.error(
+                                `❌ Erro no download: ${response.status}`
+                            );
+                        }
+                    } catch (err) {
+                        console.error('Download failed:', err);
+                        window.notificationManager.error(
+                            '❌ Erro de conexão: ' + err.message
+                        );
+                    }
+                },
+
+                async deleteFile(fileId, filename) {
+                    if (!confirm(`Deseja realmente deletar "${filename}"?`)) {
+                        return;
+                    }
+
+                    this.loading = true;
+
+                    try {
+                        const response = await fetch(`/api/files/delete/${fileId}`, {
+                            method: 'DELETE',
+                            credentials: 'same-origin'
+                        });
+
+                        if (response.ok) {
+                            window.notificationManager.success(
+                                `✅ Arquivo "${filename}" deletado com sucesso!`
+                            );
+                            await this.loadFiles();
+                        } else {
+                            const errorText = await response.text();
+                            console.error('Delete error:', errorText);
+                            window.notificationManager.error(
+                                `❌ Erro ao deletar: ${response.status}`
+                            );
+                        }
+                    } catch (err) {
+                        console.error('Delete failed:', err);
+                        window.notificationManager.error(
+                            '❌ Erro de conexão: ' + err.message
+                        );
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                formatFileSize(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                formatDate(dateString) {
+                    const date = new Date(dateString);
+                    return date.toLocaleDateString('pt-BR') + ' ' + 
+                           date.toLocaleTimeString('pt-BR');
+                }
+            }));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+- Informar Pedro sobre reuniões marcadas online ou presencialmente além de marcar com base na minha agenda
