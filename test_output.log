@@ -1,0 +1,1967 @@
+    Blocking waiting for file lock on build directory
+   Compiling rocket v0.1.0 (/app)
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `once_cell`
+ --> tests/integration_file_upload_e2e.rs:3:5
+  |
+3 | use once_cell::sync::Lazy;
+  |     ^^^^^^^^^ use of unresolved module or unlinked crate `once_cell`
+  |
+  = help: if you wanted to use a crate named `once_cell`, use `cargo add once_cell` to add it to your `Cargo.toml`
+
+error[E0432]: unresolved import `serde_json`
+ --> tests/integration_file_upload_e2e.rs:2:5
+  |
+2 | use serde_json::json;
+  |     ^^^^^^^^^^ use of unresolved module or unlinked crate `serde_json`
+  |
+  = help: if you wanted to use a crate named `serde_json`, use `cargo add serde_json` to add it to your `Cargo.toml`
+
+error[E0432]: unresolved import `serde_json`
+  --> tests/integration_file_upload_e2e.rs:42:9
+   |
+42 |     use serde_json::Value;
+   |         ^^^^^^^^^^ use of unresolved module or unlinked crate `serde_json`
+   |
+   = help: if you wanted to use a crate named `serde_json`, use `cargo add serde_json` to add it to your `Cargo.toml`
+
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `reqwest`
+  --> tests/integration_file_upload_e2e.rs:19:21
+   |
+19 |             client: reqwest::Client::builder()
+   |                     ^^^^^^^ use of unresolved module or unlinked crate `reqwest`
+   |
+   = help: if you wanted to use a crate named `reqwest`, use `cargo add reqwest` to add it to your `Cargo.toml`
+help: consider importing one of these items
+   |
+ 1 + use deadpool_postgres::Client;
+   |
+ 1 + use redis::Client;
+   |
+ 1 + use tokio_postgres::Client;
+   |
+help: if you import `Client`, refer to it directly
+   |
+19 -             client: reqwest::Client::builder()
+19 +             client: Client::builder()
+   |
+
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `reqwest`
+ --> tests/integration_file_upload_e2e.rs:8:13
+  |
+8 |     client: reqwest::Client,
+  |             ^^^^^^^ use of unresolved module or unlinked crate `reqwest`
+  |
+  = help: if you wanted to use a crate named `reqwest`, use `cargo add reqwest` to add it to your `Cargo.toml`
+
+Some errors have detailed explanations: E0432, E0433.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `rocket` (test "integration_file_upload_e2e") due to 5 previous errors
+warning: build failed, waiting for other jobs to finish...
+error[E0432]: unresolved import `serde`
+ --> src/models/user.rs:3:5
+  |
+3 | use serde::{Serialize, Deserialize};
+  |     ^^^^^ help: a similar path exists: `sonic_rs::serde`
+
+error[E0432]: unresolved import `serde`
+ --> src/models/session.rs:2:5
+  |
+2 | use serde::{Deserialize, Serialize};
+  |     ^^^^^ help: a similar path exists: `sonic_rs::serde`
+
+error[E0432]: unresolved import `serde`
+ --> src/models/file.rs:1:5
+  |
+1 | use serde::{Deserialize, Serialize};
+  |     ^^^^^ help: a similar path exists: `sonic_rs::serde`
+
+error[E0432]: unresolved import `serde`
+ --> src/models/folder.rs:2:5
+  |
+2 | use serde::{Deserialize, Serialize};
+  |     ^^^^^ help: a similar path exists: `sonic_rs::serde`
+
+error[E0432]: unresolved import `serde`
+  --> src/handlers/auth.rs:10:5
+   |
+10 | use serde::{Deserialize, Serialize};
+   |     ^^^^^ help: a similar path exists: `sonic_rs::serde`
+
+error[E0432]: unresolved import `serde`
+  --> src/handlers/files.rs:15:5
+   |
+15 | use serde::{Deserialize, Serialize};
+   |     ^^^^^ help: a similar path exists: `sonic_rs::serde`
+
+error[E0432]: unresolved import `serde`
+ --> src/handlers/folders.rs:9:5
+  |
+9 | use serde::Deserialize;
+  |     ^^^^^ help: a similar path exists: `sonic_rs::serde`
+
+error: cannot find attribute `serde` in this scope
+  --> src/handlers/files.rs:64:7
+   |
+64 |     #[serde(default = "default_limit")]
+   |       ^^^^^
+
+error: cannot find attribute `serde` in this scope
+  --> src/handlers/files.rs:66:7
+   |
+66 |     #[serde(default)]
+   |       ^^^^^
+
+error: cannot find attribute `serde` in this scope
+  --> src/handlers/folders.rs:29:7
+   |
+29 |     #[serde(default)]
+   |       ^^^^^
+
+error[E0433]: failed to resolve: could not find `serde` in `bincode`
+  --> src/handlers/files.rs:74:48
+   |
+74 | #[derive(Debug, Serialize, Deserialize, Clone, Encode, Decode)]
+   |                                                ^^^^^^ could not find `serde` in `bincode`
+   |
+   = note: this error originates in the derive macro `Encode` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0433]: failed to resolve: could not find `serde` in `bincode`
+  --> src/handlers/files.rs:74:56
+   |
+74 | #[derive(Debug, Serialize, Deserialize, Clone, Encode, Decode)]
+   |                                                        ^^^^^^ could not find `serde` in `bincode`
+   |
+   = note: this error originates in the derive macro `Decode` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: unused import: `PasswordHash`
+ --> src/crypto/dek.rs:7:21
+  |
+7 |     password_hash::{PasswordHash, PasswordHasher, SaltString},
+  |                     ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: unused imports: `DateTime` and `Utc`
+ --> src/repositories/user.rs:8:14
+  |
+8 | use chrono::{DateTime, Utc};
+  |              ^^^^^^^^  ^^^
+
+warning: unused import: `std::convert::TryFrom`
+ --> src/repositories/user.rs:9:5
+  |
+9 | use std::convert::TryFrom;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Response`
+ --> src/handlers/files.rs:6:30
+  |
+6 |     response::{IntoResponse, Response},
+  |                              ^^^^^^^^
+
+warning: unused import: `Extension`
+ --> src/middleware_layer/auth.rs:7:5
+  |
+7 |     Extension,
+  |     ^^^^^^^^^
+
+warning: unused import: `error::AppError`
+  --> src/middleware_layer/auth.rs:13:5
+   |
+13 |     error::AppError,
+   |     ^^^^^^^^^^^^^^^
+
+error[E0277]: the trait bound `RegisterRequest: serde::Deserialize<'de>` is not satisfied
+  --> src/handlers/auth.rs:80:20
+   |
+80 |     Json(payload): Json<RegisterRequest>,
+   |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `RegisterRequest`
+   |
+   = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `RegisterRequest` type
+   = note: for types from other crates check whether the crate offers a `serde` feature flag
+   = help: the following other types implement trait `Deserialize<'de>`:
+             &'a [u8]
+             &'a serde_json::raw::RawValue
+             &'a std::path::Path
+             &'a str
+             ()
+             (T,)
+             (T0, T1)
+             (T0, T1, T2)
+           and 157 others
+   = note: required for `RegisterRequest` to implement `serde_core::de::DeserializeOwned`
+   = note: required for `axum::Json<RegisterRequest>` to implement `FromRequest<AppState>`
+   = help: see issue #48214
+
+error[E0277]: the trait bound `LoginRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/auth.rs:187:20
+    |
+187 |     Json(payload): Json<LoginRequest>,
+    |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `LoginRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `LoginRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `LoginRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::Json<LoginRequest>` to implement `FromRequest<AppState>`
+    = help: see issue #48214
+
+error[E0277]: the trait bound `ChangePasswordRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/auth.rs:343:20
+    |
+343 |     Json(payload): Json<ChangePasswordRequest>,
+    |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `ChangePasswordRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `ChangePasswordRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `ChangePasswordRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::Json<ChangePasswordRequest>` to implement `FromRequest<AppState>`
+    = help: see issue #48214
+
+error[E0277]: the trait bound `InitUploadRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:163:22
+    |
+163 |     axum::Json(req): axum::Json<InitUploadRequest>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `InitUploadRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `InitUploadRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `InitUploadRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::Json<InitUploadRequest>` to implement `FromRequest<AppState>`
+    = help: see issue #48214
+
+error[E0277]: the trait bound `FinalizeUploadRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:535:22
+    |
+535 |     axum::Json(req): axum::Json<FinalizeUploadRequest>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `FinalizeUploadRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `FinalizeUploadRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `FinalizeUploadRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::Json<FinalizeUploadRequest>` to implement `FromRequest<AppState>`
+    = help: see issue #48214
+
+error[E0277]: the trait bound `CancelUploadRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:694:22
+    |
+694 |     axum::Json(req): axum::Json<CancelUploadRequest>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `CancelUploadRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `CancelUploadRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `CancelUploadRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::Json<CancelUploadRequest>` to implement `FromRequest<AppState>`
+    = help: see issue #48214
+
+error[E0277]: the trait bound `RegisterRequest: serde::Deserialize<'de>` is not satisfied
+  --> src/handlers/auth.rs:80:20
+   |
+80 |     Json(payload): Json<RegisterRequest>,
+   |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `RegisterRequest`
+   |
+   = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `RegisterRequest` type
+   = note: for types from other crates check whether the crate offers a `serde` feature flag
+   = help: the following other types implement trait `Deserialize<'de>`:
+             &'a [u8]
+             &'a serde_json::raw::RawValue
+             &'a std::path::Path
+             &'a str
+             ()
+             (T,)
+             (T0, T1)
+             (T0, T1, T2)
+           and 157 others
+   = note: required for `RegisterRequest` to implement `serde_core::de::DeserializeOwned`
+   = note: required for `Json<RegisterRequest>` to implement `FromRequest<AppState>`
+   = help: see issue #48214
+
+error[E0277]: the trait bound `CreateFolderRequest: serde::Deserialize<'de>` is not satisfied
+  --> src/handlers/folders.rs:38:16
+   |
+38 |     Json(req): Json<CreateFolderRequest>,
+   |                ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `CreateFolderRequest`
+   |
+   = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `CreateFolderRequest` type
+   = note: for types from other crates check whether the crate offers a `serde` feature flag
+   = help: the following other types implement trait `Deserialize<'de>`:
+             &'a [u8]
+             &'a serde_json::raw::RawValue
+             &'a std::path::Path
+             &'a str
+             ()
+             (T,)
+             (T0, T1)
+             (T0, T1, T2)
+           and 157 others
+   = note: required for `CreateFolderRequest` to implement `serde_core::de::DeserializeOwned`
+   = note: required for `axum::Json<CreateFolderRequest>` to implement `FromRequest<AppState>`
+   = help: see issue #48214
+
+error[E0277]: the trait bound `LoginRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/auth.rs:187:20
+    |
+187 |     Json(payload): Json<LoginRequest>,
+    |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `LoginRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `LoginRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `LoginRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `Json<LoginRequest>` to implement `FromRequest<AppState>`
+    = help: see issue #48214
+
+error[E0277]: the trait bound `ChangePasswordRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/auth.rs:343:20
+    |
+343 |     Json(payload): Json<ChangePasswordRequest>,
+    |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `ChangePasswordRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `ChangePasswordRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `ChangePasswordRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `Json<ChangePasswordRequest>` to implement `FromRequest<AppState>`
+    = help: see issue #48214
+
+error[E0277]: the trait bound `InitUploadRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:163:22
+    |
+163 |     axum::Json(req): axum::Json<InitUploadRequest>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `InitUploadRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `InitUploadRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `InitUploadRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `Json<InitUploadRequest>` to implement `FromRequest<AppState>`
+    = help: see issue #48214
+
+error[E0277]: the trait bound `FinalizeUploadRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:535:22
+    |
+535 |     axum::Json(req): axum::Json<FinalizeUploadRequest>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `FinalizeUploadRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `FinalizeUploadRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `FinalizeUploadRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `Json<FinalizeUploadRequest>` to implement `FromRequest<AppState>`
+    = help: see issue #48214
+
+error[E0277]: the trait bound `CancelUploadRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:694:22
+    |
+694 |     axum::Json(req): axum::Json<CancelUploadRequest>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `CancelUploadRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `CancelUploadRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `CancelUploadRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `Json<CancelUploadRequest>` to implement `FromRequest<AppState>`
+    = help: see issue #48214
+
+error[E0277]: the trait bound `CreateFolderRequest: serde::Deserialize<'de>` is not satisfied
+  --> src/handlers/folders.rs:38:16
+   |
+38 |     Json(req): Json<CreateFolderRequest>,
+   |                ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `CreateFolderRequest`
+   |
+   = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `CreateFolderRequest` type
+   = note: for types from other crates check whether the crate offers a `serde` feature flag
+   = help: the following other types implement trait `Deserialize<'de>`:
+             &'a [u8]
+             &'a serde_json::raw::RawValue
+             &'a std::path::Path
+             &'a str
+             ()
+             (T,)
+             (T0, T1)
+             (T0, T1, T2)
+           and 157 others
+   = note: required for `CreateFolderRequest` to implement `serde_core::de::DeserializeOwned`
+   = note: required for `Json<CreateFolderRequest>` to implement `FromRequest<AppState>`
+   = help: see issue #48214
+
+warning: unused variable: `name`
+  --> src/services/auth.rs:74:5
+   |
+74 |     name: String,
+   |     ^^^^ help: if this is intentional, prefix it with an underscore: `_name`
+   |
+   = note: `#[warn(unused_variables)]` on by default
+
+error[E0596]: cannot borrow `client` as mutable, as it is not declared as mutable
+  --> src/services/files.rs:24:23
+   |
+24 |     let transaction = client.transaction().await?;
+   |                       ^^^^^^ cannot borrow as mutable
+   |
+help: consider changing this to be mutable
+   |
+23 |     let mut client = state.db.get().await?;
+   |         +++
+
+error[E0277]: the trait bound `session::Session: serde::Serialize` is not satisfied
+    --> src/handlers/auth.rs:123:44
+     |
+ 123 |     let session_json = sonic_rs::to_string(&session)
+     |                        ------------------- ^^^^^^^^ the trait `Serialize` is not implemented for `session::Session`
+     |                        |
+     |                        required by a bound introduced by this call
+     |
+     = note: for local types consider adding `#[derive(serde::Serialize)]` to your `session::Session` type
+     = note: for types from other crates check whether the crate offers a `serde` feature flag
+     = help: the following other types implement trait `Serialize`:
+               &'a T
+               &'a mut T
+               ()
+               (T,)
+               (T0, T1)
+               (T0, T1, T2)
+               (T0, T1, T2, T3)
+               (T0, T1, T2, T3, T4)
+             and 144 others
+note: required by a bound in `sonic_rs::to_string`
+    --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sonic-rs-0.5.6/src/serde/ser.rs:1633:17
+     |
+1631 | pub fn to_string<T>(value: &T) -> Result<String>
+     |        --------- required by a bound in this function
+1632 | where
+1633 |     T: ?Sized + Serialize,
+     |                 ^^^^^^^^^ required by this bound in `to_string`
+
+error[E0599]: no method named `into_response` found for tuple `(http::StatusCode, axum::Json<AuthResponse>)` in the current scope
+   --> src/handlers/auth.rs:179:46
+    |
+179 |     Ok((StatusCode::CREATED, Json(response)).into_response())
+    |                                              ^^^^^^^^^^^^^ method not found in `(http::StatusCode, axum::Json<AuthResponse>)`
+
+error[E0599]: no method named `into_response` found for tuple `(http::StatusCode, Json<AuthResponse>)` in the current scope
+   --> src/handlers/auth.rs:179:46
+    |
+179 |     Ok((StatusCode::CREATED, Json(response)).into_response())
+    |                                              ^^^^^^^^^^^^^ method not found in `(http::StatusCode, Json<AuthResponse>)`
+
+error[E0277]: the trait bound `session::Session: serde::Serialize` is not satisfied
+    --> src/handlers/auth.rs:223:44
+     |
+ 223 |     let session_json = sonic_rs::to_string(&session)
+     |                        ------------------- ^^^^^^^^ the trait `Serialize` is not implemented for `session::Session`
+     |                        |
+     |                        required by a bound introduced by this call
+     |
+     = note: for local types consider adding `#[derive(serde::Serialize)]` to your `session::Session` type
+     = note: for types from other crates check whether the crate offers a `serde` feature flag
+     = help: the following other types implement trait `Serialize`:
+               &'a T
+               &'a mut T
+               ()
+               (T,)
+               (T0, T1)
+               (T0, T1, T2)
+               (T0, T1, T2, T3)
+               (T0, T1, T2, T3, T4)
+             and 144 others
+note: required by a bound in `sonic_rs::to_string`
+    --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sonic-rs-0.5.6/src/serde/ser.rs:1633:17
+     |
+1631 | pub fn to_string<T>(value: &T) -> Result<String>
+     |        --------- required by a bound in this function
+1632 | where
+1633 |     T: ?Sized + Serialize,
+     |                 ^^^^^^^^^ required by this bound in `to_string`
+
+error[E0599]: no method named `into_response` found for tuple `(http::StatusCode, axum::Json<AuthResponse>)` in the current scope
+   --> src/handlers/auth.rs:284:41
+    |
+284 |     Ok((StatusCode::OK, Json(response)).into_response())
+    |                                         ^^^^^^^^^^^^^ method not found in `(http::StatusCode, axum::Json<AuthResponse>)`
+
+error[E0599]: no method named `into_response` found for tuple `(http::StatusCode, Json<AuthResponse>)` in the current scope
+   --> src/handlers/auth.rs:284:41
+    |
+284 |     Ok((StatusCode::OK, Json(response)).into_response())
+    |                                         ^^^^^^^^^^^^^ method not found in `(http::StatusCode, Json<AuthResponse>)`
+
+error[E0599]: no method named `into_response` found for tuple `(http::StatusCode, axum::Json<AuthResponse>)` in the current scope
+   --> src/handlers/auth.rs:335:41
+    |
+335 |     Ok((StatusCode::OK, Json(response)).into_response())
+    |                                         ^^^^^^^^^^^^^ method not found in `(http::StatusCode, axum::Json<AuthResponse>)`
+
+error[E0599]: no method named `into_response` found for tuple `(http::StatusCode, Json<AuthResponse>)` in the current scope
+   --> src/handlers/auth.rs:335:41
+    |
+335 |     Ok((StatusCode::OK, Json(response)).into_response())
+    |                                         ^^^^^^^^^^^^^ method not found in `(http::StatusCode, Json<AuthResponse>)`
+
+error[E0599]: no method named `into_response` found for tuple `(http::StatusCode, axum::Json<AuthResponse>)` in the current scope
+   --> src/handlers/auth.rs:364:41
+    |
+364 |     Ok((StatusCode::OK, Json(response)).into_response())
+    |                                         ^^^^^^^^^^^^^ method not found in `(http::StatusCode, axum::Json<AuthResponse>)`
+
+error[E0599]: no method named `into_response` found for tuple `(http::StatusCode, Json<AuthResponse>)` in the current scope
+   --> src/handlers/auth.rs:364:41
+    |
+364 |     Ok((StatusCode::OK, Json(response)).into_response())
+    |                                         ^^^^^^^^^^^^^ method not found in `(http::StatusCode, Json<AuthResponse>)`
+
+error[E0596]: cannot borrow `client` as mutable, as it is not declared as mutable
+   --> src/handlers/files.rs:577:23
+    |
+577 |     let transaction = client.transaction().await?;
+    |                       ^^^^^^ cannot borrow as mutable
+    |
+help: consider changing this to be mutable
+    |
+576 |     let mut client = state.db.get().await?;
+    |         +++
+
+error[E0308]: mismatched types
+   --> src/handlers/files.rs:810:36
+    |
+810 |         bincode::decode_from_slice(&chunks_metadata_raw, bincode::config::standard())
+    |         -------------------------- ^^^^^^^^^^^^^^^^^^^^ expected `&[u8]`, found `&Option<Vec<u8>>`
+    |         |
+    |         arguments to this function are incorrect
+    |
+    = note: expected reference `&[u8]`
+               found reference `&Option<Vec<u8>>`
+note: function defined here
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bincode-2.0.1/src/lib.rs:148:8
+    |
+148 | pub fn decode_from_slice<D: de::Decode<()>, C: Config>(
+    |        ^^^^^^^^^^^^^^^^^
+
+error[E0596]: cannot borrow `client` as mutable, as it is not declared as mutable
+   --> src/handlers/files.rs:930:23
+    |
+930 |     let transaction = client.transaction().await?;
+    |                       ^^^^^^ cannot borrow as mutable
+    |
+help: consider changing this to be mutable
+    |
+929 |     let mut client = state.db.get().await?;
+    |         +++
+
+error[E0277]: the trait bound `StorageInfoResponse: serde::Serialize` is not satisfied
+   --> src/handlers/files.rs:966:41
+    |
+966 |       let response = sonic_rs::to_string(&sonic_rs::json!(StorageInfoResponse {
+    |  _________________________________________^
+967 | |         storage_quota_bytes,
+968 | |         storage_used_bytes,
+969 | |         available_bytes,
+970 | |         usage_percentage,
+971 | |     }))
+    | |      ^
+    | |      |
+    | |______the trait `Serialize` is not implemented for `StorageInfoResponse`
+    |        required by a bound introduced by this call
+    |
+    = note: for local types consider adding `#[derive(serde::Serialize)]` to your `StorageInfoResponse` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Serialize`:
+              &'a T
+              &'a mut T
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+              (T0, T1, T2, T3)
+              (T0, T1, T2, T3, T4)
+            and 144 others
+note: required by a bound in `to_value`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sonic-rs-0.5.6/src/value/ser.rs:61:17
+    |
+ 59 | pub fn to_value<T>(value: &T) -> Result<Value>
+    |        -------- required by a bound in this function
+ 60 | where
+ 61 |     T: ?Sized + Serialize,
+    |                 ^^^^^^^^^ required by this bound in `to_value`
+    = note: this error originates in the macro `json_internal` which comes from the expansion of the macro `sonic_rs::json` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0596]: cannot borrow `client` as mutable, as it is not declared as mutable
+   --> src/handlers/files.rs:987:23
+    |
+987 |     let transaction = client.transaction().await?;
+    |                       ^^^^^^ cannot borrow as mutable
+    |
+help: consider changing this to be mutable
+    |
+986 |     let mut client = state.db.get().await?;
+    |         +++
+
+warning: variable does not need to be mutable
+    --> src/handlers/files.rs:1012:38
+     |
+1012 | pub async fn cleanup_expired_uploads(mut state: AppState) -> Result<()> {
+     |                                      ----^^^^^
+     |                                      |
+     |                                      help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` on by default
+
+error[E0277]: the trait bound `session::Session: serde::Deserialize<'de>` is not satisfied
+    --> src/middleware_layer/auth.rs:72:28
+     |
+  72 |     let session: Session = sonic_rs::from_str(&session_json)
+     |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Deserialize<'_>` is not implemented for `session::Session`
+     |
+     = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `session::Session` type
+     = note: for types from other crates check whether the crate offers a `serde` feature flag
+     = help: the following other types implement trait `Deserialize<'de>`:
+               &'a [u8]
+               &'a serde_json::raw::RawValue
+               &'a std::path::Path
+               &'a str
+               ()
+               (T,)
+               (T0, T1)
+               (T0, T1, T2)
+             and 157 others
+note: required by a bound in `sonic_rs::from_str`
+    --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sonic-rs-0.5.6/src/serde/de.rs:1361:8
+     |
+1359 | pub fn from_str<'a, T>(s: &'a str) -> Result<T>
+     |        -------- required by a bound in this function
+1360 | where
+1361 |     T: de::Deserialize<'a>,
+     |        ^^^^^^^^^^^^^^^^^^^ required by this bound in `from_str`
+
+error[E0599]: no method named `host` found for reference `&tokio_postgres::config::Host` in the current scope
+  --> src/db.rs:20:38
+   |
+20 |         if let Some(hostname) = host.host() {
+   |                                      ^^^^ method not found in `&tokio_postgres::config::Host`
+
+error[E0599]: no method named `port` found for reference `&tokio_postgres::config::Host` in the current scope
+  --> src/db.rs:23:34
+   |
+23 |         if let Some(port) = host.port() {
+   |                                  ^^^^ method not found in `&tokio_postgres::config::Host`
+
+error[E0063]: missing field `queue_mode` in initializer of `PoolConfig`
+  --> src/db.rs:44:21
+   |
+44 |     cfg.pool = Some(PoolConfig {
+   |                     ^^^^^^^^^^ missing `queue_mode`
+
+error[E0277]: the trait bound `AppError: From<deadpool::managed::config::CreatePoolError<ConfigError>>` is not satisfied
+  --> src/db.rs:53:5
+   |
+53 | /     cfg.create_pool(Some(Runtime::Tokio1), NoTls)
+54 | |         .map_err(AppError::from)
+   | |________________________________^ the trait `From<deadpool::managed::config::CreatePoolError<ConfigError>>` is not implemented for `AppError`
+   |
+   = help: the following other types implement trait `From<T>`:
+             `AppError` implements `From<RedisError>`
+             `AppError` implements `From<deadpool::managed::errors::PoolError<tokio_postgres::Error>>`
+             `AppError` implements `From<std::io::Error>`
+             `AppError` implements `From<tokio_postgres::Error>`
+
+error[E0277]: the trait bound `AppError: From<deadpool::managed::config::CreatePoolError<ConfigError>>` is not satisfied
+  --> src/db.rs:54:18
+   |
+54 |         .map_err(AppError::from)
+   |                  ^^^^^^^^ the trait `From<deadpool::managed::config::CreatePoolError<ConfigError>>` is not implemented for `AppError`
+   |
+   = help: the following other types implement trait `From<T>`:
+             `AppError` implements `From<RedisError>`
+             `AppError` implements `From<deadpool::managed::errors::PoolError<tokio_postgres::Error>>`
+             `AppError` implements `From<std::io::Error>`
+             `AppError` implements `From<tokio_postgres::Error>`
+
+warning: use of deprecated associated function `argon2::password_hash::SaltString::new`: use `from_b64` instead
+  --> src/crypto/dek.rs:73:28
+   |
+73 |     let salt = SaltString::new(salt_str)
+   |                            ^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+error[E0277]: the trait bound `RegisterRequest: serde::Deserialize<'de>` is not satisfied
+  --> src/handlers/auth.rs:80:20
+   |
+80 |     Json(payload): Json<RegisterRequest>,
+   |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `RegisterRequest`
+   |
+   = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `RegisterRequest` type
+   = note: for types from other crates check whether the crate offers a `serde` feature flag
+   = help: the following other types implement trait `Deserialize<'de>`:
+             &'a [u8]
+             &'a serde_json::raw::RawValue
+             &'a std::path::Path
+             &'a str
+             ()
+             (T,)
+             (T0, T1)
+             (T0, T1, T2)
+           and 157 others
+   = note: required for `RegisterRequest` to implement `serde_core::de::DeserializeOwned`
+   = note: required for `axum::Json<RegisterRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_register_2_from_request_check`
+  --> src/handlers/auth.rs:80:20
+   |
+80 |     Json(payload): Json<RegisterRequest>,
+   |                    ^^^^ required by this bound in `__axum_macros_check_register_2_from_request_check`
+
+error[E0277]: the trait bound `LoginRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/auth.rs:187:20
+    |
+187 |     Json(payload): Json<LoginRequest>,
+    |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `LoginRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `LoginRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `LoginRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::Json<LoginRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_login_2_from_request_check`
+   --> src/handlers/auth.rs:187:20
+    |
+187 |     Json(payload): Json<LoginRequest>,
+    |                    ^^^^ required by this bound in `__axum_macros_check_login_2_from_request_check`
+
+error[E0277]: the trait bound `RegisterRequest: serde::Deserialize<'de>` is not satisfied
+  --> src/handlers/auth.rs:80:20
+   |
+80 |     Json(payload): Json<RegisterRequest>,
+   |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `RegisterRequest`
+   |
+   = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `RegisterRequest` type
+   = note: for types from other crates check whether the crate offers a `serde` feature flag
+   = help: the following other types implement trait `Deserialize<'de>`:
+             &'a [u8]
+             &'a serde_json::raw::RawValue
+             &'a std::path::Path
+             &'a str
+             ()
+             (T,)
+             (T0, T1)
+             (T0, T1, T2)
+           and 157 others
+   = note: required for `RegisterRequest` to implement `serde_core::de::DeserializeOwned`
+   = note: required for `Json<RegisterRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_register_2_from_request_check`
+  --> src/handlers/auth.rs:80:20
+   |
+80 |     Json(payload): Json<RegisterRequest>,
+   |                    ^^^^ required by this bound in `__axum_macros_check_register_2_from_request_check`
+
+error[E0277]: the trait bound `ChangePasswordRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/auth.rs:343:20
+    |
+343 |     Json(payload): Json<ChangePasswordRequest>,
+    |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `ChangePasswordRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `ChangePasswordRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `ChangePasswordRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::Json<ChangePasswordRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_change_password_2_from_request_check`
+   --> src/handlers/auth.rs:343:20
+    |
+343 |     Json(payload): Json<ChangePasswordRequest>,
+    |                    ^^^^ required by this bound in `__axum_macros_check_change_password_2_from_request_check`
+
+error[E0277]: the trait bound `InitUploadRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:163:22
+    |
+163 |     axum::Json(req): axum::Json<InitUploadRequest>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `InitUploadRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `InitUploadRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `InitUploadRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::Json<InitUploadRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_init_upload_2_from_request_check`
+   --> src/handlers/files.rs:163:22
+    |
+163 |     axum::Json(req): axum::Json<InitUploadRequest>,
+    |                      ^^^^ required by this bound in `__axum_macros_check_init_upload_2_from_request_check`
+
+error[E0277]: the trait bound `LoginRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/auth.rs:187:20
+    |
+187 |     Json(payload): Json<LoginRequest>,
+    |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `LoginRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `LoginRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `LoginRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `Json<LoginRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_login_2_from_request_check`
+   --> src/handlers/auth.rs:187:20
+    |
+187 |     Json(payload): Json<LoginRequest>,
+    |                    ^^^^ required by this bound in `__axum_macros_check_login_2_from_request_check`
+
+error[E0277]: the trait bound `ChangePasswordRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/auth.rs:343:20
+    |
+343 |     Json(payload): Json<ChangePasswordRequest>,
+    |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `ChangePasswordRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `ChangePasswordRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `ChangePasswordRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `Json<ChangePasswordRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_change_password_2_from_request_check`
+   --> src/handlers/auth.rs:343:20
+    |
+343 |     Json(payload): Json<ChangePasswordRequest>,
+    |                    ^^^^ required by this bound in `__axum_macros_check_change_password_2_from_request_check`
+
+error[E0277]: the trait bound `InitUploadRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:163:22
+    |
+163 |     axum::Json(req): axum::Json<InitUploadRequest>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `InitUploadRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `InitUploadRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `InitUploadRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `Json<InitUploadRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_init_upload_2_from_request_check`
+   --> src/handlers/files.rs:163:22
+    |
+163 |     axum::Json(req): axum::Json<InitUploadRequest>,
+    |                      ^^^^ required by this bound in `__axum_macros_check_init_upload_2_from_request_check`
+
+error[E0277]: the trait bound `FinalizeUploadRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:535:22
+    |
+535 |     axum::Json(req): axum::Json<FinalizeUploadRequest>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `FinalizeUploadRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `FinalizeUploadRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `FinalizeUploadRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::Json<FinalizeUploadRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_finalize_upload_2_from_request_check`
+   --> src/handlers/files.rs:535:22
+    |
+535 |     axum::Json(req): axum::Json<FinalizeUploadRequest>,
+    |                      ^^^^ required by this bound in `__axum_macros_check_finalize_upload_2_from_request_check`
+
+error[E0277]: the trait bound `CancelUploadRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:694:22
+    |
+694 |     axum::Json(req): axum::Json<CancelUploadRequest>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `CancelUploadRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `CancelUploadRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `CancelUploadRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::Json<CancelUploadRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_cancel_upload_2_from_request_check`
+   --> src/handlers/files.rs:694:22
+    |
+694 |     axum::Json(req): axum::Json<CancelUploadRequest>,
+    |                      ^^^^ required by this bound in `__axum_macros_check_cancel_upload_2_from_request_check`
+
+error[E0277]: the trait bound `ListFilesQuery: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:732:20
+    |
+732 |     Query(params): Query<ListFilesQuery>,
+    |                    ^^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `ListFilesQuery`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `ListFilesQuery` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `ListFilesQuery` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `Query<ListFilesQuery>` to implement `FromRequestParts<AppState>`
+    = note: required for `Query<ListFilesQuery>` to implement `FromRequest<AppState, axum_core::extract::private::ViaParts>`
+note: required by a bound in `__axum_macros_check_list_files_2_from_request_check`
+   --> src/handlers/files.rs:732:20
+    |
+732 |     Query(params): Query<ListFilesQuery>,
+    |                    ^^^^^ required by this bound in `__axum_macros_check_list_files_2_from_request_check`
+
+error[E0277]: the trait bound `FinalizeUploadRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:535:22
+    |
+535 |     axum::Json(req): axum::Json<FinalizeUploadRequest>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `FinalizeUploadRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `FinalizeUploadRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `FinalizeUploadRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `Json<FinalizeUploadRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_finalize_upload_2_from_request_check`
+   --> src/handlers/files.rs:535:22
+    |
+535 |     axum::Json(req): axum::Json<FinalizeUploadRequest>,
+    |                      ^^^^ required by this bound in `__axum_macros_check_finalize_upload_2_from_request_check`
+
+error[E0277]: the trait bound `Uuid: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:772:20
+    |
+772 |     Path(file_id): Path<Uuid>,
+    |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `Uuid`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `Uuid` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `Uuid` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::extract::Path<Uuid>` to implement `FromRequestParts<AppState>`
+    = note: required for `axum::extract::Path<Uuid>` to implement `FromRequest<AppState, axum_core::extract::private::ViaParts>`
+note: required by a bound in `__axum_macros_check_download_file_2_from_request_check`
+   --> src/handlers/files.rs:772:20
+    |
+772 |     Path(file_id): Path<Uuid>,
+    |                    ^^^^ required by this bound in `__axum_macros_check_download_file_2_from_request_check`
+
+error[E0277]: the trait bound `CancelUploadRequest: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:694:22
+    |
+694 |     axum::Json(req): axum::Json<CancelUploadRequest>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `CancelUploadRequest`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `CancelUploadRequest` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `CancelUploadRequest` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `Json<CancelUploadRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_cancel_upload_2_from_request_check`
+   --> src/handlers/files.rs:694:22
+    |
+694 |     axum::Json(req): axum::Json<CancelUploadRequest>,
+    |                      ^^^^ required by this bound in `__axum_macros_check_cancel_upload_2_from_request_check`
+
+error[E0277]: the trait bound `Uuid: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/files.rs:917:20
+    |
+917 |     Path(file_id): Path<Uuid>,
+    |                    ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `Uuid`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `Uuid` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `Uuid` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::extract::Path<Uuid>` to implement `FromRequestParts<AppState>`
+    = note: required for `axum::extract::Path<Uuid>` to implement `FromRequest<AppState, axum_core::extract::private::ViaParts>`
+note: required by a bound in `__axum_macros_check_delete_file_2_from_request_check`
+   --> src/handlers/files.rs:917:20
+    |
+917 |     Path(file_id): Path<Uuid>,
+    |                    ^^^^ required by this bound in `__axum_macros_check_delete_file_2_from_request_check`
+
+error[E0277]: the trait bound `AppState: FromRequest<(), axum_core::extract::private::ViaParts>` is not satisfied
+    --> src/handlers/files.rs:1012:49
+     |
+1012 | pub async fn cleanup_expired_uploads(mut state: AppState) -> Result<()> {
+     |                                                 ^^^^^^^^ the trait `FromRequestParts<()>` is not implemented for `AppState`
+     |
+     = note: Function argument is not a valid axum extractor.
+             See `https://docs.rs/axum/0.8/axum/extract/index.html` for details
+     = help: the following other types implement trait `FromRequestParts<S>`:
+               `()` implements `FromRequestParts<S>`
+               `(T1, T2)` implements `FromRequestParts<S>`
+               `(T1, T2, T3)` implements `FromRequestParts<S>`
+               `(T1, T2, T3, T4)` implements `FromRequestParts<S>`
+               `(T1, T2, T3, T4, T5)` implements `FromRequestParts<S>`
+               `(T1, T2, T3, T4, T5, T6)` implements `FromRequestParts<S>`
+               `(T1, T2, T3, T4, T5, T6, T7)` implements `FromRequestParts<S>`
+               `(T1, T2, T3, T4, T5, T6, T7, T8)` implements `FromRequestParts<S>`
+             and 28 others
+     = note: required for `AppState` to implement `FromRequest<(), axum_core::extract::private::ViaParts>`
+note: required by a bound in `__axum_macros_check_cleanup_expired_uploads_0_from_request_check`
+    --> src/handlers/files.rs:1012:49
+     |
+1012 | pub async fn cleanup_expired_uploads(mut state: AppState) -> Result<()> {
+     |                                                 ^^^^^^^^ required by this bound in `__axum_macros_check_cleanup_expired_uploads_0_from_request_check`
+
+error[E0277]: the trait bound `CreateFolderRequest: serde::Deserialize<'de>` is not satisfied
+  --> src/handlers/folders.rs:38:16
+   |
+38 |     Json(req): Json<CreateFolderRequest>,
+   |                ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `CreateFolderRequest`
+   |
+   = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `CreateFolderRequest` type
+   = note: for types from other crates check whether the crate offers a `serde` feature flag
+   = help: the following other types implement trait `Deserialize<'de>`:
+             &'a [u8]
+             &'a serde_json::raw::RawValue
+             &'a std::path::Path
+             &'a str
+             ()
+             (T,)
+             (T0, T1)
+             (T0, T1, T2)
+           and 157 others
+   = note: required for `CreateFolderRequest` to implement `serde_core::de::DeserializeOwned`
+   = note: required for `axum::Json<CreateFolderRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_create_folder_2_from_request_check`
+  --> src/handlers/folders.rs:38:16
+   |
+38 |     Json(req): Json<CreateFolderRequest>,
+   |                ^^^^ required by this bound in `__axum_macros_check_create_folder_2_from_request_check`
+
+error[E0277]: the trait bound `ListFolderQuery: serde::Deserialize<'de>` is not satisfied
+  --> src/handlers/folders.rs:72:19
+   |
+72 |     Query(query): Query<ListFolderQuery>,
+   |                   ^^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `ListFolderQuery`
+   |
+   = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `ListFolderQuery` type
+   = note: for types from other crates check whether the crate offers a `serde` feature flag
+   = help: the following other types implement trait `Deserialize<'de>`:
+             &'a [u8]
+             &'a serde_json::raw::RawValue
+             &'a std::path::Path
+             &'a str
+             ()
+             (T,)
+             (T0, T1)
+             (T0, T1, T2)
+           and 157 others
+   = note: required for `ListFolderQuery` to implement `serde_core::de::DeserializeOwned`
+   = note: required for `Query<ListFolderQuery>` to implement `FromRequestParts<AppState>`
+   = note: required for `Query<ListFolderQuery>` to implement `FromRequest<AppState, axum_core::extract::private::ViaParts>`
+note: required by a bound in `__axum_macros_check_list_folder_contents_2_from_request_check`
+  --> src/handlers/folders.rs:72:19
+   |
+72 |     Query(query): Query<ListFolderQuery>,
+   |                   ^^^^^ required by this bound in `__axum_macros_check_list_folder_contents_2_from_request_check`
+
+error[E0277]: the trait bound `Uuid: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/folders.rs:121:22
+    |
+121 |     Path(folder_id): Path<Uuid>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `Uuid`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `Uuid` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `Uuid` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::extract::Path<Uuid>` to implement `FromRequestParts<AppState>`
+    = note: required for `axum::extract::Path<Uuid>` to implement `FromRequest<AppState, axum_core::extract::private::ViaParts>`
+note: required by a bound in `__axum_macros_check_get_folder_stats_2_from_request_check`
+   --> src/handlers/folders.rs:121:22
+    |
+121 |     Path(folder_id): Path<Uuid>,
+    |                      ^^^^ required by this bound in `__axum_macros_check_get_folder_stats_2_from_request_check`
+
+error[E0277]: the trait bound `Uuid: serde::Deserialize<'de>` is not satisfied
+   --> src/handlers/folders.rs:150:22
+    |
+150 |     Path(folder_id): Path<Uuid>,
+    |                      ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `Uuid`
+    |
+    = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `Uuid` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Deserialize<'de>`:
+              &'a [u8]
+              &'a serde_json::raw::RawValue
+              &'a std::path::Path
+              &'a str
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+            and 157 others
+    = note: required for `Uuid` to implement `serde_core::de::DeserializeOwned`
+    = note: required for `axum::extract::Path<Uuid>` to implement `FromRequestParts<AppState>`
+    = note: required for `axum::extract::Path<Uuid>` to implement `FromRequest<AppState, axum_core::extract::private::ViaParts>`
+note: required by a bound in `__axum_macros_check_delete_folder_2_from_request_check`
+   --> src/handlers/folders.rs:150:22
+    |
+150 |     Path(folder_id): Path<Uuid>,
+    |                      ^^^^ required by this bound in `__axum_macros_check_delete_folder_2_from_request_check`
+
+error[E0277]: the trait bound `fn(State<AppState>, Cookies, ...) -> ... {register}: Handler<_, _>` is not satisfied
+   --> src/main.rs:146:43
+    |
+146 |         .route("/api/auth/register", post(handlers::auth::register))
+    |                                      ---- ^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Cookies, Json<RegisterRequest>) -> ... {register}`
+    |                                      |
+    |                                      required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-1db96fb5201f702a.long-type-3833799951271494342.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `CreateFolderRequest: serde::Deserialize<'de>` is not satisfied
+  --> src/handlers/folders.rs:38:16
+   |
+38 |     Json(req): Json<CreateFolderRequest>,
+   |                ^^^^ the trait `for<'de> Deserialize<'de>` is not implemented for `CreateFolderRequest`
+   |
+   = note: for local types consider adding `#[derive(serde::Deserialize)]` to your `CreateFolderRequest` type
+   = note: for types from other crates check whether the crate offers a `serde` feature flag
+   = help: the following other types implement trait `Deserialize<'de>`:
+             &'a [u8]
+             &'a serde_json::raw::RawValue
+             &'a std::path::Path
+             &'a str
+             ()
+             (T,)
+             (T0, T1)
+             (T0, T1, T2)
+           and 157 others
+   = note: required for `CreateFolderRequest` to implement `serde_core::de::DeserializeOwned`
+   = note: required for `Json<CreateFolderRequest>` to implement `FromRequest<AppState>`
+note: required by a bound in `__axum_macros_check_create_folder_2_from_request_check`
+  --> src/handlers/folders.rs:38:16
+   |
+38 |     Json(req): Json<CreateFolderRequest>,
+   |                ^^^^ required by this bound in `__axum_macros_check_create_folder_2_from_request_check`
+
+error[E0277]: the trait bound `fn(State<AppState>, Cookies, Json<...>) -> ... {login}: Handler<_, _>` is not satisfied
+   --> src/main.rs:154:40
+    |
+154 |         .route("/api/auth/login", post(handlers::auth::login))
+    |                                   ---- ^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Cookies, Json<LoginRequest>) -> ... {login}`
+    |                                   |
+    |                                   required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-1db96fb5201f702a.long-type-5337400025518915075.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {init_upload}: Handler<_, _>` is not satisfied
+   --> src/main.rs:162:47
+    |
+162 |         .route("/api/files/upload/init", post(handlers::files::init_upload))
+    |                                          ---- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {init_upload}`
+    |                                          |
+    |                                          required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-1db96fb5201f702a.long-type-15392748066037627315.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {finalize_upload}: Handler<_, _>` is not satisfied
+   --> src/main.rs:166:18
+    |
+166 |             post(handlers::files::finalize_upload),
+    |             ---- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {finalize_upload}`
+    |             |
+    |             required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-1db96fb5201f702a.long-type-15807999982662260588.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {cancel_upload}: Handler<_, _>` is not satisfied
+   --> src/main.rs:170:18
+    |
+170 |             post(handlers::files::cancel_upload),
+    |             ---- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {cancel_upload}`
+    |             |
+    |             required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-1db96fb5201f702a.long-type-14736107654095838838.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {change_password}: Handler<_, _>` is not satisfied
+   --> src/main.rs:186:18
+    |
+186 |             post(handlers::auth::change_password),
+    |             ---- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {change_password}`
+    |             |
+    |             required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-1db96fb5201f702a.long-type-12879263602681914023.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {list_files}: Handler<_, _>` is not satisfied
+   --> src/main.rs:192:34
+    |
+192 |         .route("/api/files", get(handlers::files::list_files))
+    |                              --- ^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {list_files}`
+    |                              |
+    |                              required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `axum::routing::get`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:441:1
+    |
+441 | top_level_handler_fn!(get, GET);
+    | ^^^^^^^^^^^^^^^^^^^^^^---^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `get`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-1db96fb5201f702a.long-type-6352698574111078584.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {download_file}: Handler<_, _>` is not satisfied
+   --> src/main.rs:193:44
+    |
+193 |         .route("/api/files/{file_id}", get(handlers::files::download_file))
+    |                                        --- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {download_file}`
+    |                                        |
+    |                                        required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `axum::routing::get`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:441:1
+    |
+441 | top_level_handler_fn!(get, GET);
+    | ^^^^^^^^^^^^^^^^^^^^^^---^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `get`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-1db96fb5201f702a.long-type-11366335184205712204.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {delete_file}: Handler<_, _>` is not satisfied
+   --> src/main.rs:194:47
+    |
+194 |         .route("/api/files/{file_id}", delete(handlers::files::delete_file))
+    |                                        ------ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {delete_file}`
+    |                                        |
+    |                                        required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `delete`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:440:1
+    |
+440 | top_level_handler_fn!(delete, DELETE);
+    | ^^^^^^^^^^^^^^^^^^^^^^------^^^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `delete`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-1db96fb5201f702a.long-type-12250042392304065355.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<...>, ..., ...) -> ... {list_folder_contents}: Handler<_, _>` is not satisfied
+   --> src/main.rs:197:17
+    |
+197 |             get(handlers::folders::list_folder_contents),
+    |             --- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<...>, ...) -> ... {list_folder_contents}`
+    |             |
+    |             required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `axum::routing::get`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:441:1
+    |
+441 | top_level_handler_fn!(get, GET);
+    | ^^^^^^^^^^^^^^^^^^^^^^---^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `get`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-1db96fb5201f702a.long-type-1775559626510590345.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {get_folder_stats}: Handler<_, _>` is not satisfied
+   --> src/main.rs:201:17
+    |
+201 |             get(handlers::folders::get_folder_stats),
+    |             --- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {get_folder_stats}`
+    |             |
+    |             required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `axum::routing::get`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:441:1
+    |
+441 | top_level_handler_fn!(get, GET);
+    | ^^^^^^^^^^^^^^^^^^^^^^---^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `get`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-1db96fb5201f702a.long-type-12368356123198210930.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, Cookies, ...) -> ... {register}: Handler<_, _>` is not satisfied
+   --> src/main.rs:146:43
+    |
+146 |         .route("/api/auth/register", post(handlers::auth::register))
+    |                                      ---- ^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Cookies, Json<RegisterRequest>) -> ... {register}`
+    |                                      |
+    |                                      required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-c6dcbdd212a060b3.long-type-8277257078883472081.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {create_folder}: Handler<_, _>` is not satisfied
+   --> src/main.rs:203:37
+    |
+203 |         .route("/api/folders", post(handlers::folders::create_folder))
+    |                                ---- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {create_folder}`
+    |                                |
+    |                                required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-1db96fb5201f702a.long-type-9414464393769190117.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, Cookies, Json<...>) -> ... {login}: Handler<_, _>` is not satisfied
+   --> src/main.rs:154:40
+    |
+154 |         .route("/api/auth/login", post(handlers::auth::login))
+    |                                   ---- ^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Cookies, Json<LoginRequest>) -> ... {login}`
+    |                                   |
+    |                                   required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-c6dcbdd212a060b3.long-type-13200866358909951308.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {delete_folder}: Handler<_, _>` is not satisfied
+   --> src/main.rs:206:20
+    |
+206 |             delete(handlers::folders::delete_folder),
+    |             ------ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {delete_folder}`
+    |             |
+    |             required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `delete`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:440:1
+    |
+440 | top_level_handler_fn!(delete, DELETE);
+    | ^^^^^^^^^^^^^^^^^^^^^^------^^^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `delete`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-1db96fb5201f702a.long-type-5449555539905263264.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {init_upload}: Handler<_, _>` is not satisfied
+   --> src/main.rs:162:47
+    |
+162 |         .route("/api/files/upload/init", post(handlers::files::init_upload))
+    |                                          ---- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {init_upload}`
+    |                                          |
+    |                                          required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-c6dcbdd212a060b3.long-type-443237618279369725.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {finalize_upload}: Handler<_, _>` is not satisfied
+   --> src/main.rs:166:18
+    |
+166 |             post(handlers::files::finalize_upload),
+    |             ---- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {finalize_upload}`
+    |             |
+    |             required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-c6dcbdd212a060b3.long-type-3068116952704987339.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {cancel_upload}: Handler<_, _>` is not satisfied
+   --> src/main.rs:170:18
+    |
+170 |             post(handlers::files::cancel_upload),
+    |             ---- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {cancel_upload}`
+    |             |
+    |             required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-c6dcbdd212a060b3.long-type-347038585012356882.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {change_password}: Handler<_, _>` is not satisfied
+   --> src/main.rs:186:18
+    |
+186 |             post(handlers::auth::change_password),
+    |             ---- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {change_password}`
+    |             |
+    |             required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-c6dcbdd212a060b3.long-type-6493864086857537480.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {list_files}: Handler<_, _>` is not satisfied
+   --> src/main.rs:192:34
+    |
+192 |         .route("/api/files", get(handlers::files::list_files))
+    |                              --- ^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {list_files}`
+    |                              |
+    |                              required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `axum::routing::get`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:441:1
+    |
+441 | top_level_handler_fn!(get, GET);
+    | ^^^^^^^^^^^^^^^^^^^^^^---^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `get`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-c6dcbdd212a060b3.long-type-9680688755627772071.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {download_file}: Handler<_, _>` is not satisfied
+   --> src/main.rs:193:44
+    |
+193 |         .route("/api/files/{file_id}", get(handlers::files::download_file))
+    |                                        --- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {download_file}`
+    |                                        |
+    |                                        required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `axum::routing::get`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:441:1
+    |
+441 | top_level_handler_fn!(get, GET);
+    | ^^^^^^^^^^^^^^^^^^^^^^---^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `get`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-c6dcbdd212a060b3.long-type-14702303781964517581.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {delete_file}: Handler<_, _>` is not satisfied
+   --> src/main.rs:194:47
+    |
+194 |         .route("/api/files/{file_id}", delete(handlers::files::delete_file))
+    |                                        ------ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {delete_file}`
+    |                                        |
+    |                                        required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `delete`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:440:1
+    |
+440 | top_level_handler_fn!(delete, DELETE);
+    | ^^^^^^^^^^^^^^^^^^^^^^------^^^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `delete`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-c6dcbdd212a060b3.long-type-7000946597562943275.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: unused import: `TryStreamExt`
+  --> src/handlers/files.rs:11:5
+   |
+11 |     TryStreamExt
+   |     ^^^^^^^^^^^^
+
+error[E0277]: the trait bound `fn(State<...>, ..., ...) -> ... {list_folder_contents}: Handler<_, _>` is not satisfied
+   --> src/main.rs:197:17
+    |
+197 |             get(handlers::folders::list_folder_contents),
+    |             --- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<...>, ...) -> ... {list_folder_contents}`
+    |             |
+    |             required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `axum::routing::get`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:441:1
+    |
+441 | top_level_handler_fn!(get, GET);
+    | ^^^^^^^^^^^^^^^^^^^^^^---^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `get`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-c6dcbdd212a060b3.long-type-3586974960904009399.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {get_folder_stats}: Handler<_, _>` is not satisfied
+   --> src/main.rs:201:17
+    |
+201 |             get(handlers::folders::get_folder_stats),
+    |             --- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {get_folder_stats}`
+    |             |
+    |             required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `axum::routing::get`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:441:1
+    |
+441 | top_level_handler_fn!(get, GET);
+    | ^^^^^^^^^^^^^^^^^^^^^^---^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `get`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-c6dcbdd212a060b3.long-type-13142365273249579468.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {create_folder}: Handler<_, _>` is not satisfied
+   --> src/main.rs:203:37
+    |
+203 |         .route("/api/folders", post(handlers::folders::create_folder))
+    |                                ---- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {create_folder}`
+    |                                |
+    |                                required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `post`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:445:1
+    |
+445 | top_level_handler_fn!(post, POST);
+    | ^^^^^^^^^^^^^^^^^^^^^^----^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `post`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-c6dcbdd212a060b3.long-type-2521906596567443516.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `fn(State<AppState>, ..., ...) -> ... {delete_folder}: Handler<_, _>` is not satisfied
+   --> src/main.rs:206:20
+    |
+206 |             delete(handlers::folders::delete_folder),
+    |             ------ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for fn item `fn(State<AppState>, Extension<Session>, ...) -> ... {delete_folder}`
+    |             |
+    |             required by a bound introduced by this call
+    |
+    = note: Consider using `#[axum::debug_handler]` to improve the error message
+    = help: the following other types implement trait `Handler<T, S>`:
+              `MethodRouter<S>` implements `Handler<(), S>`
+              `axum::handler::Layered<L, H, T, S>` implements `Handler<T, S>`
+note: required by a bound in `delete`
+   --> /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.8.6/src/routing/method_routing.rs:440:1
+    |
+440 | top_level_handler_fn!(delete, DELETE);
+    | ^^^^^^^^^^^^^^^^^^^^^^------^^^^^^^^^
+    | |                     |
+    | |                     required by a bound in this function
+    | required by this bound in `delete`
+    = note: the full name for the type has been written to '/app/target/debug/deps/rocket-c6dcbdd212a060b3.long-type-9996400860991322809.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+    = note: this error originates in the macro `top_level_handler_fn` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+Some errors have detailed explanations: E0063, E0277, E0308, E0432, E0433, E0596, E0599.
+For more information about an error, try `rustc --explain E0063`.
+warning: `rocket` (bin "rocket" test) generated 10 warnings
+error: could not compile `rocket` (bin "rocket" test) due to 83 previous errors; 10 warnings emitted
+warning: `rocket` (bin "rocket") generated 10 warnings (10 duplicates)
+error: could not compile `rocket` (bin "rocket") due to 83 previous errors; 10 warnings emitted
