@@ -50,23 +50,12 @@ pub struct AuthResponse {
 }
 
 /// Creates a secure cookie with the given name, value, and max age.
-///
-/// # Arguments
-///
-/// * `name` - The name of the cookie.
-/// * `value` - The value of the cookie.
-/// * `max_age_days` - The maximum age of the cookie in days.
-///
-/// # Returns
-///
-/// A `Cookie` instance.
 fn create_secure_cookie(name: String, value: String, max_age_days: i64) -> Cookie<'static> {
     let mut cookie = Cookie::new(name.clone(), value);
 
     let is_production = std::env::var("APP_ENV")
         .unwrap_or_else(|_| "development".to_string()) == "production";
 
-    // ✅ CSRF token must not have HttpOnly (needs to be readable by JavaScript); Session ID must have HttpOnly (for security).
     if name != "csrf_token" {
         cookie.set_http_only(true);
     }
@@ -84,16 +73,7 @@ fn create_secure_cookie(name: String, value: String, max_age_days: i64) -> Cooki
 }
 
 /// Handles user registration.
-///
-/// # Arguments
-///
-/// * `state` - The application state.
-/// * `cookies` - The request cookies.
-/// * `payload` - The registration request payload.
-///
-/// # Returns
-///
-/// An `impl IntoResponse` containing the registration response.
+#[axum::debug_handler]
 pub async fn register(
     State(mut state): State<AppState>,
     cookies: Cookies,
@@ -200,16 +180,7 @@ pub async fn register(
 }
 
 /// Handles user login.
-///
-/// # Arguments
-///
-/// * `state` - The application state.
-/// * `cookies` - The request cookies.
-/// * `payload` - The login request payload.
-///
-/// # Returns
-///
-/// A `Response` containing the login response.
+#[axum::debug_handler]
 pub async fn login(
     State(mut state): State<AppState>,
     cookies: Cookies,
@@ -314,16 +285,7 @@ pub async fn login(
 }
 
 /// Handles user logout.
-///
-/// # Arguments
-///
-/// * `state` - The application state.
-/// * `session` - The user's session.
-/// * `cookies` - The request cookies.
-///
-/// # Returns
-///
-/// A `Response` containing the logout response.
+#[axum::debug_handler]
 pub async fn logout(
     State(mut state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -374,16 +336,7 @@ pub async fn logout(
 }
 
 /// Handles changing a user's password.
-///
-/// # Arguments
-///
-/// * `state` - The application state.
-/// * `session` - The user's session.
-/// * `payload` - The change password request payload.
-///
-/// # Returns
-///
-/// A `Response` containing the change password response.
+#[axum::debug_handler]
 pub async fn change_password(
     State(mut state): State<AppState>,
     Extension(session): Extension<Session>,
