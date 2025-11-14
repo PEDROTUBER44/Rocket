@@ -1,8 +1,3 @@
-use jemallocator::Jemalloc;
-
-#[global_allocator]
-static GLOBAL: Jemalloc = Jemalloc;
-
 use axum::{
     Router,
     routing::{get, post, delete},
@@ -28,7 +23,6 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 mod config;
 mod error;
 mod state;
-mod db;
 mod crypto {
     pub mod aes;
     pub mod dek;

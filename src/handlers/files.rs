@@ -24,7 +24,6 @@ use crate::{
     models::session::Session,
     state::AppState,
     state::{UPLOAD_BUFFER_SLOTS, DOWNLOAD_BUFFER_SLOTS},
-    repositories,
 };
 use redis::AsyncCommands;
 
@@ -128,6 +127,7 @@ async fn cleanup_failed_upload(
     let upload_dir = PathBuf::from("uploads/files");
     let mut deleted_count = 0;
 
+    // ✅ REMOVER APENAS CHUNKS PARCIALMENTE ENVIADOS
     for chunk_batch_start in (0..metadata.chunks_received_count).step_by(CLEANUP_BATCH_SIZE) {
         let batch_end = (chunk_batch_start + CLEANUP_BATCH_SIZE).min(metadata.chunks_received_count);
         for chunk_idx in chunk_batch_start..batch_end {
@@ -141,6 +141,7 @@ async fn cleanup_failed_upload(
 
     tracing::debug!("✅ Removed {} chunk files from disk", deleted_count);
 
+    // ✅ NÃO REVERTER QUOTA - NUNCA FOI DEBITADA
     let mut redis = state.redis.clone();
     let redis_key = format!("upload:{}:{}", user_id, upload_session_id);
     let _ = redis.del::<_, ()>(&redis_key).await.ok();
@@ -156,7 +157,6 @@ async fn cleanup_failed_upload(
     Ok(())
 }
 
-#[axum::debug_handler]
 pub async fn init_upload(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -202,15 +202,31 @@ pub async fn init_upload(
         ));
     }
 
-    let (storage_quota_bytes, storage_used_bytes) = repositories::user::get_user_storage_info(&state.db, &user_id).await?;
+    // ✅ APENAS VALIDAR ESPAÇO, NÃO DEBITAR AINDA
+    let mut tx = state.db.begin().await?;
+    let user_quota = sqlx::query!(
+        r#"
+        SELECT storage_quota_bytes, storage_used_bytes
+        FROM users
+        WHERE id = $1
+        FOR UPDATE
+        "#,
+        user_id
+    )
+    .fetch_one(&mut *tx)
+    .await
+    .map_err(|_| AppError::Unauthorized)?;
 
-    let available_space = storage_quota_bytes - storage_used_bytes;
+    let available_space = user_quota.storage_quota_bytes - user_quota.storage_used_bytes;
     if req.file_size > available_space {
+        tx.rollback().await?;
         return Err(AppError::Validation(format!(
             "Insufficient storage quota. Required: {} bytes, Available: {} bytes",
             req.file_size, available_space
         )));
     }
+
+    tx.commit().await?;
 
     tracing::info!(
         "✅ Quota check passed: {} bytes available for user {}",
@@ -266,7 +282,6 @@ pub async fn init_upload(
     Ok((StatusCode::OK, response).into_response())
 }
 
-#[axum::debug_handler]
 pub async fn upload_chunk(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -528,7 +543,6 @@ pub async fn upload_chunk(
     Ok((StatusCode::OK, response).into_response())
 }
 
-#[axum::debug_handler]
 pub async fn finalize_upload(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -566,6 +580,7 @@ pub async fn finalize_upload(
             metadata.chunks_received_count,
             metadata.total_chunks
         );
+        // ✅ LIMPAR UPLOAD INCOMPLETO (não foi debitado ainda)
         cleanup_failed_upload(&state, user_id, &req.upload_session_id, &metadata).await?;
         return Err(AppError::Validation(format!(
             "Incomplete upload: received {} chunks, expected {}",
@@ -573,13 +588,31 @@ pub async fn finalize_upload(
         )));
     }
 
-    let client = state.db.get().await?;
-    let transaction = client.transaction().await?;
+    // ✅ AGORA DEBITAR A QUOTA - upload completo e validado
+    let mut tx = state.db.begin().await.map_err(|e| {
+        tracing::error!("Database transaction begin failed: {}", e);
+        AppError::Database(e)
+    })?;
 
-    let (storage_quota_bytes, storage_used_bytes) = repositories::user::get_user_storage_info(&state.db, &user_id).await?;
+    let user_quota = sqlx::query!(
+        r#"
+        SELECT storage_quota_bytes, storage_used_bytes
+        FROM users
+        WHERE id = $1
+        FOR UPDATE
+        "#,
+        user_id
+    )
+    .fetch_one(&mut *tx)
+    .await
+    .map_err(|e| {
+        tracing::error!("Failed to fetch user quota: {}", e);
+        AppError::Database(e)
+    })?;
 
-    let available_space = storage_quota_bytes - storage_used_bytes;
+    let available_space = user_quota.storage_quota_bytes - user_quota.storage_used_bytes;
     if metadata.total_size > available_space {
+        tx.rollback().await?;
         cleanup_failed_upload(&state, user_id, &req.upload_session_id, &metadata).await?;
         return Err(AppError::Validation(format!(
             "Insufficient storage quota at finalization. Required: {} bytes, Available: {} bytes",
@@ -587,7 +620,22 @@ pub async fn finalize_upload(
         )));
     }
 
-    repositories::user::update_storage_with_quota_check(&state.db, &user_id, metadata.total_size).await?;
+    // ✅ DEBITAR A QUOTA AGORA
+    sqlx::query!(
+        r#"
+        UPDATE users
+        SET storage_used_bytes = storage_used_bytes + $1
+        WHERE id = $2
+        "#,
+        metadata.total_size,
+        user_id
+    )
+    .execute(&mut *tx)
+    .await
+    .map_err(|e| {
+        tracing::error!("Failed to update storage quota: {}", e);
+        AppError::Database(e)
+    })?;
 
     let file_id = Uuid::new_v4();
     let mut chunks_data: Vec<ChunkInfo> = Vec::new();
@@ -610,6 +658,7 @@ pub async fn finalize_upload(
 
     if user_dek.is_empty() {
         tracing::error!("User DEK not available in session for user: {}", user_id);
+        tx.rollback().await?;
         cleanup_failed_upload(&state, user_id, &req.upload_session_id, &metadata).await?;
         return Err(AppError::Encryption(
             "User DEK not available in session".to_string(),
@@ -643,22 +692,51 @@ pub async fn finalize_upload(
 
     tracing::debug!("DEK encrypted successfully with KEK version {}", kek_version);
 
-    repositories::file::create_file(
-        &state.db,
+    sqlx::query!(
+        r#"
+        INSERT INTO files (
+            id,
+            user_id,
+            folder_id,
+            original_filename,
+            total_chunks,
+            chunks_metadata,
+            encrypted_dek,
+            nonce,
+            dek_version,
+            file_size,
+            mime_type,
+            checksum_sha256,
+            upload_status,
+            uploaded_at
+        ) VALUES (
+            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 'completed', NOW()
+        )
+        "#,
         file_id,
         user_id,
-        metadata.filename.clone(),
+        req.folder_id,
+        metadata.filename,
         metadata.total_chunks as i32,
         chunks_bytes,
         encrypted_dek,
-        dek_nonce.to_vec(),
+        &dek_nonce,
         kek_version,
         metadata.total_size,
-        Some("application/octet-stream".to_string()),
-        metadata.expected_hash,
-    ).await?;
+        "application/octet-stream",
+        metadata.expected_hash
+    )
+    .execute(&mut *tx)
+    .await
+    .map_err(|e| {
+        tracing::error!("Failed to insert file record: {}", e);
+        AppError::Database(e)
+    })?;
 
-    transaction.commit().await?;
+    tx.commit().await.map_err(|e| {
+        tracing::error!("Transaction commit failed: {}", e);
+        AppError::Database(e)
+    })?;
 
     tracing::info!(
         "⚡ Upload finalized successfully: File {} with {} chunks (quota debited)",
@@ -687,7 +765,6 @@ pub async fn finalize_upload(
     Ok((StatusCode::OK, response).into_response())
 }
 
-#[axum::debug_handler]
 pub async fn cancel_upload(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -714,6 +791,7 @@ pub async fn cancel_upload(
         bincode::decode_from_slice(&metadata_bytes, config)
             .map_err(|e| AppError::Internal(format!("Bincode decode failed: {}", e)))?;
 
+    // ✅ LIMPAR ARQUIVO INCOMPLETO (quota nunca foi debitada)
     cleanup_failed_upload(&state, user_id, &req.upload_session_id, &metadata).await?;
 
     let response = sonic_rs::to_string(&sonic_rs::json!({
@@ -725,7 +803,6 @@ pub async fn cancel_upload(
     Ok((StatusCode::OK, response).into_response())
 }
 
-#[axum::debug_handler]
 pub async fn list_files(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -735,7 +812,20 @@ pub async fn list_files(
 
     tracing::debug!("📂 Listing files - limit: {}, offset: {}", params.limit, params.offset);
 
-    let files = repositories::file::list_user_files(&state.db, user_id, params.limit, params.offset).await?;
+    let files = sqlx::query!(
+        r#"
+        SELECT id, original_filename, file_size, mime_type, uploaded_at, access_count
+        FROM files
+        WHERE user_id = $1 AND is_deleted = false
+        ORDER BY uploaded_at DESC
+        LIMIT $2 OFFSET $3
+        "#,
+        user_id,
+        params.limit,
+        params.offset
+    )
+    .fetch_all(&state.db)
+    .await?;
 
     let response = sonic_rs::to_string(&sonic_rs::json!({
         "files": files.iter().map(|f| sonic_rs::json!({
@@ -765,7 +855,6 @@ fn sanitize_filename(filename: &str) -> String {
         .collect()
 }
 
-#[axum::debug_handler]
 pub async fn download_file(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -799,12 +888,23 @@ pub async fn download_file(
 
     tracing::info!("⏳ Download buffer: {} chunks (concurrent: {}, available: {})", buffer_chunks, concurrent_downloads, available);
 
-    let file = repositories::file::find_by_id(&state.db, file_id, user_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
+    let file = sqlx::query!(
+        r#"
+        SELECT id, original_filename, chunks_metadata,
+               encrypted_dek, nonce, dek_version
+        FROM files
+        WHERE id = $1 AND user_id = $2 AND is_deleted = false
+        "#,
+        file_id,
+        user_id
+    )
+    .fetch_optional(&state.db)
+    .await?
+    .ok_or(AppError::NotFound)?;
 
     let chunks_metadata_raw = file
-        .chunks_metadata;
+        .chunks_metadata
+        .ok_or(AppError::Internal("Missing chunks_metadata".into()))?;
 
     let (chunks_data, _): (Vec<ChunkInfo>, usize) =
         bincode::decode_from_slice(&chunks_metadata_raw, bincode::config::standard())
@@ -910,7 +1010,6 @@ pub async fn download_file(
     Ok((response_headers, body).into_response())
 }
 
-#[axum::debug_handler]
 pub async fn delete_file(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -918,21 +1017,49 @@ pub async fn delete_file(
 ) -> Result<impl IntoResponse> {
     let user_id = session.user_id;
 
-    let file = repositories::file::find_by_id(&state.db, file_id, user_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
+    let file = sqlx::query!(
+        r#"
+        SELECT id, file_size, is_deleted
+        FROM files
+        WHERE id = $1 AND user_id = $2
+        "#,
+        file_id,
+        user_id
+    )
+    .fetch_optional(&state.db)
+    .await?
+    .ok_or(AppError::NotFound)?;
 
     if file.is_deleted {
         return Err(AppError::Validation("File already deleted".into()));
     }
 
-    let client = state.db.get().await?;
-    let transaction = client.transaction().await?;
+    let mut tx = state.db.begin().await?;
+    sqlx::query!(
+        r#"
+        UPDATE files
+        SET is_deleted = true, deleted_at = NOW()
+        WHERE id = $1 AND user_id = $2
+        "#,
+        file_id,
+        user_id
+    )
+    .execute(&mut *tx)
+    .await?;
 
-    repositories::file::soft_delete_file(&state.db, file_id, user_id).await?;
-    repositories::user::rollback_storage_usage(&state.db, &user_id, file.file_size).await?;
+    sqlx::query!(
+        r#"
+        UPDATE users
+        SET storage_used_bytes = GREATEST(0, storage_used_bytes - $1)
+        WHERE id = $2
+        "#,
+        file.file_size,
+        user_id
+    )
+    .execute(&mut *tx)
+    .await?;
 
-    transaction.commit().await?;
+    tx.commit().await?;
 
     tracing::info!(
         "🗑️ File deleted: {} ({} bytes quota released for user {})",
@@ -950,22 +1077,30 @@ pub async fn delete_file(
     Ok((StatusCode::OK, response).into_response())
 }
 
-#[axum::debug_handler]
 pub async fn storage_info(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
 ) -> Result<impl IntoResponse> {
     let user_id = session.user_id;
 
-    let (storage_quota_bytes, storage_used_bytes) = repositories::user::get_user_storage_info(&state.db, &user_id).await?;
+    let user = sqlx::query!(
+        r#"
+        SELECT storage_quota_bytes, storage_used_bytes
+        FROM users
+        WHERE id = $1
+        "#,
+        user_id
+    )
+    .fetch_one(&state.db)
+    .await?;
 
-    let available_bytes = storage_quota_bytes - storage_used_bytes;
+    let available_bytes = user.storage_quota_bytes - user.storage_used_bytes;
     let usage_percentage =
-        (storage_used_bytes as f64 / storage_quota_bytes as f64) * 100.0;
+        (user.storage_used_bytes as f64 / user.storage_quota_bytes as f64) * 100.0;
 
     let response = sonic_rs::to_string(&sonic_rs::json!(StorageInfoResponse {
-        storage_quota_bytes,
-        storage_used_bytes,
+        storage_quota_bytes: user.storage_quota_bytes,
+        storage_used_bytes: user.storage_used_bytes,
         available_bytes,
         usage_percentage,
     }))
@@ -974,7 +1109,6 @@ pub async fn storage_info(
     Ok((StatusCode::OK, response).into_response())
 }
 
-#[axum::debug_handler]
 pub async fn recalculate_user_quota(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -983,15 +1117,33 @@ pub async fn recalculate_user_quota(
 
     tracing::warn!("🔄 Recalculating storage quota for user: {}", user_id);
 
-    let client = state.db.get().await?;
-    let transaction = client.transaction().await?;
+    let mut tx = state.db.begin().await?;
+    let total_size: Option<i64> = sqlx::query_scalar(
+        r#"
+        SELECT COALESCE(SUM(file_size), 0)
+        FROM files
+        WHERE user_id = $1 AND is_deleted = false
+        "#,
+    )
+    .bind(user_id)
+    .fetch_one(&mut *tx)
+    .await?;
 
-    let files = repositories::file::list_user_files(&state.db, user_id, 1000, 0).await?;
-    let actual_size = files.iter().map(|f| f.file_size).sum();
+    let actual_size = total_size.unwrap_or(0);
 
-    repositories::user::rollback_storage_usage(&state.db, &user_id, actual_size).await?;
+    sqlx::query!(
+        r#"
+        UPDATE users
+        SET storage_used_bytes = $1
+        WHERE id = $2
+        "#,
+        actual_size,
+        user_id
+    )
+    .execute(&mut *tx)
+    .await?;
 
-    transaction.commit().await?;
+    tx.commit().await?;
 
     tracing::info!(
         "✅ Storage quota recalculated: {} bytes for user {}",
@@ -1008,7 +1160,6 @@ pub async fn recalculate_user_quota(
     Ok((StatusCode::OK, response).into_response())
 }
 
-#[axum::debug_handler]
 pub async fn cleanup_expired_uploads(mut state: AppState) -> Result<()> {
     tracing::info!("🧹 Checking for expired uploads...");
 
@@ -1052,7 +1203,17 @@ pub async fn cleanup_expired_uploads(mut state: AppState) -> Result<()> {
                         let mut del_redis = state.redis.clone();
                         let _: () = del_redis.del::<_, ()>(&key).await.unwrap_or(());
 
-                        repositories::user::rollback_storage_usage(&state.db, &metadata.user_id, metadata.total_size).await?;
+                        let _ = sqlx::query!(
+                            r#"
+                            UPDATE users
+                            SET storage_used_bytes = GREATEST(0, storage_used_bytes - $1)
+                            WHERE id = $2
+                            "#,
+                            metadata.total_size,
+                            metadata.user_id
+                        )
+                        .execute(&state.db)
+                        .await;
 
                         let lock_key = format!("user_uploading:{}", metadata.user_id);
                         let mut lock_redis = state.redis.clone();

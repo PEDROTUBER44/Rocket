@@ -13,10 +13,17 @@ use crate::{
     error::AppError,
     models::session::Session,
     state::AppState,
-    repositories::{file as file_repo, user as user_repo},
 };
 
 /// Extracts the real IP address from the request extensions.
+///
+/// # Arguments
+///
+/// * `req` - The incoming request.
+///
+/// # Returns
+///
+/// The IP address as a string, or "unknown" if not found.
 fn extract_real_ip(req: &Request<Body>) -> String {
     req.extensions()
         .get::<ConnectInfo<SocketAddr>>()
@@ -25,6 +32,16 @@ fn extract_real_ip(req: &Request<Body>) -> String {
 }
 
 /// A middleware that rate limits user registration.
+///
+/// # Arguments
+///
+/// * `state` - The application state.
+/// * `req` - The incoming request.
+/// * `next` - The next middleware in the chain.
+///
+/// # Returns
+///
+/// A `Response` or an error `AppError`.
 pub async fn rate_limit_register(
     State(state): State<AppState>,
     req: Request<Body>,
@@ -71,6 +88,16 @@ pub async fn rate_limit_register(
 }
 
 /// A middleware that rate limits user login attempts.
+///
+/// # Arguments
+///
+/// * `state` - The application state.
+/// * `req` - The incoming request.
+/// * `next` - The next middleware in the chain.
+///
+/// # Returns
+///
+/// A `Response` or an error `AppError`.
 pub async fn rate_limit_login(
     State(state): State<AppState>,
     req: Request<Body>,
@@ -148,6 +175,17 @@ pub async fn rate_limit_login(
 }
 
 /// A middleware that rate limits password change attempts.
+///
+/// # Arguments
+///
+/// * `state` - The application state.
+/// * `session` - The user's session.
+/// * `req` - The incoming request.
+/// * `next` - The next middleware in the chain.
+///
+/// # Returns
+///
+/// A `Response` or an error `AppError`.
 pub async fn rate_limit_change_password(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -199,6 +237,17 @@ pub async fn rate_limit_change_password(
 }
 
 /// A middleware that checks if the user has enough storage quota.
+///
+/// # Arguments
+///
+/// * `state` - The application state.
+/// * `session` - The user's session.
+/// * `req` - The incoming request.
+/// * `next` - The next middleware in the chain.
+///
+/// # Returns
+///
+/// A `Response` or an error `AppError`.
 pub async fn check_storage_quota(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -207,9 +256,20 @@ pub async fn check_storage_quota(
 ) -> Response {
     let user_id = session.user_id;
     
-    match user_repo::get_user_storage_info(&state.db, &user_id).await {
-        Ok((storage_quota_bytes, storage_used_bytes)) => {
-            let available = storage_quota_bytes - storage_used_bytes;
+    let storage_info = sqlx::query!(
+        r#"
+        SELECT storage_quota_bytes, storage_used_bytes
+        FROM users
+        WHERE id = $1
+        "#,
+        user_id
+    )
+    .fetch_optional(&state.db)
+    .await;
+
+    match storage_info {
+        Ok(Some(info)) => {
+            let available = info.storage_quota_bytes - info.storage_used_bytes;
             
             if available <= 0 {
                 return AppError::Validation(
@@ -219,13 +279,28 @@ pub async fn check_storage_quota(
             
             next.run(req).await
         }
-        Err(_) => {
+        Ok(None) => {
             AppError::Unauthorized.into_response()
+        }
+        Err(e) => {
+            tracing::error!("Error checking storage quota: {}", e);
+            AppError::Internal("Failed to check storage quota".to_string()).into_response()
         }
     }
 }
 
 /// A middleware that rate limits file downloads.
+///
+/// # Arguments
+///
+/// * `state` - The application state.
+/// * `session` - The user's session.
+/// * `req` - The incoming request.
+/// * `next` - The next middleware in the chain.
+///
+/// # Returns
+///
+/// A `Response` or an error `AppError`.
 pub async fn rate_limit_file_download(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -242,7 +317,18 @@ pub async fn rate_limit_file_download(
         Err(_) => return next.run(req).await,
     };
 
-    match file_repo::find_by_id(&state.db, file_id, user_id).await {
+    let file_owner = sqlx::query!(
+        r#"
+        SELECT user_id, is_deleted
+        FROM files
+        WHERE id = $1
+        "#,
+        file_id
+    )
+    .fetch_optional(&state.db)
+    .await;
+
+    match file_owner {
         Ok(Some(file)) => {
             if file.is_deleted {
                 return AppError::NotFound.into_response();
@@ -303,6 +389,17 @@ pub async fn rate_limit_file_download(
 }
 
 /// A middleware that verifies that the current user owns the requested file.
+///
+/// # Arguments
+///
+/// * `state` - The application state.
+/// * `session` - The user's session.
+/// * `req` - The incoming request.
+/// * `next` - The next middleware in the chain.
+///
+/// # Returns
+///
+/// A `Response` or an error `AppError`.
 pub async fn verify_file_ownership(
     State(state): State<AppState>,
     Extension(session): Extension<Session>,
@@ -319,7 +416,18 @@ pub async fn verify_file_ownership(
         Err(_) => return next.run(req).await,
     };
 
-    match file_repo::find_by_id(&state.db, file_id, user_id).await {
+    let file_owner = sqlx::query!(
+        r#"
+        SELECT user_id, is_deleted
+        FROM files
+        WHERE id = $1
+        "#,
+        file_id
+    )
+    .fetch_optional(&state.db)
+    .await;
+
+    match file_owner {
         Ok(Some(file)) => {
             if file.is_deleted {
                 return AppError::NotFound.into_response();

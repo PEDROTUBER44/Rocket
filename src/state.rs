@@ -1,6 +1,9 @@
-use deadpool_postgres::Pool;
+use sqlx::{postgres::PgPoolOptions, PgPool};
 use redis::aio::ConnectionManager;
-use std::sync::Arc;
+use std::{
+    time::Duration,
+    sync::Arc
+};
 use tokio::sync::Semaphore;
 use crate::config::Config;
 use crate::crypto::kek::KekCache;
@@ -65,7 +68,7 @@ impl DownloadRateLimiter {
 #[derive(Clone)]
 pub struct AppState {
     /// The database connection pool.
-    pub db: Pool,
+    pub db: PgPool,
     /// The Redis connection manager.
     pub redis: ConnectionManager,
     /// The application's configuration.
@@ -89,15 +92,24 @@ impl AppState {
     ///
     /// A `Result` containing the `AppState`.
     pub async fn new(config: &Config) -> Result<Self> {
-        let db = crate::db::create_pool(&config.database_url)?;
+        let db = PgPoolOptions::new()
+            .max_connections(120)
+            .min_connections(20)
+            .acquire_timeout(Duration::from_secs(5))
+            .idle_timeout(Duration::from_secs(30))
+            .max_lifetime(Duration::from_secs(1800))
+            .connect(&config.database_url)
+            .await?;
+
         tracing::info!(
-            "✅ PostgreSQL Pool initialized with deadpool-postgres (OPTIMIZED for production)"
+            "✅ PostgreSQL Pool initialized: min=10, max=50 (OPTIMIZED for production)"
         );
 
         let redis_client = redis::Client::open(config.redis_url.as_str())?;
         let redis = ConnectionManager::new(redis_client).await?;
-        tracing::info!("✅ Redis Connection Manager initialized (pooled)");
 
+        tracing::info!("✅ Redis Connection Manager initialized (pooled)");
+        
         let kek_cache = KekCache::new();
         tracing::info!("✅ KEK Cache initialized");
 

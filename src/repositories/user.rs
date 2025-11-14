@@ -1,113 +1,279 @@
-use deadpool_postgres::Pool;
-use tokio_postgres::Row;
+use sqlx::PgPool;
 use uuid::Uuid;
 use crate::{
     error::{AppError, Result},
     models::user::User,
 };
-use chrono::{DateTime, Utc};
-use std::convert::TryFrom;
-
-/// A helper function to map a `tokio_postgres::Row` to a `User`.
-fn row_to_user(row: &Row) -> Result<User> {
-    Ok(User {
-        id: row.try_get("id").map_err(|_| AppError::MissingData("id".to_string()))?,
-        name: row.try_get("name").map_err(|_| AppError::MissingData("name".to_string()))?,
-        username: row.try_get("username").map_err(|_| AppError::MissingData("username".to_string()))?,
-        email: row.try_get("email").map_err(|_| AppError::MissingData("email".to_string()))?,
-        password: row.try_get("password").map_err(|_| AppError::MissingData("password".to_string()))?,
-        roles: row.try_get("roles").map_err(|_| AppError::MissingData("roles".to_string()))?,
-        encrypted_dek: row.try_get("encrypted_dek").map_err(|_| AppError::MissingData("encrypted_dek".to_string()))?,
-        dek_salt: row.try_get("dek_salt").map_err(|_| AppError::MissingData("dek_salt".to_string()))?,
-        dek_kek_version: row.try_get("dek_kek_version").map_err(|_| AppError::MissingData("dek_kek_version".to_string()))?,
-        storage_quota_bytes: row.try_get("storage_quota_bytes").map_err(|_| AppError::MissingData("storage_quota_bytes".to_string()))?,
-        storage_used_bytes: row.try_get("storage_used_bytes").map_err(|_| AppError::MissingData("storage_used_bytes".to_string()))?,
-        created_at: row.try_get("created_at").map_err(|_| AppError::MissingData("created_at".to_string()))?,
-        updated_at: row.try_get("updated_at").map_err(|_| AppError::MissingData("updated_at".to_string()))?,
-        last_password_change: row.try_get("last_password_change").map_err(|_| AppError::MissingData("last_password_change".to_string()))?,
-        is_active: row.try_get("is_active").map_err(|_| AppError::MissingData("is_active".to_string()))?,
-    })
-}
 
 /// Creates a new user in the database.
+///
+/// # Arguments
+///
+/// * `pool` - The database connection pool.
+/// * `id` - The unique identifier for the user.
+/// * `email` - The user's email address.
+/// * `password_hash` - The user's hashed password.
+/// * `encrypted_dek` - The user's encrypted data encryption key.
+/// * `dek_salt` - The salt used to derive the key that encrypts the data encryption key.
+///
+/// # Returns
+///
+/// A `Result` containing the created `User`.
 pub async fn create_user(
-    pool: &Pool,
+    pool: &PgPool,
     id: Uuid,
     email: Option<String>,
     password_hash: String,
     encrypted_dek: Vec<u8>,
     dek_salt: Vec<u8>,
 ) -> Result<User> {
-    let client = pool.get().await?;
-    let row = client
-        .query_one(
-            r#"
-            INSERT INTO users (id, email, password, encrypted_dek, dek_salt)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING *
-            "#,
-            &[&id, &email, &password_hash, &encrypted_dek, &dek_salt],
-        )
-        .await?;
-    row_to_user(&row)
+    let user = sqlx::query_as!(
+        User,
+        r#"
+        INSERT INTO users (id, email, password, encrypted_dek, dek_salt)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING 
+            id,
+            name,
+            username,
+            email,
+            password,
+            roles,
+            encrypted_dek,
+            dek_salt,
+            dek_kek_version,
+            storage_quota_bytes,
+            storage_used_bytes,
+            created_at,
+            updated_at,
+            last_password_change,
+            is_active
+        "#,
+        id,
+        email,
+        password_hash,
+        encrypted_dek,
+        dek_salt
+    )
+    .fetch_one(pool)
+    .await?;
+
+    Ok(user)
 }
 
 /// Finds a user by their email address.
-pub async fn find_by_email(pool: &Pool, email: &str) -> Result<Option<User>> {
-    let client = pool.get().await?;
-    let row = client
-        .query_opt(
-            r#"
-            SELECT *
-            FROM users
-            WHERE email = $1 AND is_active = true
-            "#,
-            &[&email],
-        )
-        .await?;
-    row.map(|r| row_to_user(&r)).transpose()
+///
+/// # Arguments
+///
+/// * `pool` - The database connection pool.
+/// * `email` - The email address to search for.
+///
+/// # Returns
+///
+/// A `Result` containing an `Option<User>`.
+pub async fn find_by_email(pool: &PgPool, email: &str) -> Result<Option<User>> {
+    let user = sqlx::query_as!(
+        User,
+        r#"
+        SELECT 
+            id,
+            name,
+            username,
+            email,
+            password,
+            roles,
+            encrypted_dek,
+            dek_salt,
+            dek_kek_version,
+            storage_quota_bytes,
+            storage_used_bytes,
+            created_at,
+            updated_at,
+            last_password_change,
+            is_active
+        FROM users 
+        WHERE email = $1 AND is_active = true
+        "#,
+        email
+    )
+    .fetch_optional(pool)
+    .await?;
+
+    Ok(user)
 }
 
 /// Finds a user by their ID.
-pub async fn find_by_id(pool: &Pool, user_id: &Uuid) -> Result<Option<User>> {
-    let client = pool.get().await?;
-    let row = client
-        .query_opt(
-            r#"
-            SELECT *
-            FROM users
-            WHERE id = $1
-            "#,
-            &[user_id],
-        )
-        .await?;
-    row.map(|r| row_to_user(&r)).transpose()
+///
+/// # Arguments
+///
+/// * `pool` - The database connection pool.
+/// * `user_id` - The ID of the user to find.
+///
+/// # Returns
+///
+/// A `Result` containing an `Option<User>`.
+pub async fn find_by_id(pool: &PgPool, user_id: &Uuid) -> Result<Option<User>> {
+    let user = sqlx::query_as!(
+        User,
+        r#"
+        SELECT 
+            id,
+            name,
+            username,
+            email,
+            password,
+            roles,
+            encrypted_dek,
+            dek_salt,
+            dek_kek_version,
+            storage_quota_bytes,
+            storage_used_bytes,
+            created_at,
+            updated_at,
+            last_password_change,
+            is_active
+        FROM users 
+        WHERE id = $1
+        "#,
+        user_id
+    )
+    .fetch_optional(pool)
+    .await?;
+
+    Ok(user)
 }
 
 /// Updates a user's password.
+///
+/// # Arguments
+///
+/// * `pool` - The database connection pool.
+/// * `user_id` - The ID of the user.
+/// * `new_password` - The new hashed password.
+/// * `encrypted_dek` - The new encrypted data encryption key.
+/// * `dek_salt` - The new salt.
+///
+/// # Returns
+///
+/// A `Result<()>`.
 pub async fn update_password(
-    pool: &Pool,
+    pool: &PgPool,
     user_id: &Uuid,
     new_password: String,
     encrypted_dek: Vec<u8>,
     dek_salt: Vec<u8>,
 ) -> Result<()> {
-    let client = pool.get().await?;
-    client
-        .execute(
-            r#"
-            UPDATE users
-            SET
-                password = $1,
-                encrypted_dek = $2,
-                dek_salt = $3,
-                last_password_change = NOW()
-            WHERE id = $4
-            "#,
-            &[&new_password, &encrypted_dek, &dek_salt, user_id],
-        )
-        .await?;
+    sqlx::query!(
+        r#"
+        UPDATE users
+        SET 
+            password = $1,
+            encrypted_dek = $2,
+            dek_salt = $3,
+            last_password_change = NOW()
+        WHERE id = $4
+        "#,
+        new_password,
+        encrypted_dek,
+        dek_salt,
+        user_id
+    )
+    .execute(pool)
+    .await?;
+
     Ok(())
+}
+
+/// Updates a user's storage usage with a quota check.
+///
+/// # Arguments
+///
+/// * `pool` - The database connection pool.
+/// * `user_id` - The ID of the user.
+/// * `file_size` - The size of the file being added.
+///
+/// # Returns
+///
+/// A `Result` containing a `StorageCheckResult`.
+pub async fn update_storage_with_quota_check(
+    pool: &PgPool,
+    user_id: &Uuid,
+    file_size: i64,
+) -> Result<StorageCheckResult> {
+    let result = sqlx::query!(
+        r#"
+        SELECT 
+            success,
+            available_bytes,
+            new_storage_used
+        FROM update_storage_with_quota_check($1, $2)
+        "#,
+        user_id,
+        file_size
+    )
+    .fetch_one(pool)
+    .await?;
+
+    Ok(StorageCheckResult {
+        success: result.success.unwrap_or(false),
+        available_bytes: result.available_bytes.unwrap_or(0),
+        new_storage_used: result.new_storage_used.unwrap_or(0),
+    })
+}
+
+/// Rolls back a user's storage usage.
+///
+/// # Arguments
+///
+/// * `pool` - The database connection pool.
+/// * `user_id` - The ID of the user.
+/// * `file_size` - The size of the file to roll back.
+///
+/// # Returns
+///
+/// A `Result<()>`.
+pub async fn rollback_storage_usage(
+    pool: &PgPool,
+    user_id: &Uuid,
+    file_size: i64,
+) -> Result<()> {
+    sqlx::query!(
+        r#"
+        SELECT rollback_storage_usage($1, $2) as success
+        "#,
+        user_id,
+        file_size
+    )
+    .fetch_one(pool)
+    .await?;
+
+    Ok(())
+}
+
+/// Gets a user's storage information.
+///
+/// # Arguments
+///
+/// * `pool` - The database connection pool.
+/// * `user_id` - The ID of the user.
+///
+/// # Returns
+///
+/// A `Result` containing a tuple of `(storage_quota_bytes, storage_used_bytes)`.
+pub async fn get_user_storage_info(pool: &PgPool, user_id: &Uuid) -> Result<(i64, i64)> {
+    let result = sqlx::query!(
+        r#"
+        SELECT storage_quota_bytes, storage_used_bytes
+        FROM users
+        WHERE id = $1
+        "#,
+        user_id
+    )
+    .fetch_optional(pool)
+    .await?
+    .ok_or(AppError::NotFound)?;
+
+    Ok((result.storage_quota_bytes, result.storage_used_bytes))
 }
 
 /// The result of a storage check.
@@ -118,67 +284,4 @@ pub struct StorageCheckResult {
     pub available_bytes: i64,
     /// The new storage usage in bytes.
     pub new_storage_used: i64,
-}
-
-/// Updates a user's storage usage with a quota check.
-pub async fn update_storage_with_quota_check(
-    pool: &Pool,
-    user_id: &Uuid,
-    file_size: i64,
-) -> Result<StorageCheckResult> {
-    let client = pool.get().await?;
-    let row = client
-        .query_one(
-            r#"
-            SELECT
-                success,
-                available_bytes,
-                new_storage_used
-            FROM update_storage_with_quota_check($1, $2)
-            "#,
-            &[user_id, &file_size],
-        )
-        .await?;
-    Ok(StorageCheckResult {
-        success: row.try_get("success").unwrap_or(false),
-        available_bytes: row.try_get("available_bytes").unwrap_or(0),
-        new_storage_used: row.try_get("new_storage_used").unwrap_or(0),
-    })
-}
-
-/// Rolls back a user's storage usage.
-pub async fn rollback_storage_usage(
-    pool: &Pool,
-    user_id: &Uuid,
-    file_size: i64,
-) -> Result<()> {
-    let client = pool.get().await?;
-    client
-        .execute(
-            r#"
-            SELECT rollback_storage_usage($1, $2) as success
-            "#,
-            &[user_id, &file_size],
-        )
-        .await?;
-    Ok(())
-}
-
-/// Gets a user's storage information.
-pub async fn get_user_storage_info(pool: &Pool, user_id: &Uuid) -> Result<(i64, i64)> {
-    let client = pool.get().await?;
-    let row = client
-        .query_opt(
-            r#"
-            SELECT storage_quota_bytes, storage_used_bytes
-            FROM users
-            WHERE id = $1
-            "#,
-            &[user_id],
-        )
-        .await?
-        .ok_or(AppError::NotFound)?;
-    let storage_quota_bytes: i64 = row.try_get("storage_quota_bytes").map_err(|_| AppError::MissingData("storage_quota_bytes".to_string()))?;
-    let storage_used_bytes: i64 = row.try_get("storage_used_bytes").map_err(|_| AppError::MissingData("storage_used_bytes".to_string()))?;
-    Ok((storage_quota_bytes, storage_used_bytes))
 }

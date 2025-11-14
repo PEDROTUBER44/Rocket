@@ -8,12 +8,8 @@ use thiserror::Error;
 #[derive(Error, Debug)]
 pub enum AppError {
     /// A database error.
-    #[error("Database connection error: {0}")]
-    Connection(#[from] tokio_postgres::Error),
-
-    /// A pool error.
-    #[error("Pool error: {0}")]
-    Pool(#[from] deadpool_postgres::PoolError),
+    #[error("Database error: {0}")]
+    Database(#[from] sqlx::Error),
 
     /// A Redis error.
     #[error("Redis error: {0}")]
@@ -22,6 +18,10 @@ pub enum AppError {
     /// An I/O error.
     #[error("IO error: {0}")]
     Io(#[from] std::io::Error),
+
+    /// A migration error.
+    #[error("Migration error: {0}")]
+    Migration(#[from] sqlx::migrate::MigrateError),
 
     /// An authentication error.
     #[error("Authentication failed: {0}")]
@@ -54,10 +54,6 @@ pub enum AppError {
     /// A rate limit exceeded error.
     #[error("Rate limit exceeded: {0}")]
     RateLimitExceeded(String),
-
-    /// Missing data in a row.
-    #[error("Missing data: {0}")]
-    MissingData(String),
 }
 
 /// A `Result` type that uses `AppError` as the error type.
@@ -66,14 +62,9 @@ pub type Result<T> = std::result::Result<T, AppError>;
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         let (status, message) = match self {
-            AppError::Connection(ref e) => {
-                tracing::error!("Database connection error: {}", e);
+            AppError::Database(ref e) => {
+                tracing::error!("Database error: {}", e);
                 (StatusCode::INTERNAL_SERVER_ERROR, "Database error".to_string())
-            }
-
-            AppError::Pool(ref e) => {
-                tracing::error!("Pool error: {}", e);
-                (StatusCode::INTERNAL_SERVER_ERROR, "Database pool error".to_string())
             }
 
             AppError::Redis(ref e) => {
@@ -84,6 +75,11 @@ impl IntoResponse for AppError {
             AppError::Io(ref e) => {
                 tracing::error!("IO error: {}", e);
                 (StatusCode::INTERNAL_SERVER_ERROR, "File system error".to_string())
+            }
+
+            AppError::Migration(ref e) => {
+                tracing::error!("Migration error: {}", e);
+                (StatusCode::INTERNAL_SERVER_ERROR, "Migration error".to_string())
             }
 
             AppError::Authentication(ref msg) => {
@@ -124,10 +120,6 @@ impl IntoResponse for AppError {
             AppError::RateLimitExceeded(ref msg) => {
                 tracing::warn!("Rate limit exceeded: {}", msg);
                 (StatusCode::TOO_MANY_REQUESTS, msg.clone())
-            }
-            AppError::MissingData(ref msg) => {
-                tracing::error!("Missing data in row: {}", msg);
-                (StatusCode::INTERNAL_SERVER_ERROR, "Internal server error".to_string())
             }
         };
 

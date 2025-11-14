@@ -1,9 +1,9 @@
+use sqlx::FromRow;
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
-use serde::{Serialize, Deserialize};
 
 /// Represents a user in the system.
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(FromRow, Clone, Debug)]
 pub struct User {
     /// The unique identifier for the user.
     pub id: Uuid,
