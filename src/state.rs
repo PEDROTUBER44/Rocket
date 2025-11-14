@@ -1,13 +1,15 @@
-use sqlx::{postgres::PgPoolOptions, PgPool};
-use redis::aio::ConnectionManager;
-use std::{
-    time::Duration,
-    sync::Arc
+use deadpool_postgres::{
+    Config as DeadpoolConfig, ManagerConfig, Pool, RecyclingMethod, Runtime, PoolConfig, Timeouts,
 };
+use redis::aio::ConnectionManager;
+use std::sync::Arc;
 use tokio::sync::Semaphore;
+use tokio_postgres::{Config as PgConfig, NoTls};
+
 use crate::config::Config;
 use crate::crypto::kek::KekCache;
-use crate::error::Result;
+use crate::error::{AppError, Result};
+use crate::statement_cache::StatementCache;
 
 /// The number of slots in the upload buffer.
 pub const UPLOAD_BUFFER_SLOTS: usize = 200; // 200 slots × ~10MB = 2GB max
@@ -68,7 +70,7 @@ impl DownloadRateLimiter {
 #[derive(Clone)]
 pub struct AppState {
     /// The database connection pool.
-    pub db: PgPool,
+    pub db: Pool,
     /// The Redis connection manager.
     pub redis: ConnectionManager,
     /// The application's configuration.
@@ -79,39 +81,52 @@ pub struct AppState {
     pub upload_limiter: UploadRateLimiter,
     /// The download rate limiter.
     pub download_limiter: DownloadRateLimiter,
+    // The prepared statement cache.
+    pub stmt_cache: StatementCache,
 }
 
 impl AppState {
     /// Creates a new `AppState`.
-    ///
-    /// # Arguments
-    ///
-    /// * `config` - The application's configuration.
-    ///
-    /// # Returns
-    ///
-    /// A `Result` containing the `AppState`.
     pub async fn new(config: &Config) -> Result<Self> {
-        let db = PgPoolOptions::new()
-            .max_connections(120)
-            .min_connections(20)
-            .acquire_timeout(Duration::from_secs(5))
-            .idle_timeout(Duration::from_secs(30))
-            .max_lifetime(Duration::from_secs(1800))
-            .connect(&config.database_url)
-            .await?;
+        let pg_config: PgConfig = config.database_url.parse().map_err(AppError::Postgres)?;
 
-        tracing::info!(
-            "✅ PostgreSQL Pool initialized: min=10, max=50 (OPTIMIZED for production)"
-        );
+        let mut deadpool_cfg = DeadpoolConfig::default();
+        deadpool_cfg.user = Some(pg_config.get_user().unwrap().to_string());
+        deadpool_cfg.password = pg_config
+            .get_password()
+            .map(|p| String::from_utf8_lossy(p).to_string());
+        deadpool_cfg.host = pg_config.get_hosts().get(0).map(|h| match h {
+            tokio_postgres::config::Host::Tcp(s) => s.to_string(),
+            _ => "localhost".to_string(),
+        });
+        deadpool_cfg.port = pg_config.get_ports().get(0).map(|p| *p);
+        deadpool_cfg.dbname = Some(pg_config.get_dbname().unwrap().to_string());
+
+        deadpool_cfg.pool = Some(PoolConfig {
+            max_size: 48,
+            timeouts: Timeouts::new(),
+            ..Default::default()
+        });
+        deadpool_cfg.manager = Some(ManagerConfig {
+            recycling_method: RecyclingMethod::Fast,
+        });
+
+        let db = deadpool_cfg
+            .create_pool(Some(Runtime::Tokio1), NoTls)
+            .map_err(AppError::PoolBuild)?;
+
+        tracing::info!("✅ Deadpool PostgreSQL Pool initialized: max_size=48 (OPTIMIZED for PgCat)");
 
         let redis_client = redis::Client::open(config.redis_url.as_str())?;
         let redis = ConnectionManager::new(redis_client).await?;
 
         tracing::info!("✅ Redis Connection Manager initialized (pooled)");
-        
+
         let kek_cache = KekCache::new();
         tracing::info!("✅ KEK Cache initialized");
+
+        let stmt_cache = StatementCache::new();
+        tracing::info!("✅ Statement Cache initialized");
 
         let upload_limiter = UploadRateLimiter::new(UPLOAD_BUFFER_SLOTS);
         tracing::info!("✅ Upload RateLimiter initialized (max 2GB)");
@@ -126,6 +141,7 @@ impl AppState {
             kek_cache,
             upload_limiter,
             download_limiter,
+            stmt_cache,
         })
     }
 }

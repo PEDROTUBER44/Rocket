@@ -2,9 +2,7 @@ use axum::{
     Router,
     routing::{get, post, delete},
     middleware::from_fn_with_state,
-    extract::DefaultBodyLimit,
 };
-
 use http::{Method, header};
 use std::net::SocketAddr;
 use std::sync::Arc;
@@ -23,6 +21,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 mod config;
 mod error;
 mod state;
+mod statement_cache;
 mod crypto {
     pub mod aes;
     pub mod dek;
@@ -127,7 +126,7 @@ async fn main() -> anyhow::Result<()> {
         .expose_headers(["x-csrf-token".parse().unwrap()])
         .max_age(Duration::from_secs(86400));
 
-    let protected_governor_conf = Arc::new(
+    let governor_conf = Arc::new(
         GovernorConfigBuilder::default()
             .per_second(10_000)
             .burst_size(50_000)
@@ -136,87 +135,36 @@ async fn main() -> anyhow::Result<()> {
             .unwrap(),
     );
 
-    let register_routes = Router::new()
+    let auth_routes = Router::new()
         .route("/api/auth/register", post(handlers::auth::register))
-        .route_layer(from_fn_with_state(
-            state.clone(),
-            middleware_layer::rate_limit::rate_limit_register,
-        ))
-        .with_state(state.clone());
-
-    let login_routes = Router::new()
         .route("/api/auth/login", post(handlers::auth::login))
-        .route_layer(from_fn_with_state(
-            state.clone(),
-            middleware_layer::rate_limit::rate_limit_login,
-        ))
-        .with_state(state.clone());
+        .route("/api/auth/logout", post(handlers::auth::logout))
+        .route("/api/auth/change-password", post(handlers::auth::change_password));
 
-    let init_routes = Router::new()
+    let file_routes = Router::new()
         .route("/api/files/upload/init", post(handlers::files::init_upload))
         .route("/api/files/upload/chunk", post(handlers::files::upload_chunk))
-        .route(
-            "/api/files/upload/finalize",
-            post(handlers::files::finalize_upload),
-        )
-        .route(
-            "/api/files/upload/cancel",
-            post(handlers::files::cancel_upload),
-        )
-        .route(
-            "/api/files/recalculate-quota",
-            post(handlers::files::recalculate_user_quota),
-        )
-        .route_layer(from_fn_with_state(
-            state.clone(),
-            middleware_layer::auth::require_auth,
-        ))
-        .with_state(state.clone());
-
-    let protected_routes = Router::new()
-        .route("/api/auth/logout", post(handlers::auth::logout))
-        .route(
-            "/api/auth/change-password",
-            post(handlers::auth::change_password),
-        )
-        .route(
-            "/api/files/storage/info",
-            get(handlers::files::storage_info),
-        )
+        .route("/api/files/upload/finalize", post(handlers::files::finalize_upload))
+        .route("/api/files/upload/cancel", post(handlers::files::cancel_upload))
+        .route("/api/files/recalculate-quota", post(handlers::files::recalculate_user_quota))
+        .route("/api/files/storage/info", get(handlers::files::storage_info))
         .route("/api/files", get(handlers::files::list_files))
         .route("/api/files/{file_id}", get(handlers::files::download_file))
-        .route("/api/files/{file_id}", delete(handlers::files::delete_file))
-        .route(
-            "/api/folders/list",
-            get(handlers::folders::list_folder_contents),
-        )
-        .route(
-            "/api/folders/{folder_id}",
-            get(handlers::folders::get_folder_stats),
-        )
+        .route("/api/files/{file_id}", delete(handlers::files::delete_file));
+
+    let folder_routes = Router::new()
+        .route("/api/folders/list", get(handlers::folders::list_folder_contents))
+        .route("/api/folders/{folder_id}", get(handlers::folders::get_folder_stats))
         .route("/api/folders", post(handlers::folders::create_folder))
-        .route(
-            "/api/folders/{folder_id}",
-            delete(handlers::folders::delete_folder),
-        )
-        .layer(tower_governor::GovernorLayer::new(
-            protected_governor_conf.clone(),
-        ))
-        .route_layer(from_fn_with_state(
-            state.clone(),
-            middleware_layer::csrf::verify_csrf,
-        ))
-        .route_layer(from_fn_with_state(
-            state.clone(),
-            middleware_layer::auth::require_auth,
-        ))
-        .with_state(state.clone());
+        .route("/api/folders/{folder_id}", delete(handlers::folders::delete_folder));
 
     let app = Router::new()
-        .merge(register_routes)
-        .merge(login_routes)
-        .merge(init_routes)
-        .merge(protected_routes)
+        .merge(auth_routes)
+        .merge(file_routes)
+        .merge(folder_routes)
+        .layer(tower_governor::GovernorLayer::new(governor_conf))
+        .layer(from_fn_with_state(state.clone(), middleware_layer::csrf::verify_csrf))
+        .layer(from_fn_with_state(state.clone(), middleware_layer::auth::require_auth))
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(DefaultMakeSpan::default().include_headers(true))
@@ -225,8 +173,8 @@ async fn main() -> anyhow::Result<()> {
                 .on_failure(DefaultOnFailure::default().level(Level::ERROR)),
         )
         .layer(CookieManagerLayer::new())
-        .layer(DefaultBodyLimit::max(1024 * 1024 * 1024))
         .layer(cors)
+        .with_state(state.clone())
         .fallback_service(ServeDir::new("files/public"));
 
     let cleanup_state = state.clone();
