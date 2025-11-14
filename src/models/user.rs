@@ -1,9 +1,9 @@
-use sqlx::FromRow;
-use uuid::Uuid;
 use chrono::{DateTime, Utc};
+use tokio_postgres::Row;
+use uuid::Uuid;
 
 /// Represents a user in the system.
-#[derive(FromRow, Clone, Debug)]
+#[derive(Clone, Debug)]
 pub struct User {
     /// The unique identifier for the user.
     pub id: Uuid,
@@ -35,4 +35,26 @@ pub struct User {
     pub last_password_change: Option<DateTime<Utc>>,
     /// Whether the user is active.
     pub is_active: bool,
+}
+
+impl From<&Row> for User {
+    fn from(row: &Row) -> Self {
+        Self {
+            id: row.get("id"),
+            name: row.get("name"),
+            username: row.get("username"),
+            email: row.get("email"),
+            password: row.get("password"),
+            roles: row.get("roles"),
+            encrypted_dek: row.get("encrypted_dek"),
+            dek_salt: row.get("dek_salt"),
+            dek_kek_version: row.get("dek_kek_version"),
+            storage_quota_bytes: row.get("storage_quota_bytes"),
+            storage_used_bytes: row.get("storage_used_bytes"),
+            created_at: row.get("created_at"),
+            updated_at: row.get("updated_at"),
+            last_password_change: row.get("last_password_change"),
+            is_active: row.get("is_active"),
+        }
+    }
 }

@@ -2,14 +2,24 @@ use axum::{
     http::StatusCode,
     response::{IntoResponse, Response},
 };
+use deadpool::managed::CreatePoolError;
+use deadpool_postgres::ConfigError;
 use thiserror::Error;
 
 /// The application's error type.
 #[derive(Error, Debug)]
 pub enum AppError {
-    /// A database error.
-    #[error("Database error: {0}")]
-    Database(#[from] sqlx::Error),
+    /// A tokio-postgres error.
+    #[error("Postgres error: {0}")]
+    Postgres(#[from] tokio_postgres::Error),
+
+    /// A deadpool-postgres pool error.
+    #[error("Database pool error: {0}")]
+    Pool(#[from] deadpool_postgres::PoolError),
+
+    /// A deadpool-postgres build error.
+    #[error("Database pool build error: {0}")]
+    PoolBuild(#[from] CreatePoolError<ConfigError>),
 
     /// A Redis error.
     #[error("Redis error: {0}")]
@@ -18,10 +28,6 @@ pub enum AppError {
     /// An I/O error.
     #[error("IO error: {0}")]
     Io(#[from] std::io::Error),
-
-    /// A migration error.
-    #[error("Migration error: {0}")]
-    Migration(#[from] sqlx::migrate::MigrateError),
 
     /// An authentication error.
     #[error("Authentication failed: {0}")]
@@ -62,9 +68,19 @@ pub type Result<T> = std::result::Result<T, AppError>;
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         let (status, message) = match self {
-            AppError::Database(ref e) => {
-                tracing::error!("Database error: {}", e);
+            AppError::Postgres(ref e) => {
+                tracing::error!("Postgres error: {}", e);
                 (StatusCode::INTERNAL_SERVER_ERROR, "Database error".to_string())
+            }
+
+            AppError::Pool(ref e) => {
+                tracing::error!("Database pool error: {}", e);
+                (StatusCode::INTERNAL_SERVER_ERROR, "Database pool error".to_string())
+            }
+
+            AppError::PoolBuild(ref e) => {
+                tracing::error!("Database pool build error: {}", e);
+                (StatusCode::INTERNAL_SERVER_ERROR, "Database pool build error".to_string())
             }
 
             AppError::Redis(ref e) => {
@@ -75,11 +91,6 @@ impl IntoResponse for AppError {
             AppError::Io(ref e) => {
                 tracing::error!("IO error: {}", e);
                 (StatusCode::INTERNAL_SERVER_ERROR, "File system error".to_string())
-            }
-
-            AppError::Migration(ref e) => {
-                tracing::error!("Migration error: {}", e);
-                (StatusCode::INTERNAL_SERVER_ERROR, "Migration error".to_string())
             }
 
             AppError::Authentication(ref msg) => {

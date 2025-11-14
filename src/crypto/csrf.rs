@@ -1,5 +1,5 @@
 use crate::error::{AppError, Result};
-use rand::TryRngCore;
+use rand::RngCore;
 use rand::rngs::OsRng;
 use base64::{Engine as _, engine::general_purpose};
 
@@ -14,8 +14,7 @@ const CSRF_TOKEN_SIZE: usize = 32;
 pub fn generate_csrf_token() -> Result<String> {
     let mut token = [0u8; CSRF_TOKEN_SIZE];
     OsRng
-        .try_fill_bytes(&mut token)
-        .map_err(|e| AppError::Internal(format!("Failed to generate CSRF token: {}", e)))?;
+        .fill_bytes(&mut token);
     
     Ok(general_purpose::URL_SAFE_NO_PAD.encode(token))
 }
